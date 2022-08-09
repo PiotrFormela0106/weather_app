@@ -13,12 +13,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.example.weatherapp.R
+import com.example.weatherapp.data.repo.WeatherRepositoryImpl
 import com.example.weatherapp.databinding.FragmentMainScreenBinding
+import com.example.weatherapp.di.DaggerMainScreenComponent
+//import com.example.weatherapp.di.DaggerMainScreenComponent
+import javax.inject.Inject
 
 
 class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserver {
     private lateinit var binding: FragmentMainScreenBinding
-    private lateinit var viewModel: MainScreenViewModel
+
+    @Inject
+    lateinit var viewModel: MainScreenViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,12 +33,15 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_main_screen, container, false
         )
-        viewModel = ViewModelProvider(this)[MainScreenViewModel::class.java]
+        val component = DaggerMainScreenComponent.create()
+        component.inject(this)
+
         binding.mainScreen = viewModel
         binding.lifecycleOwner = this
         lifecycle.addObserver(viewModel)
 
-        viewModel.getData()
+        viewModel.getCurrentWeatherForCity()
+        //viewModel.getCurrentWeatherForLocation()
         viewModel.status.observe(viewLifecycleOwner, Observer<Boolean> { status ->
             if (!status) {
                 Toast.makeText(activity, "There is no such city!", Toast.LENGTH_LONG).show()

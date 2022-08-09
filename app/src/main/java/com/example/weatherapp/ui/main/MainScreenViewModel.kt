@@ -12,10 +12,11 @@ import java.util.concurrent.TimeUnit
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import com.example.weatherapp.domain.Result
 import com.example.weatherapp.domain.repo.WeatherRepository
+import javax.inject.Inject
 
-class MainScreenViewModel() : ViewModel(), LifecycleObserver {
-    private val retrofitClient = RetrofitClient()
-    private val weatherRepository = WeatherRepositoryImpl(retrofitClient)
+class MainScreenViewModel @Inject constructor(
+    private val weatherRepository: WeatherRepository
+) : ViewModel(), LifecycleObserver {
     private val disposable = CompositeDisposable()
     private val iconId = MutableLiveData<String>()
     val imageUrl = MutableLiveData<String>("https://openweathermap.org/img/wn/03d@2x.png")
@@ -25,10 +26,29 @@ class MainScreenViewModel() : ViewModel(), LifecycleObserver {
     val cityName = MutableLiveData<String>()
     val cityArg = MutableLiveData<String>()
 
-    fun getData() {
+    fun getCurrentWeatherForCity() {
         progress.postValue(true)
         disposable.add(
             weatherRepository.getCurrentWeatherForCity("Somonino")
+                .subscribeOn(Schedulers.io())
+                .delay(1, TimeUnit.SECONDS) //make progress bar longer (duration)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(
+                    onSuccess = {
+                        progress.postValue(false)
+                        when (it) {
+                            is Result.OnSuccess -> handleSuccess(it.data)
+                            is Result.OnError -> {
+                                handleError(it.error)
+                            }
+                        }
+                    })
+        )
+    }
+    fun getCurrentWeatherForLocation() {
+        progress.postValue(true)
+        disposable.add(
+            weatherRepository.getCurrentWeatherForLocation(54.27,18.19)
                 .subscribeOn(Schedulers.io())
                 .delay(1, TimeUnit.SECONDS) //make progress bar longer (duration)
                 .observeOn(AndroidSchedulers.mainThread())

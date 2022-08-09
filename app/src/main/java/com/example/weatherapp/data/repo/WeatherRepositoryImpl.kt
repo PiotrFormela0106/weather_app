@@ -5,34 +5,24 @@ import com.example.weatherapp.data.mappers.CurrentWeatherData
 import com.example.weatherapp.data.mappers.CurrentWeatherDomain
 import com.example.weatherapp.data.mappers.toDomain
 import com.example.weatherapp.domain.models.*
-import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.repo.WeatherRepository
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.core.SingleTransformer
 import com.example.weatherapp.domain.Result
+import javax.inject.Inject
 
-class WeatherRepositoryImpl(retrofitClient: RetrofitClient) : WeatherRepository {
+class WeatherRepositoryImpl @Inject constructor(retrofitClient: RetrofitClient) : WeatherRepository {
     private val api = retrofitClient.api
 
     override fun getCurrentWeatherForCity(city: String): Single<Result<CurrentWeather>> {
-        return api.getData(city,"7a6886b06890c79387cbdf1ebc857ef2","eng","metric")
+        return api.getCurrentWeatherForCity(city,"7a6886b06890c79387cbdf1ebc857ef2","pl","metric")
             .compose(mapCurrentWeatherResponse())
     }
 
-    /*override fun getCurrentWeatherForLocation(
-        lat: Long,
-        lon: Long
-    ): Single<Result<CurrentWeather>> {
-
+    override fun getCurrentWeatherForLocation(lat: Double, lon: Double): Single<Result<CurrentWeather>> {
+        return api.getCurrentWeatherForLocation(lat,lon,"7a6886b06890c79387cbdf1ebc857ef2")
+            .compose(mapCurrentWeatherResponse())
     }
-
-    override fun getForecastForCity(city: String): Single<Result<ForecastWeather>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun getForecastForLocation(lat: Long, lon: Long): Single<Result<ForecastWeather>> {
-        TODO("Not yet implemented")
-    }*/
 
     private fun mapCurrentWeatherResponse():
             SingleTransformer<CurrentWeatherData, Result<CurrentWeatherDomain>> {

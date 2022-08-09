@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.Single
 
 interface WeatherRepository {
     fun getCurrentWeatherForCity(city: String): Single<Result<CurrentWeatherDomain>>
-    //fun getCurrentWeatherForLocation(lat: Long, lon: Long): Single<Result<CurrentWeather>>
+    fun getCurrentWeatherForLocation(lat: Double, lon: Double): Single<Result<CurrentWeatherDomain>>
     //fun getForecastForCity(city: String): Single<Result<ForecastWeather>>
     //fun getForecastForLocation(lat: Long, lon: Long): Single<Result<ForecastWeather>>
 }
