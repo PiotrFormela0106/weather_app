@@ -2,6 +2,7 @@ package com.example.weatherapp.ui.main
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.example.weatherapp.controller.PreferencesController
 import com.example.weatherapp.data.api.RetrofitClient
 import com.example.weatherapp.domain.models.CurrentWeather
 import com.example.weatherapp.data.repo.WeatherRepositoryImpl
@@ -15,7 +16,8 @@ import com.example.weatherapp.domain.repo.WeatherRepository
 import javax.inject.Inject
 
 class MainScreenViewModel @Inject constructor(
-    private val weatherRepository: WeatherRepository
+    private val weatherRepository: WeatherRepository,
+    private val preferencesController: PreferencesController
 ) : ViewModel(), LifecycleObserver {
     private val disposable = CompositeDisposable()
     private val iconId = MutableLiveData<String>()
@@ -24,12 +26,11 @@ class MainScreenViewModel @Inject constructor(
     val weatherData = MutableLiveData<CurrentWeather>()
     val progress = MutableLiveData<Boolean>(false)
     val cityName = MutableLiveData<String>()
-    val cityArg = MutableLiveData<String>()
 
     fun getCurrentWeatherForCity() {
         progress.postValue(true)
         disposable.add(
-            weatherRepository.getCurrentWeatherForCity("Somonino")
+            weatherRepository.getCurrentWeatherForCity(preferencesController.getCity())
                 .subscribeOn(Schedulers.io())
                 .delay(1, TimeUnit.SECONDS) //make progress bar longer (duration)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -71,12 +72,10 @@ class MainScreenViewModel @Inject constructor(
         iconId.value = data.weather[0].icon
         imageUrl.value = "https://openweathermap.org/img/wn/${iconId.value}@2x.png"
         status.value = true
-        Log.i("Czy dziala", data.weather[0].description)
-
+        preferencesController.saveCity(data.cityName)
     }
 
     private fun handleError(error: Error?) {
-        Log.i("Czy dziala","nie")
         status.value = false
     }
 

@@ -1,28 +1,26 @@
 package com.example.weatherapp.ui.main
 
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.navArgs
+import androidx.navigation.Navigation
 import com.example.weatherapp.R
-import com.example.weatherapp.data.repo.WeatherRepositoryImpl
 import com.example.weatherapp.databinding.FragmentMainScreenBinding
 import com.example.weatherapp.di.DaggerMainScreenComponent
-//import com.example.weatherapp.di.DaggerMainScreenComponent
+import com.example.weatherapp.di.RepositoryModule
 import javax.inject.Inject
 
 
 class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserver {
     private lateinit var binding: FragmentMainScreenBinding
-
     @Inject
     lateinit var viewModel: MainScreenViewModel
 
@@ -33,10 +31,15 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_main_screen, container, false
         )
-        val component = DaggerMainScreenComponent.create()
-        component.inject(this)
+
+        val thisContext: Context = container?.context!!
+        DaggerMainScreenComponent.builder()
+            .repositoryModule(RepositoryModule(thisContext))
+            .build()
+            .inject(this)
 
         binding.mainScreen = viewModel
+        binding.mainScreenFragment = this
         binding.lifecycleOwner = this
         lifecycle.addObserver(viewModel)
 
@@ -49,6 +52,12 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
         })
 
         return binding.root
+    }
+
+
+    fun goToCities(){
+        val action = MainScreenFragmentDirections.navigateToCities()
+        Navigation.findNavController(binding.root).navigate(action)
     }
 
 }

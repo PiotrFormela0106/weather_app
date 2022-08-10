@@ -9,7 +9,11 @@
         android:id="@+id/mainScreenFragment"
         android:name="com.example.weatherapp.ui.main.MainScreenFragment"
         android:label="fragment_main_screen"
-        tools:layout="@layout/fragment_main_screen" />
+        tools:layout="@layout/fragment_main_screen" >
+        <action
+            android:id="@+id/navigateToCities"
+            app:destination="@id/cityScreenFragment" />
+    </fragment>
     <fragment
         android:id="@+id/additionalInfoScreenFragment"
         android:name="com.example.weatherapp.ui.additionalinfo.AdditionalInfoScreenFragment"
