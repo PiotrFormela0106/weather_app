@@ -21,18 +21,38 @@ class MainScreenViewModel @Inject constructor(
     private val disposable = CompositeDisposable()
     private val iconId = MutableLiveData<String>()
     val imageUrl = MutableLiveData<String>("https://openweathermap.org/img/wn/03d@2x.png")
-    val status = MutableLiveData<Boolean>()
+    val status = MutableLiveData<Boolean>()// it's better to use enum instead of Boolean
+    // for example
+    // enum Status{initial,loading, success, error}
+    //val status = MutableLiveData<Boolean>()
     val weatherData = MutableLiveData<CurrentWeather>()
     val forecastData = MutableLiveData<ForecastWeather>()
-    val progress = MutableLiveData<Boolean>(false)
+    val progress = MutableLiveData<Boolean>(false)//you can use single variable instead of two: status and progress
+    //now they do one common job
+    // but you can post status=loading instead of posting progress=true
+    // and post status=success or error instead of posting progress=false
+    //and in xml progress bar can be visible only when status==loading
     val cityName = MutableLiveData<String>()
+
+    // now you have to api calls in two rx chains.
+    // so it's unclear when it's time to hide progressbar
+    //so you should to combine two rx chain by some rx operator like zip, merge, combineLatest
+    // and you will have just one handleSucces function.
+    // do it in init{}
+
+    //also you should have only 2 fun
+    //fun getCurrentWeather() and fun getForecastForCity().
+    //because it's resposibility of repository to chooose how to get this info.
+    // you can have enum LocationMethod{cityname, location}
+    //and save this LocationMethod in Storage (in preferences)
+    // and repository will ask storage every time how to get info, via cityName or via location
 
     fun getCurrentWeatherForCity() {
         progress.postValue(true)
         disposable.add(
             weatherRepository.getCurrentWeatherForCity(preferencesController.getCity())
                 .subscribeOn(Schedulers.io())
-                .delay(1, TimeUnit.SECONDS) //make progress bar longer (duration)
+                .delay(3, TimeUnit.SECONDS) //make progress bar longer (duration)//todo remove in production
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onSuccess = {
@@ -51,7 +71,7 @@ class MainScreenViewModel @Inject constructor(
         disposable.add(
             weatherRepository.getCurrentWeatherForLocation(54.27,18.19)
                 .subscribeOn(Schedulers.io())
-                .delay(1, TimeUnit.SECONDS) //make progress bar longer (duration)
+                .delay(3, TimeUnit.SECONDS) //make progress bar longer (duration)//todo remove in production
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onSuccess = {
@@ -102,7 +122,7 @@ class MainScreenViewModel @Inject constructor(
         weatherData.value = data
         cityName.postValue(data.cityName)
         iconId.value = data.weather[0].icon
-        imageUrl.value = "https://openweathermap.org/img/wn/${iconId.value}@2x.png"
+        imageUrl.value = "https://openweathermap.org/img/wn/${iconId.value}@2x.png"//extract global reusable fun to create image url by image shortcut
         status.value = true
         preferencesController.saveCity(data.cityName)
     }

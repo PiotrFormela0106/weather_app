@@ -5,17 +5,17 @@ import com.google.gson.annotations.SerializedName
 data class ForecastWeather(var city: City, val list: List<ListElement>)
 
 data class CurrentWeather(
-    @SerializedName("name") var cityName: String,
+    @SerializedName("name") var cityName: String,//remove this from domain model, you don't use serialization
     val main: Main,
-    val coord: Coord,
+    val coord: Coord,// rename to coordinates
     val weather: List<Weather>,
     val clouds: Clouds,
-    val sys: Sys,
+    val sys: Sys,// rename to something better
     val wind: Wind
 )
 
-data class ListElement (
-    val dt: Long,
+data class ListElement (//rename to ForecastItem
+    val dt: Long,// I don't know meaning of this field. if it will not be used then it can be removed
     val main: MainClass,
     val weather: List<Weather>,
     val clouds: Clouds,
@@ -23,15 +23,15 @@ data class ListElement (
     val visibility: Long,
     val pop: Double,
     val sys: SysClass,
-    @SerializedName("dt_txt") val dtTxt: String,
+    @SerializedName("dt_txt") val dtTxt: String,//remove this from domain model, you don't use serialization
     val rain: Rain? = null
 )
 
-data class MainClass (
+data class MainClass (//rename to MainInfo
     val temp: Double,
-    @SerializedName("feels_Like") val feelsLike: Double,
-    @SerializedName("temp_min")val tempMin: Double,
-    @SerializedName("temp_max")val tempMax: Double,
+    @SerializedName("feels_Like") val feelsLike: Double,//remove this from domain model, you don't use serialization
+    @SerializedName("temp_min")val tempMin: Double,//remove this from domain model, you don't use serialization
+    @SerializedName("temp_max")val tempMax: Double,//remove this from domain model, you don't use serialization
     val pressure: Long,
     @SerializedName("sea_level")val seaLevel: Long,
     @SerializedName("grnd_level")val grindLevel: Long,
@@ -82,8 +82,8 @@ data class Sys (
     val sunrise: Long,
     val sunset: Long
 )
-data class SysClass(
-    val pod: String
+data class SysClass(// I don't know meaning of this field. if it will not be used then it can be removed
+    val pod: String// if it will be used them rename to clear title
 )
 data class Wind (
     val speed: Double,

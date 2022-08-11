@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class RetrofitClient @Inject constructor(){
     val api: WeatherApi = Retrofit.Builder()
-        .baseUrl("https://api.openweathermap.org/data/2.5/")
+        .baseUrl("https://api.openweathermap.org/data/2.5/")// try to extract constant to gradle
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .build()

@@ -12,6 +12,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentMainScreenBinding
 import com.example.weatherapp.di.DaggerMainScreenComponent
@@ -43,9 +44,9 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
         binding.lifecycleOwner = this
         lifecycle.addObserver(viewModel)
 
-        viewModel.getCurrentWeatherForCity()
+        viewModel.getCurrentWeatherForCity()//move to init block of viewmodel
         //viewModel.getCurrentWeatherForLocation()
-        viewModel.getForecastForCity()
+        viewModel.getForecastForCity()//move to init block of viewmodel
         viewModel.status.observe(viewLifecycleOwner, Observer<Boolean> { status ->
             if (!status) {
                 Toast.makeText(activity, "There is no such city!", Toast.LENGTH_LONG).show()
@@ -56,9 +57,22 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
     }
 
 
-    fun goToCities(){
+    fun goToCities(){//this logic should be moved to view model
+        // onClick of databinding should call a function of viewmodel
+        // and viewmodel should somehow pass this event to fragment
+        // usually we have the source of events in viewmodel
+        //and fragment subscribes on this events
+        //
+        //look at the sample app events() of viewModel
+        // and fun handleEvents(event: Event) in fragment
+        //
+        // after you fix this,
+        // you should remove "mainScreenFragment" from xml
+        //and
+        //in fun handleError of viewmodel send event from viewModel to fragment to show toast.
+        //so you will be able to remove from fragment line "viewModel.status.observe..."
         val action = MainScreenFragmentDirections.navigateToCities()
-        Navigation.findNavController(binding.root).navigate(action)
+        findNavController().navigate(action)
     }
 
 }

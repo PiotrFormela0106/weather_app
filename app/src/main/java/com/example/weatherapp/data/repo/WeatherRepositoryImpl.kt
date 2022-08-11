@@ -13,22 +13,40 @@ class WeatherRepositoryImpl @Inject constructor(retrofitClient: RetrofitClient) 
     private val api = retrofitClient.api
 
     override fun getCurrentWeatherForCity(city: String): Single<Result<CurrentWeather>> {
-        return api.getCurrentWeatherForCity(city,"7a6886b06890c79387cbdf1ebc857ef2","pl","metric")
+        return api.getCurrentWeatherForCity(
+            cityName = city,
+            apikey = "7a6886b06890c79387cbdf1ebc857ef2",
+            lang = "pl",
+            units = "metric"
+        )//use named params when you have a lot of parameters of function
             .compose(mapCurrentWeatherResponse())
     }
 
     override fun getCurrentWeatherForLocation(lat: Double, lon: Double): Single<Result<CurrentWeather>> {
-        return api.getCurrentWeatherForLocation(lat,lon,"7a6886b06890c79387cbdf1ebc857ef2")
+        return api.getCurrentWeatherForLocation(
+            lat = lat,
+            lon = lon,
+            apikey = "7a6886b06890c79387cbdf1ebc857ef2"
+        )
             .compose(mapCurrentWeatherResponse())
     }
 
     override fun getForecastForCity(cityName: String): Single<Result<ForecastWeather>> {
-        return api.getForecastForCity(cityName,"7a6886b06890c79387cbdf1ebc857ef2","eng","metric")
+        return api.getForecastForCity(
+            cityName = cityName,
+            apikey = "7a6886b06890c79387cbdf1ebc857ef2",
+            lang = "eng",
+            units = "metric"
+        )
             .compose(mapForecastWeatherResponse())
     }
 
     override fun getForecastForLocation(lat: Double, lon: Double): Single<Result<ForecastWeather>> {
-        return api.getForecastForLocation(lat,lon,"7a6886b06890c79387cbdf1ebc857ef2")
+        return api.getForecastForLocation(
+            lat = lat,
+            lon = lon,
+            apikey = "7a6886b06890c79387cbdf1ebc857ef2"
+        )
             .compose(mapForecastWeatherResponse())
     }
 
