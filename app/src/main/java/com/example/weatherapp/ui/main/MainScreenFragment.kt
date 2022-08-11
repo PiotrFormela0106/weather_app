@@ -45,6 +45,7 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
 
         viewModel.getCurrentWeatherForCity()
         //viewModel.getCurrentWeatherForLocation()
+        viewModel.getForecastForCity()
         viewModel.status.observe(viewLifecycleOwner, Observer<Boolean> { status ->
             if (!status) {
                 Toast.makeText(activity, "There is no such city!", Toast.LENGTH_LONG).show()

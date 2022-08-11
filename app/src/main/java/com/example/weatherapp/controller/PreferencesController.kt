@@ -8,6 +8,7 @@ class PreferencesController @Inject constructor(context: Context) {
     private val prefs: SharedPreferences =
         context.getSharedPreferences("weather_prefs", Context.MODE_PRIVATE)
 
+
     fun saveCity(city: String?) {
         if (city == null) {
             prefs.edit().remove(EXTRA_CITY).apply()

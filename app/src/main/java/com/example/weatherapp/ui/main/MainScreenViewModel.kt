@@ -3,9 +3,8 @@ package com.example.weatherapp.ui.main
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.weatherapp.controller.PreferencesController
-import com.example.weatherapp.data.api.RetrofitClient
+import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.models.CurrentWeather
-import com.example.weatherapp.data.repo.WeatherRepositoryImpl
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -24,6 +23,7 @@ class MainScreenViewModel @Inject constructor(
     val imageUrl = MutableLiveData<String>("https://openweathermap.org/img/wn/03d@2x.png")
     val status = MutableLiveData<Boolean>()
     val weatherData = MutableLiveData<CurrentWeather>()
+    val forecastData = MutableLiveData<ForecastWeather>()
     val progress = MutableLiveData<Boolean>(false)
     val cityName = MutableLiveData<String>()
 
@@ -65,6 +65,38 @@ class MainScreenViewModel @Inject constructor(
                     })
         )
     }
+    fun getForecastForCity() {
+        disposable.add(
+            weatherRepository.getForecastForCity("Munich")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(
+                    onSuccess = {
+                        when (it) {
+                            is Result.OnSuccess -> handleSuccess(it.data)
+                            is Result.OnError -> {
+                                handleError(it.error)
+                            }
+                        }
+                    })
+        )
+    }
+    fun getForecastForLocation() {
+        disposable.add(
+            weatherRepository.getForecastForLocation(54.27,18.19)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(
+                    onSuccess = {
+                        when (it) {
+                            is Result.OnSuccess -> handleSuccess(it.data)
+                            is Result.OnError -> {
+                                handleError(it.error)
+                            }
+                        }
+                    })
+        )
+    }
 
     private fun handleSuccess(data: CurrentWeather) {
         weatherData.value = data
@@ -75,7 +107,16 @@ class MainScreenViewModel @Inject constructor(
         preferencesController.saveCity(data.cityName)
     }
 
+    private fun handleSuccess(data: ForecastWeather) {
+        Log.i("forecast","success")
+        forecastData.value = data
+        status.value = true
+        //preferencesController.saveCity(data.city.toString())
+    }
+
     private fun handleError(error: Error?) {
+        Log.i("forecast","error")
+
         status.value = false
     }
 

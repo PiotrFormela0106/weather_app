@@ -1,9 +1,7 @@
 package com.example.weatherapp.data.repo
 
 import com.example.weatherapp.data.api.RetrofitClient
-import com.example.weatherapp.data.mappers.CurrentWeatherData
-import com.example.weatherapp.data.mappers.CurrentWeatherDomain
-import com.example.weatherapp.data.mappers.toDomain
+import com.example.weatherapp.data.mappers.*
 import com.example.weatherapp.domain.models.*
 import com.example.weatherapp.domain.repo.WeatherRepository
 import io.reactivex.rxjava3.core.Single
@@ -24,8 +22,26 @@ class WeatherRepositoryImpl @Inject constructor(retrofitClient: RetrofitClient) 
             .compose(mapCurrentWeatherResponse())
     }
 
+    override fun getForecastForCity(cityName: String): Single<Result<ForecastWeather>> {
+        return api.getForecastForCity(cityName,"7a6886b06890c79387cbdf1ebc857ef2","eng","metric")
+            .compose(mapForecastWeatherResponse())
+    }
+
+    override fun getForecastForLocation(lat: Double, lon: Double): Single<Result<ForecastWeather>> {
+        return api.getForecastForLocation(lat,lon,"7a6886b06890c79387cbdf1ebc857ef2")
+            .compose(mapForecastWeatherResponse())
+    }
+
     private fun mapCurrentWeatherResponse():
             SingleTransformer<CurrentWeatherData, Result<CurrentWeatherDomain>> {
+        return SingleTransformer { upstream ->
+            upstream
+                .map { Result.withValue(it.toDomain()) }
+                .onErrorReturn{Result.withError(Error(it))}
+        }
+    }
+    private fun mapForecastWeatherResponse():
+            SingleTransformer<ForecastWeatherData, Result<ForecastWeatherDomain>> {
         return SingleTransformer { upstream ->
             upstream
                 .map { Result.withValue(it.toDomain()) }

@@ -2,7 +2,7 @@ package com.example.weatherapp.domain.models
 
 import com.google.gson.annotations.SerializedName
 
-data class ForecastWeather(val city: City,val list: List<ListElement>)
+data class ForecastWeather(var city: City, val list: List<ListElement>)
 
 data class CurrentWeather(
     @SerializedName("name") var cityName: String,
@@ -22,21 +22,21 @@ data class ListElement (
     val wind: Wind,
     val visibility: Long,
     val pop: Double,
-    val sys: Sys,
+    val sys: SysClass,
     @SerializedName("dt_txt") val dtTxt: String,
     val rain: Rain? = null
 )
 
 data class MainClass (
     val temp: Double,
-    val feelsLike: Double,
-    val tempMin: Double,
-    val tempMax: Double,
+    @SerializedName("feels_Like") val feelsLike: Double,
+    @SerializedName("temp_min")val tempMin: Double,
+    @SerializedName("temp_max")val tempMax: Double,
     val pressure: Long,
-    val seaLevel: Long,
-    val grindLevel: Long,
+    @SerializedName("sea_level")val seaLevel: Long,
+    @SerializedName("grnd_level")val grindLevel: Long,
     val humidity: Long,
-    val tempKf: Double
+    @SerializedName("temp_kf")val tempKf: Double
 )
 
 data class Rain (
@@ -55,7 +55,7 @@ data class City (
 )
 
 data class Weather(
-    val id: Long,
+    //val id: Long,
     val main: String,
     val description: String,
     val icon: String
@@ -82,7 +82,9 @@ data class Sys (
     val sunrise: Long,
     val sunset: Long
 )
-
+data class SysClass(
+    val pod: String
+)
 data class Wind (
     val speed: Double,
     val deg: Long,

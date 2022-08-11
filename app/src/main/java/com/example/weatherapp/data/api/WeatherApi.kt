@@ -2,9 +2,7 @@ package com.example.weatherapp.data.api
 
 import com.example.weatherapp.data.models.CurrentWeather
 import com.example.weatherapp.data.models.ForecastWeather
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -23,12 +21,22 @@ interface WeatherApi {
         @Query("lat") lat: Double,
         @Query("lon") lon: Double,
         @Query("appid") apikey: String
-    ): Single<CurrentWeather>
+    )       : Single<CurrentWeather>
 
 
     @GET("forecast")
-    fun getForecast(
+    fun getForecastForCity(
         @Query("q") cityName: String,
+        @Query("appid") apikey: String,
+        @Query("lang") lang: String,
+        @Query("units") units: String
+    )
+            : Single<ForecastWeather>
+
+    @GET("forecast")
+    fun getForecastForLocation(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
         @Query("appid") apikey: String
     )
             : Single<ForecastWeather>
