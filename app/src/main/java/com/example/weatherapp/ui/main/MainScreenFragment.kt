@@ -2,6 +2,7 @@ package com.example.weatherapp.ui.main
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +13,14 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentMainScreenBinding
 import com.example.weatherapp.di.DaggerMainScreenComponent
 import com.example.weatherapp.di.RepositoryModule
+import com.example.weatherapp.domain.models.ForecastWeather
+import com.example.weatherapp.domain.models.ListElement
+import com.example.weatherapp.ui.ForecastAdapter
 import javax.inject.Inject
 
 
@@ -23,6 +28,7 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
     private lateinit var binding: FragmentMainScreenBinding
     @Inject
     lateinit var viewModel: MainScreenViewModel
+    lateinit var forecast: ForecastWeather
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +50,6 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
         lifecycle.addObserver(viewModel)
 
         viewModel.getCurrentWeatherForCity()
-        //viewModel.getCurrentWeatherForLocation()
         viewModel.getForecastForCity()
         viewModel.status.observe(viewLifecycleOwner, Observer<Boolean> { status ->
             if (!status) {
@@ -52,6 +57,11 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
             }
         })
 
+        viewModel.forecastData.observe(viewLifecycleOwner,Observer<ForecastWeather>{data ->
+            forecast = data
+            binding.recyclerForecast.layoutManager = LinearLayoutManager(thisContext,LinearLayoutManager.HORIZONTAL,false)
+            binding.recyclerForecast.adapter = ForecastAdapter(forecast)
+        })
         return binding.root
     }
 

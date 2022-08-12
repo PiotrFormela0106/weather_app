@@ -2,6 +2,7 @@ package com.example.weatherapp.ui.main
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.example.weatherapp.Cache
 import com.example.weatherapp.controller.PreferencesController
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.models.CurrentWeather
@@ -26,13 +27,14 @@ class MainScreenViewModel @Inject constructor(
     val forecastData = MutableLiveData<ForecastWeather>()
     val progress = MutableLiveData<Boolean>(false)
     val cityName = MutableLiveData<String>()
+    val cache = MutableLiveData<Cache>()
 
     fun getCurrentWeatherForCity() {
         progress.postValue(true)
         disposable.add(
-            weatherRepository.getCurrentWeatherForCity(preferencesController.getCity())
+            weatherRepository.getCurrentWeatherForCity("Somonino")
                 .subscribeOn(Schedulers.io())
-                .delay(1, TimeUnit.SECONDS) //make progress bar longer (duration)
+                //.delay(1, TimeUnit.SECONDS) //make progress bar longer (duration)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onSuccess = {
@@ -67,7 +69,7 @@ class MainScreenViewModel @Inject constructor(
     }
     fun getForecastForCity() {
         disposable.add(
-            weatherRepository.getForecastForCity("Munich")
+            weatherRepository.getForecastForCity("Somonino")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
@@ -99,24 +101,22 @@ class MainScreenViewModel @Inject constructor(
     }
 
     private fun handleSuccess(data: CurrentWeather) {
+        status.value = true
         weatherData.value = data
         cityName.postValue(data.cityName)
         iconId.value = data.weather[0].icon
         imageUrl.value = "https://openweathermap.org/img/wn/${iconId.value}@2x.png"
-        status.value = true
         preferencesController.saveCity(data.cityName)
     }
 
     private fun handleSuccess(data: ForecastWeather) {
-        Log.i("forecast","success")
+        cache.value?.cache(cityName.toString(),data)
         forecastData.value = data
         status.value = true
         //preferencesController.saveCity(data.city.toString())
     }
 
     private fun handleError(error: Error?) {
-        Log.i("forecast","error")
-
         status.value = false
     }
 
