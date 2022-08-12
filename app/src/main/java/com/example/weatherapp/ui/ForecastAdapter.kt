@@ -11,26 +11,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.Cache
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.ForecastDayBinding
+import com.example.weatherapp.domain.models.ForecastItem
 import com.example.weatherapp.domain.models.ForecastWeather
-import com.example.weatherapp.domain.models.ListElement
+import com.squareup.picasso.Picasso
 
 class ForecastAdapter(private val forecast: ForecastWeather) :
     RecyclerView.Adapter<MyViewHolder>() {
     private lateinit var binding: ForecastDayBinding
-    //private val list: MutableList<ListElement> = mutableListOf()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
 
         binding = ForecastDayBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val layoutInflater = LayoutInflater.from(parent.context)
         val forecastBinding: ForecastDayBinding =
             ForecastDayBinding.inflate(layoutInflater, parent, false)
-        //val forecastDay = layoutInflater.inflate(R.layout.forecast_day, parent, false)
         return MyViewHolder(forecastBinding)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        lateinit var day: ListElement
+        lateinit var day: ForecastItem
         when (position) {
             0 -> day = forecast.list[position]
             1 -> day = forecast.list[8]
@@ -49,9 +47,14 @@ class ForecastAdapter(private val forecast: ForecastWeather) :
 class MyViewHolder(private val binding: ForecastDayBinding) :
 
     RecyclerView.ViewHolder(binding.root) {
-    fun bind(day: ListElement) {
-        binding.day.text = day.dtTxt
-        binding.temp.text = day.main.temp.toString()
-        binding.wind.text = day.wind.speed.toString()
+    fun bind(day: ForecastItem) {
+        //binding.day.text = day.date
+        //binding.temp.text = day.main.temp.toString()
+        //binding.wind.text = day.wind.speed.toString()
+        binding.forecast = day
+        binding.executePendingBindings()
+        Picasso.get()
+            .load("https://openweathermap.org/img/wn/${day.weather.get(0).icon}@2x.png")
+            .into(binding.imageView2)
     }
 }

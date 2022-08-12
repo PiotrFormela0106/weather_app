@@ -2,8 +2,11 @@ package com.example.weatherapp.ui.main
 
 import android.util.Log
 import androidx.lifecycle.*
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.weatherapp.Cache
 import com.example.weatherapp.controller.PreferencesController
+import com.example.weatherapp.domain.CityError
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.models.CurrentWeather
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -13,7 +16,10 @@ import java.util.concurrent.TimeUnit
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import com.example.weatherapp.domain.Result
 import com.example.weatherapp.domain.repo.WeatherRepository
+import com.example.weatherapp.ui.UiEvents
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
+import com.example.weatherapp.domain.Error
 
 class MainScreenViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository,
@@ -27,7 +33,14 @@ class MainScreenViewModel @Inject constructor(
     val forecastData = MutableLiveData<ForecastWeather>()
     val progress = MutableLiveData<Boolean>(false)
     val cityName = MutableLiveData<String>()
-    val cache = MutableLiveData<Cache>()
+
+    private val uiEvents = UiEvents<Event>()
+    val events: Observable<Event> = uiEvents.stream()
+
+    init {
+        getCurrentWeatherForCity()
+        getForecastForCity()
+    }
 
     fun getCurrentWeatherForCity() {
         progress.postValue(true)
@@ -110,7 +123,6 @@ class MainScreenViewModel @Inject constructor(
     }
 
     private fun handleSuccess(data: ForecastWeather) {
-        cache.value?.cache(cityName.toString(),data)
         forecastData.value = data
         status.value = true
         //preferencesController.saveCity(data.city.toString())
@@ -118,6 +130,13 @@ class MainScreenViewModel @Inject constructor(
 
     private fun handleError(error: Error?) {
         status.value = false
+        if(error is CityError){
+            uiEvents.post(Event.OnCityError(error.message))
+        }
+    }
+
+    fun onCitiesClick(){
+        Event.OnCitiesClick.let{uiEvents.post(it)}
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -130,4 +149,10 @@ class MainScreenViewModel @Inject constructor(
         Log.i("lifecycleobserver", "I\'m inside Observer of ViewModel ON_DESTROY")
         disposable.clear()
     }
+
+    sealed class Event{
+        object OnCitiesClick : Event()
+        class OnCityError(val message: String): Event()
+    }
+
 }

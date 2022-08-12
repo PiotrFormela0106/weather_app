@@ -2,44 +2,29 @@ package com.example.weatherapp.data.mappers
 
 typealias CurrentWeatherDomain = com.example.weatherapp.domain.models.CurrentWeather
 typealias ForecastWeatherDomain = com.example.weatherapp.domain.models.ForecastWeather
-typealias MainClassDomain = com.example.weatherapp.domain.models.MainClass
+typealias MainInfoDomain = com.example.weatherapp.domain.models.MainInfo
 typealias RainDomain = com.example.weatherapp.domain.models.Rain
 typealias CityDomain = com.example.weatherapp.domain.models.City
 typealias WeatherDomain = com.example.weatherapp.domain.models.Weather
-typealias MainDomain = com.example.weatherapp.domain.models.Main
 typealias CloudsDomain = com.example.weatherapp.domain.models.Clouds
-typealias SysDomain = com.example.weatherapp.domain.models.Sys
-typealias SysClassDomain = com.example.weatherapp.domain.models.SysClass
+typealias SunDomain = com.example.weatherapp.domain.models.Sun
 typealias WindDomain = com.example.weatherapp.domain.models.Wind
-typealias CoordDomain = com.example.weatherapp.domain.models.Coord
-typealias ListElementDomain = com.example.weatherapp.domain.models.ListElement
+typealias CoordinatesDomain = com.example.weatherapp.domain.models.Coordinates
+typealias ForecastItemDomain = com.example.weatherapp.domain.models.ForecastItem
 
 typealias CurrentWeatherData = com.example.weatherapp.data.models.CurrentWeather
 typealias ForecastWeatherData = com.example.weatherapp.data.models.ForecastWeather
-typealias MainClassData = com.example.weatherapp.data.models.MainClass
+typealias MainInfoData = com.example.weatherapp.data.models.MainInfo
 typealias RainData = com.example.weatherapp.data.models.Rain
 typealias CityData = com.example.weatherapp.data.models.City
 typealias WeatherData = com.example.weatherapp.data.models.Weather
-typealias MainData = com.example.weatherapp.data.models.Main
 typealias CloudsData = com.example.weatherapp.data.models.Clouds
-typealias SysData = com.example.weatherapp.data.models.Sys
-typealias SysClassData = com.example.weatherapp.data.models.SysClass
+typealias SunData = com.example.weatherapp.data.models.Sun
 typealias WindData = com.example.weatherapp.data.models.Wind
-typealias CoordData = com.example.weatherapp.data.models.Coord
-typealias ListElementData = com.example.weatherapp.data.models.ListElement
+typealias CoordinatesData = com.example.weatherapp.data.models.Coordinates
+typealias ForecastItemData = com.example.weatherapp.data.models.ForecastItem
 
-fun MainData.toDomain(): MainDomain = MainDomain(
-    temp = temp,
-    feelsLike = feelsLike,
-    tempMin = tempMin,
-    tempMax = tempMax,
-    pressure = pressure,
-    humidity = humidity,
-    seaLevel = seaLevel,
-    grindLevel = grindLevel
-)
-
-fun CoordData.toDomain(): CoordDomain = CoordDomain(
+fun CoordinatesData.toDomain(): CoordinatesDomain = CoordinatesDomain(
     lon = lon,
     lat = lat
 )
@@ -54,24 +39,19 @@ fun CloudsData.toDomain(): CloudsDomain = CloudsDomain(
     all = all
 )
 
-fun SysData.toDomain(): SysDomain = SysDomain(
-    type = type,
-    id = id,
-    country = country,
+fun SunData.toDomain(): SunDomain = SunDomain(
     sunrise = sunrise,
     sunset = sunset,
 )
 
 fun WindData.toDomain(): WindDomain = WindDomain(
-    speed = speed,
-    deg = deg,
-    gust = gust
+    speed = speed
 )
 
 fun CurrentWeatherData.toDomain(): CurrentWeatherDomain = CurrentWeatherDomain(
     cityName = cityName,
     main = main.toDomain(),
-    coord = coord.toDomain(),
+    coordinates = coordinates.toDomain(),
     weather = weather.map{it.toDomain()},
     clouds = clouds.toDomain(),
     sys = sys.toDomain(),
@@ -79,46 +59,30 @@ fun CurrentWeatherData.toDomain(): CurrentWeatherDomain = CurrentWeatherDomain(
 )
 
 fun CityData.toDomain(): CityDomain = CityDomain(
-    id = id,
     name = name,
-    coord = coord.toDomain(),
+    coordinates = coordinates.toDomain(),
     country = country,
-    population = population,
-    timezone = timezone,
     sunrise = sunrise,
     sunset = sunset
 )
 
-fun MainClassData.toDomain(): MainClassDomain = MainClassDomain(
+fun MainInfoData.toDomain(): MainInfoDomain = MainInfoDomain(
     temp = temp,
     feelsLike = feelsLike,
-    tempMin = tempMin,
-    tempMax = tempMax,
     pressure = pressure,
-    seaLevel = seaLevel,
-    grindLevel = grindLevel,
-    humidity = humidity,
-    tempKf = tempKf
+    humidity = humidity
 )
 
 fun RainData.toDomain(): RainDomain = RainDomain(
     the3H = the3H
 )
 
-fun SysClassData.toDomain(): SysClassDomain = SysClassDomain(
-    pod = pod
-)
-
-fun ListElementData.toDomain(): ListElementDomain = ListElementDomain(
-    dt = dt,
+fun ForecastItemData.toDomain(): ForecastItemDomain = ForecastItemDomain(
     main = main.toDomain(),
     weather = weather.map{it.toDomain()},
     clouds = clouds.toDomain(),
     wind = wind.toDomain(),
-    visibility = visibility,
-    pop = pop,
-    sys = sys.toDomain(),
-    dtTxt = dtTxt,
+    date = date,
     rain = rain?.toDomain()
 )
 

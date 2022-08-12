@@ -13,14 +13,16 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentMainScreenBinding
 import com.example.weatherapp.di.DaggerMainScreenComponent
 import com.example.weatherapp.di.RepositoryModule
 import com.example.weatherapp.domain.models.ForecastWeather
-import com.example.weatherapp.domain.models.ListElement
 import com.example.weatherapp.ui.ForecastAdapter
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
 
@@ -29,6 +31,7 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
     @Inject
     lateinit var viewModel: MainScreenViewModel
     lateinit var forecast: ForecastWeather
+    //lateinit var adapter: ForecastAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,31 +47,38 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
             .build()
             .inject(this)
 
-        binding.mainScreen = viewModel
-        binding.mainScreenFragment = this
+        binding.viewModel = viewModel
         binding.lifecycleOwner = this
         lifecycle.addObserver(viewModel)
 
-        viewModel.getCurrentWeatherForCity()
-        viewModel.getForecastForCity()
-        viewModel.status.observe(viewLifecycleOwner, Observer<Boolean> { status ->
-            if (!status) {
-                Toast.makeText(activity, "There is no such city!", Toast.LENGTH_LONG).show()
-            }
-        })
+        viewModel.events
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe{handleEvent(it)}
 
+        //-----------IN-PROGRESS-------------//
+        //don't analyse it for now, it's in progress
         viewModel.forecastData.observe(viewLifecycleOwner,Observer<ForecastWeather>{data ->
             forecast = data
-            binding.recyclerForecast.layoutManager = LinearLayoutManager(thisContext,LinearLayoutManager.HORIZONTAL,false)
-            binding.recyclerForecast.adapter = ForecastAdapter(forecast)
+            setupRecyclerView(thisContext, forecast)
         })
+        //-----------IN-PROGRESS-------------//
+
         return binding.root
     }
 
+    private fun setupRecyclerView(context: Context, forecast: ForecastWeather){
+        binding.recyclerForecast.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+        binding.recyclerForecast.adapter = ForecastAdapter(forecast)
+    }
 
-    fun goToCities(){
-        val action = MainScreenFragmentDirections.navigateToCities()
-        Navigation.findNavController(binding.root).navigate(action)
+    private fun handleEvent(event: MainScreenViewModel.Event) {
+        when(event){
+            is MainScreenViewModel.Event.OnCitiesClick ->
+                findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
+            is MainScreenViewModel.Event.OnCityError -> {
+                Toast.makeText(activity, event.message, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
 }

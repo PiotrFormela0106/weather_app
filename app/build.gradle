@@ -29,8 +29,15 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            buildConfigField "String", "API_URL", '"https://api.openweathermap.org/data/2.5/"'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug{
+            minifyEnabled false
+            buildConfigField "String", "API_URL", '"https://api.openweathermap.org/data/2.5/"'
+            debuggable true
+        }
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
