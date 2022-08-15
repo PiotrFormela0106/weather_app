@@ -2,20 +2,22 @@ package com.example.weatherapp.ui.main
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentMainScreenBinding
 import com.example.weatherapp.di.DaggerMainScreenComponent
@@ -73,8 +75,11 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
 
     private fun handleEvent(event: MainScreenViewModel.Event) {
         when(event){
-            is MainScreenViewModel.Event.OnCitiesClick ->
+            is MainScreenViewModel.Event.OnCitiesClick -> {
                 findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
+                //View.OnClickListener { activity?.onBackPressed() }
+            }
+
             is MainScreenViewModel.Event.OnCityError -> {
                 Toast.makeText(activity, event.message, Toast.LENGTH_LONG).show()
             }

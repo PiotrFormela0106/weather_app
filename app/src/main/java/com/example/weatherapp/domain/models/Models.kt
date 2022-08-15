@@ -1,9 +1,9 @@
 package com.example.weatherapp.domain.models
 
-data class ForecastWeather(var city: City, val list: List<ForecastItem>)
+data class ForecastWeather(val city: City, val list: List<ForecastItem>)
 
 data class CurrentWeather(
-    var cityName: String,
+    val cityName: String,
     val main: MainInfo,
     val coordinates: Coordinates,
     val weather: List<Weather>,

@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="36dp"
-        android:text='@{Double.toString(viewModel.weatherData.main.temp)+` C`}'
+        android:text='@{viewModel.temp}'
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@color/black"
         android:textSize="34sp"

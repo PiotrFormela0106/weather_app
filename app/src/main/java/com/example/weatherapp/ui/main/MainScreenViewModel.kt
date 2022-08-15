@@ -33,7 +33,7 @@ class MainScreenViewModel @Inject constructor(
     val forecastData = MutableLiveData<ForecastWeather>()
     val progress = MutableLiveData<Boolean>(false)
     val cityName = MutableLiveData<String>()
-
+    var temp: LiveData<String> = Transformations.map(weatherData) { weather -> weather.main.temp.toString() + " C" }
     private val uiEvents = UiEvents<Event>()
     val events: Observable<Event> = uiEvents.stream()
 

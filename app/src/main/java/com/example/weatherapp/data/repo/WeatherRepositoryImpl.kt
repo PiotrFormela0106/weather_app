@@ -11,8 +11,9 @@ import com.example.weatherapp.domain.Result
 import javax.inject.Inject
 import com.example.weatherapp.domain.Error
 import com.example.weatherapp.domain.toError
+import com.example.weatherapp.BuildConfig
+import com.example.weatherapp.BuildConfig.API_KEY
 
-private const val API_KEY = "7a6886b06890c79387cbdf1ebc857ef2"
 private const val LANG_PL = "pl"
 private const val LANG_ENG = "eng"
 private const val METRIC = "METRIC"
