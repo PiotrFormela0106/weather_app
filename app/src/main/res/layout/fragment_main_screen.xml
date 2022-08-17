@@ -4,11 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
-            name="mainScreen"
+            name="viewModel"
             type="com.example.weatherapp.ui.main.MainScreenViewModel"/>
-        <variable
-            name="mainScreenFragment"
-            type="com.example.weatherapp.ui.main.MainScreenFragment"/>
     </data>
 
     <LinearLayout
@@ -28,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="@{mainScreen.forecastData.list.get(0).dtTxt}"
+                android:text="@{viewModel.cityName}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 android:textColor="@color/black"
                 android:textSize="24sp"
@@ -41,7 +38,7 @@
                 android:id="@+id/imageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{()->mainScreenFragment.goToCities()}"
+                android:onClick="@{()->viewModel.onCitiesClick()}"
                 app:layout_constraintEnd_toStartOf="@+id/city_name"
                 app:layout_constraintHorizontal_bias="0.101"
                 app:layout_constraintStart_toStartOf="parent"
@@ -52,16 +49,21 @@
 
         <include
             layout="@layout/current_weather"
-            app:mainScreen="@{mainScreen}" />
+            app:viewModel="@{viewModel}" />
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerForecast"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="250dp"
+            android:background="@color/blue_sky"
             android:orientation="horizontal"
-            tools:listitem="@layout/forecast_day"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/forecast_day" />
+
+        <include layout="@layout/air_pollution"
+            app:viewModel="@{viewModel}"/>
 
         <ProgressBar
             android:id="@+id/progress"
@@ -69,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="@{mainScreen.progress}" />
+            android:visibility="@{viewModel.progress}"/>
 
 
     </LinearLayout>

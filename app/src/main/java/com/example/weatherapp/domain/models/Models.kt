@@ -1,42 +1,55 @@
 package com.example.weatherapp.domain.models
 
-import com.google.gson.annotations.SerializedName
-
-data class ForecastWeather(var city: City, val list: List<ListElement>)
+//data class AirPollution(val coordinates: Coordinates, val list: List<AirPollutionItem>)
+data class AirPollution(val coordinates: Coordinates, val list: List<AirPollutionItem>)
+data class CurrentAndForecast(val currentWeather: CurrentWeather, val forecast: ForecastWeather)
+data class ForecastWeather(val city: City, val list: List<ForecastItem>)
 
 data class CurrentWeather(
-    @SerializedName("name") var cityName: String,
-    val main: Main,
-    val coord: Coord,
+    val cityName: String,
+    val main: MainInfo,
+    val coordinates: Coordinates,
     val weather: List<Weather>,
     val clouds: Clouds,
-    val sys: Sys,
+    val sys: Sun,
     val wind: Wind
 )
 
-data class ListElement (
-    val dt: Long,
-    val main: MainClass,
+data class ForecastItem (
+    val main: MainInfo,
     val weather: List<Weather>,
     val clouds: Clouds,
     val wind: Wind,
-    val visibility: Long,
-    val pop: Double,
-    val sys: SysClass,
-    @SerializedName("dt_txt") val dtTxt: String,
+    val date: String,
     val rain: Rain? = null
 )
 
-data class MainClass (
+data class AirPollutionItem(
+    val main: AirQualityIndex,
+    val components: Components,
+    val dt: Int
+)
+
+data class AirQualityIndex(
+    val aqi: Int
+)
+
+data class Components(
+    var co: Double,
+    var no: Double,
+    var no2: Double,
+    var o3: Double,
+    var so2: Double,
+    var pm2_5: Double,
+    var pm10: Double,
+    var nh3 : Double
+)
+
+data class MainInfo (
     val temp: Double,
-    @SerializedName("feels_Like") val feelsLike: Double,
-    @SerializedName("temp_min")val tempMin: Double,
-    @SerializedName("temp_max")val tempMax: Double,
+    val feelsLike: Double,
     val pressure: Long,
-    @SerializedName("sea_level")val seaLevel: Long,
-    @SerializedName("grnd_level")val grindLevel: Long,
     val humidity: Long,
-    @SerializedName("temp_kf")val tempKf: Double
 )
 
 data class Rain (
@@ -44,54 +57,32 @@ data class Rain (
 )
 
 data class City (
-    val id: Long,
     val name: String,
-    val coord: Coord,
+    val coordinates: Coordinates,
     val country: String,
-    val population: Long,
-    val timezone: Long,
     val sunrise: Long,
     val sunset: Long
 )
 
 data class Weather(
-    //val id: Long,
     val main: String,
     val description: String,
     val icon: String
 )
 
-data class Main(
-    @SerializedName("temp") val temp: Double,
-    @SerializedName("feels_like") val feelsLike: Double,
-    @SerializedName("temp_min") val tempMin: Double,
-    @SerializedName("temp_max") val tempMax: Double, val pressure: Long,
-    val humidity: Long,
-    @SerializedName("sea_level") val seaLevel: Long,
-    @SerializedName("grnd_level") val grindLevel: Long
-
-)
 data class Clouds (
     val all: Long
 )
 
-data class Sys (
-    val type: Long,
-    val id: Long,
-    val country: String,
+data class Sun (
     val sunrise: Long,
     val sunset: Long
 )
-data class SysClass(
-    val pod: String
-)
 data class Wind (
-    val speed: Double,
-    val deg: Long,
-    val gust: Double
+    val speed: Double
 )
 
-data class Coord(
+data class Coordinates(
     val lon: Double,
     val lat: Double
 )

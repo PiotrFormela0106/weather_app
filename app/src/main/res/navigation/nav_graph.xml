@@ -8,20 +8,29 @@
     <fragment
         android:id="@+id/mainScreenFragment"
         android:name="com.example.weatherapp.ui.main.MainScreenFragment"
-        android:label="fragment_main_screen"
+        android:label="Main screen"
         tools:layout="@layout/fragment_main_screen" >
         <action
             android:id="@+id/navigateToCities"
-            app:destination="@id/cityScreenFragment" />
+            app:destination="@id/cityScreenFragment"
+            app:popUpTo="@id/mainScreenFragment"/>
+        <action
+            android:id="@+id/navigateToSettings"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/additionalInfoScreenFragment"
         android:name="com.example.weatherapp.ui.additionalinfo.AdditionalInfoScreenFragment"
-        android:label="fragment_additional_info_screen"
+        android:label="Additional info"
         tools:layout="@layout/fragment_additional_info_screen" />
     <fragment
         android:id="@+id/cityScreenFragment"
         android:name="com.example.weatherapp.ui.city.CityScreenFragment"
-        android:label="fragment_city_screen"
+        android:label="Cities screen"
         tools:layout="@layout/fragment_city_screen" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.weatherapp.ui.settings.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

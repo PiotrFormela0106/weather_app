@@ -2,39 +2,83 @@ package com.example.weatherapp.ui.main
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.weatherapp.Cache
 import com.example.weatherapp.controller.PreferencesController
-import com.example.weatherapp.domain.models.ForecastWeather
+import com.example.weatherapp.domain.models.AirPollution
+import com.example.weatherapp.data.repo.WeatherRepositoryImpl.LocationMethod
+import com.example.weatherapp.domain.CityError
+import com.example.weatherapp.domain.Error
+import com.example.weatherapp.domain.Result
+import com.example.weatherapp.domain.models.CurrentAndForecast
 import com.example.weatherapp.domain.models.CurrentWeather
+import com.example.weatherapp.domain.models.ForecastWeather
+import com.example.weatherapp.domain.repo.StorageRepository
+import com.example.weatherapp.domain.repo.WeatherRepository
+import com.example.weatherapp.ui.UiEvents
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
-import io.reactivex.rxjava3.kotlin.subscribeBy
-import com.example.weatherapp.domain.Result
-import com.example.weatherapp.domain.repo.WeatherRepository
 import javax.inject.Inject
 
 class MainScreenViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository,
-    private val preferencesController: PreferencesController
+    private val storageRepository: StorageRepository
 ) : ViewModel(), LifecycleObserver {
     private val disposable = CompositeDisposable()
     private val iconId = MutableLiveData<String>()
     val imageUrl = MutableLiveData<String>("https://openweathermap.org/img/wn/03d@2x.png")
-    val status = MutableLiveData<Boolean>()
+    val status = MutableLiveData<Status>(Status.Loading)
     val weatherData = MutableLiveData<CurrentWeather>()
     val forecastData = MutableLiveData<ForecastWeather>()
-    val progress = MutableLiveData<Boolean>(false)
+    val airPollutionData = MutableLiveData<AirPollution>()
     val cityName = MutableLiveData<String>()
-    val cache = MutableLiveData<Cache>()
+    val temperature: LiveData<String> =
+        Transformations.map(weatherData) { weather -> "${weather.main.temp} C" }
+    val aqi: LiveData<String> =
+        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].main.aqi}" }
+    val co: LiveData<String> =
+        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.co}" }
+    val no: LiveData<String> =
+        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.no}" }
+    val no2: LiveData<String> =
+        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.no2}" }
+    val o3: LiveData<String> =
+        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.o3}" }
+    val so2: LiveData<String> =
+        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.so2}" }
+    val pm2_5: LiveData<String> =
+        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.pm2_5}" }
+    val pm10: LiveData<String> =
+        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.pm10}" }
+    val nh3: LiveData<String> =
+        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.nh3}" }
+    private val uiEvents = UiEvents<Event>()
+    val events: Observable<Event> = uiEvents.stream()
+    val progress = MutableLiveData<Boolean>()
 
-    fun getCurrentWeatherForCity() {
+    enum class Status { Loading, Success, Error }
+
+    init {
+        storageRepository.saveLocationMethod(LocationMethod.City)
+        getCurrentWeather()
+        getForecastWeather()
+        getAirPollution()
+
+    }
+
+    private fun getCurrentWeather() {
         progress.postValue(true)
+        status.postValue(Status.Loading)
         disposable.add(
-            weatherRepository.getCurrentWeatherForCity("Somonino")
+            weatherRepository.getCurrentWeather(
+                city ="Somonino",
+                units = storageRepository.getUnits() ?: "metric"
+            )
                 .subscribeOn(Schedulers.io())
-                //.delay(1, TimeUnit.SECONDS) //make progress bar longer (duration)
+                //.delay(3, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onSuccess = {
@@ -48,28 +92,10 @@ class MainScreenViewModel @Inject constructor(
                     })
         )
     }
-    fun getCurrentWeatherForLocation() {
-        progress.postValue(true)
+
+    private fun getForecastWeather() {
         disposable.add(
-            weatherRepository.getCurrentWeatherForLocation(54.27,18.19)
-                .subscribeOn(Schedulers.io())
-                .delay(1, TimeUnit.SECONDS) //make progress bar longer (duration)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(
-                    onSuccess = {
-                        progress.postValue(false)
-                        when (it) {
-                            is Result.OnSuccess -> handleSuccess(it.data)
-                            is Result.OnError -> {
-                                handleError(it.error)
-                            }
-                        }
-                    })
-        )
-    }
-    fun getForecastForCity() {
-        disposable.add(
-            weatherRepository.getForecastForCity("Somonino")
+            weatherRepository.getForecastWeather("Somonino")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
@@ -83,9 +109,10 @@ class MainScreenViewModel @Inject constructor(
                     })
         )
     }
-    fun getForecastForLocation() {
+
+    private fun getAirPollution() {
         disposable.add(
-            weatherRepository.getForecastForLocation(54.27,18.19)
+            weatherRepository.getAirPollution(54.27, 18.19)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
@@ -96,28 +123,37 @@ class MainScreenViewModel @Inject constructor(
                                 handleError(it.error)
                             }
                         }
-                    })
+                    }
+                )
         )
     }
 
     private fun handleSuccess(data: CurrentWeather) {
-        status.value = true
+        status.postValue(Status.Success)
         weatherData.value = data
         cityName.postValue(data.cityName)
         iconId.value = data.weather[0].icon
         imageUrl.value = "https://openweathermap.org/img/wn/${iconId.value}@2x.png"
-        preferencesController.saveCity(data.cityName)
+        storageRepository.saveCity(data.cityName)
     }
 
     private fun handleSuccess(data: ForecastWeather) {
-        cache.value?.cache(cityName.toString(),data)
         forecastData.value = data
-        status.value = true
-        //preferencesController.saveCity(data.city.toString())
+    }
+
+    private fun handleSuccess(data: AirPollution) {
+        airPollutionData.value = data
     }
 
     private fun handleError(error: Error?) {
-        status.value = false
+        status.postValue(Status.Error)
+        if (error is CityError) {
+            uiEvents.post(Event.OnCityError(error.message))
+        }
+    }
+
+    fun onCitiesClick() {
+        Event.OnCitiesClick.let { uiEvents.post(it) }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -130,4 +166,10 @@ class MainScreenViewModel @Inject constructor(
         Log.i("lifecycleobserver", "I\'m inside Observer of ViewModel ON_DESTROY")
         disposable.clear()
     }
+
+    sealed class Event {
+        object OnCitiesClick : Event()
+        class OnCityError(val message: String) : Event()
+    }
+
 }

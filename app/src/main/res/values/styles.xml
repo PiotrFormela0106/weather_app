@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="air_pollution" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/air_pollution_components_text_size</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_width">@dimen/air_pollution_comp_width</item>
+    </style>
+    <style name="air_pollution_hints" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/air_pollution_components_hints_text_size</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_width">@dimen/air_pollution_comp_width</item>
+    </style>
+    <style name="air_pollution_aqi" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/air_pollution_aqi</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+</resources>

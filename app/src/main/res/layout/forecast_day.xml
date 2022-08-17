@@ -4,23 +4,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="forecastMainScreen"
-            type="com.example.weatherapp.ui.main.MainScreenViewModel" />
+            name="forecast"
+            type="com.example.weatherapp.domain.models.ForecastItem" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="100dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/blue_sky">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/forecast_rectangle">
 
             <TextView
                 android:id="@+id/day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Day"
+                android:gravity="center"
+                android:text="@{forecast.date}"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -30,8 +33,8 @@
                 android:id="@+id/temp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Temp"
+                android:layout_marginTop="12dp"
+                android:text="@{Double.toString(forecast.main.temp)}"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
@@ -40,21 +43,22 @@
 
             <ImageView
                 android:id="@+id/imageView2"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginTop="16dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/temp"
                 tools:srcCompat="@tools:sample/avatars" />
 
+
             <TextView
                 android:id="@+id/wind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Wind"
+                android:layout_marginTop="4dp"
+                android:text="@{forecast.weather.get(0).main}"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"

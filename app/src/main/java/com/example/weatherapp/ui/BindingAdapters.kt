@@ -3,9 +3,20 @@ package com.example.weatherapp.ui
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.databinding.BindingAdapter
+import com.example.weatherapp.ui.main.MainScreenViewModel
+import com.example.weatherapp.ui.main.MainScreenViewModel.Status
 import com.squareup.picasso.Picasso
 
+@BindingAdapter("android:visibility")
+fun setVisibility(view: View, visible: Status) {
+    view.visibility =
+        when(visible){
+            Status.Success, Status.Loading -> View.VISIBLE
+            Status.Error -> View.INVISIBLE
+        }
+}
 @BindingAdapter("android:visibility")
 fun setVisibility(view: View, visible: Boolean) {
     view.visibility = if (visible) View.VISIBLE else View.GONE
