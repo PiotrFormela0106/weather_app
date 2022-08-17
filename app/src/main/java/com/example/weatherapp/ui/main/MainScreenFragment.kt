@@ -33,7 +33,6 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
     @Inject
     lateinit var viewModel: MainScreenViewModel
     lateinit var forecast: ForecastWeather
-    //lateinit var adapter: ForecastAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,7 +57,6 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
             .subscribe{handleEvent(it)}
 
         //-----------IN-PROGRESS-------------//
-        //don't analyse it for now, it's in progress
         viewModel.forecastData.observe(viewLifecycleOwner,Observer<ForecastWeather>{data ->
             forecast = data
             setupRecyclerView(thisContext, forecast)
@@ -77,9 +75,7 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
         when(event){
             is MainScreenViewModel.Event.OnCitiesClick -> {
                 findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
-                //View.OnClickListener { activity?.onBackPressed() }
             }
-
             is MainScreenViewModel.Event.OnCityError -> {
                 Toast.makeText(activity, event.message, Toast.LENGTH_LONG).show()
             }

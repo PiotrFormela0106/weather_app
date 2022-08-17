@@ -13,45 +13,75 @@ import com.example.weatherapp.domain.Error
 import com.example.weatherapp.domain.toError
 import com.example.weatherapp.BuildConfig
 import com.example.weatherapp.BuildConfig.API_KEY
+import com.example.weatherapp.controller.PreferencesController
+import com.example.weatherapp.domain.repo.StorageRepository
 
 private const val LANG_PL = "pl"
 private const val LANG_ENG = "eng"
 private const val METRIC = "METRIC"
 
-class WeatherRepositoryImpl @Inject constructor(retrofitClient: RetrofitClient) :
-    WeatherRepository {
+class WeatherRepositoryImpl @Inject constructor(
+    retrofitClient: RetrofitClient,
+    val storageRepository: StorageRepository
+) : WeatherRepository {
+    enum class LocationMethod {
+        City, Location;
+
+        companion object {
+            fun toLocationMethod(methodString: String): LocationMethod {
+                return valueOf(methodString)
+            }
+        }
+    }
+
     private val api = retrofitClient.api
-    override fun getCurrentWeatherForCity(city: String): Single<Result<CurrentWeather>> {
-        return api.getCurrentWeatherForCity(
-            cityName = city,
-            apikey = API_KEY,
-            lang = LANG_PL,
-            units = METRIC
-        )
-            .compose(mapCurrentWeatherResponse())
+    override fun getCurrentWeather(
+        city: String?,
+        lat: Double?,
+        lon: Double?,
+        units: String
+    ): Single<Result<CurrentWeatherDomain>> {
+        return when (storageRepository.getLocationMethod()) {
+            LocationMethod.City -> api.getCurrentWeatherForCity(
+                cityName = city,
+                apikey = API_KEY,
+                lang = LANG_PL,
+                units = units
+            ).compose(mapCurrentWeatherResponse())
+            LocationMethod.Location -> api.getCurrentWeatherForLocation(
+                lat = lat,
+                lon = lon,
+                apikey = API_KEY,
+                units = units
+            ).compose(mapCurrentWeatherResponse())
+        }
+
     }
 
-    override fun getCurrentWeatherForLocation(
-        lat: Double,
-        lon: Double
-    ): Single<Result<CurrentWeather>> {
-        return api.getCurrentWeatherForLocation(lat = lat, lon = lon, apikey = API_KEY)
-            .compose(mapCurrentWeatherResponse())
+    override fun getForecastWeather(
+        city: String?,
+        lat: Double?,
+        lon: Double?
+    ): Single<Result<ForecastWeatherDomain>> {
+        return when (storageRepository.getLocationMethod()) {
+            LocationMethod.City -> api.getForecastForCity(
+                cityName = city,
+                apikey = API_KEY,
+                lang = LANG_PL,
+                units = "metric"
+            ).compose(mapForecastWeatherResponse())
+            LocationMethod.Location -> api.getForecastForLocation(
+                lat = lat,
+                lon = lon,
+                apikey = API_KEY,
+                units = "metric"
+            ).compose(mapForecastWeatherResponse())
+        }
     }
 
-    override fun getForecastForCity(cityName: String): Single<Result<ForecastWeather>> {
-        return api.getForecastForCity(
-            cityName = cityName,
-            apikey = API_KEY,
-            lang = LANG_PL,
-            units = METRIC
-        )
-            .compose(mapForecastWeatherResponse())
-    }
-
-    override fun getForecastForLocation(lat: Double, lon: Double): Single<Result<ForecastWeather>> {
-        return api.getForecastForLocation(lat = lat, lon = lon, apikey = API_KEY)
-            .compose(mapForecastWeatherResponse())
+    override fun getAirPollution(lat: Double, lon: Double):Single<Result<AirPollutionDomain>> {
+        return api.getAirPollution(lat = lat, lon = lon, apikey = API_KEY)
+            .compose(mapAirPollutionResponse())
     }
 
     private fun mapCurrentWeatherResponse():
@@ -60,7 +90,7 @@ class WeatherRepositoryImpl @Inject constructor(retrofitClient: RetrofitClient) 
             upstream
                 .map { Result.withValue(it.toDomain()) }
                 .onErrorReturn { it.toResultError() }
-                //.onErrorReturn { Result.withError(Error(it)) }
+            //.onErrorReturn { Result.withError(Error(it)) }
         }
     }
 
@@ -70,12 +100,22 @@ class WeatherRepositoryImpl @Inject constructor(retrofitClient: RetrofitClient) 
             upstream
                 .map { Result.withValue(it.toDomain()) }
                 .onErrorReturn { it.toResultError() }
-                //.onErrorReturn { Result.withError(Error(it)) }
+            //.onErrorReturn { Result.withError(Error(it)) }
         }
     }
+
+    private fun mapAirPollutionResponse():SingleTransformer<AirPollutionData, Result<AirPollutionDomain>>{
+        return SingleTransformer { upstream ->
+            upstream
+                .map { Result.withValue(it.toDomain()) }
+                .onErrorReturn { it.toResultError() }
+        }
+    }
+
     private fun <T> Throwable.toResultError(): Result<T> {
         val error = this.toError()
         return Result.withError<T>(error)
     }
+
 
 }
