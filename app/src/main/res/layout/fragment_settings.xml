@@ -20,23 +20,23 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-            <!--android:checkedButton="@{viewModel.radioChecked}"-->
+            app:layout_constraintTop_toTopOf="parent"
+            android:checkedButton="@{viewModel.radioChecked}">
 
             <RadioButton
                 android:id="@+id/metric"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="@{()->viewModel.onRadioButtonClick()}"
                 android:text="Metric"
+                android:onClick="@{()->viewModel.onRadioButtonClick()}"
                 android:textSize="24sp" />
 
             <RadioButton
                 android:id="@+id/non_metric"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="@{()->viewModel.onRadioButtonClick()}"
                 android:text="Not metric"
+                android:onClick="@{()->viewModel.onRadioButtonClick()}"
                 android:textSize="24sp" />
         </RadioGroup>
     </androidx.constraintlayout.widget.ConstraintLayout>

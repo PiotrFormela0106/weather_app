@@ -15,7 +15,13 @@ class SettingsViewModel @Inject constructor(
     private val uiEvents = UiEvents<Event>()
     val events: Observable<SettingsViewModel.Event> = uiEvents.stream()
     private val units = storageRepository.getUnits()
-    //val radioChecked = MutableLiveData<Int>(if (units.equals("metric")) R.id.metric else R.id.non_metric)
+    val radioChecked = MutableLiveData<Int>()
+
+    init {
+        radioChecked.postValue(
+            if (units.equals("metric")) R.id.metric else R.id.non_metric
+        )
+    }
 
     fun onRadioButtonClick() {
         Event.OnRadioButtonClick.let { uiEvents.post(it) }
