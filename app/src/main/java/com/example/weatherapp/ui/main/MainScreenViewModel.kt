@@ -1,6 +1,7 @@
 package com.example.weatherapp.ui.main
 
 import android.util.Log
+import androidx.databinding.ObservableField
 import androidx.lifecycle.*
 import com.example.weatherapp.controller.PreferencesController
 import com.example.weatherapp.domain.models.AirPollution
@@ -8,7 +9,6 @@ import com.example.weatherapp.data.repo.WeatherRepositoryImpl.LocationMethod
 import com.example.weatherapp.domain.CityError
 import com.example.weatherapp.domain.Error
 import com.example.weatherapp.domain.Result
-import com.example.weatherapp.domain.models.CurrentAndForecast
 import com.example.weatherapp.domain.models.CurrentWeather
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.repo.StorageRepository
@@ -18,6 +18,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.functions.BiFunction
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -58,23 +59,26 @@ class MainScreenViewModel @Inject constructor(
     private val uiEvents = UiEvents<Event>()
     val events: Observable<Event> = uiEvents.stream()
     val progress = MutableLiveData<Boolean>()
+    val lat = MutableLiveData<Double>(84.27)
+    val lon = MutableLiveData<Double>(28.19)
 
     enum class Status { Loading, Success, Error }
 
     init {
+        Log.i("viewModel/units", storageRepository.getUnits())
         storageRepository.saveLocationMethod(LocationMethod.City)
         getCurrentWeather()
         getForecastWeather()
         getAirPollution()
-
     }
+
 
     private fun getCurrentWeather() {
         progress.postValue(true)
         status.postValue(Status.Loading)
         disposable.add(
             weatherRepository.getCurrentWeather(
-                city ="Somonino",
+                city = "Somonino",
                 units = storageRepository.getUnits() ?: "metric"
             )
                 .subscribeOn(Schedulers.io())
@@ -95,7 +99,10 @@ class MainScreenViewModel @Inject constructor(
 
     private fun getForecastWeather() {
         disposable.add(
-            weatherRepository.getForecastWeather("Somonino")
+            weatherRepository.getForecastWeather(
+                city = "Somonino",
+                units = storageRepository.getUnits() ?: "metric"
+            )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
@@ -109,10 +116,33 @@ class MainScreenViewModel @Inject constructor(
                     })
         )
     }
+    /*private fun getCurrentWeather() {
+        progress.postValue(true)
+        status.postValue(Status.Loading)
+        weatherRepository.getCurrentWeather(
+            city = "Somonino",
+            units = storageRepository.getUnits() ?: "metric"
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    private fun getForecastWeather() {
+            weatherRepository.getForecastWeather(
+                city = "Somonino",
+                units = storageRepository.getUnits() ?: "metric"
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+    }*/
 
     private fun getAirPollution() {
+        lat.postValue(weatherData.value?.coordinates?.lat)
+        lon.postValue(weatherData.value?.coordinates?.lat)
+        Log.i("weatherDAta", weatherData.value?.coordinates?.lat.toString())
+        Log.i("lonAir", lon.value.toString())
         disposable.add(
-            weatherRepository.getAirPollution(54.27, 18.19)
+            weatherRepository.getAirPollution(lat = 54.27,lon = 18.99)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(

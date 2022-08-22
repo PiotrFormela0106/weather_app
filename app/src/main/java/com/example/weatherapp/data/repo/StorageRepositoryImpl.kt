@@ -38,5 +38,4 @@ class StorageRepositoryImpl @Inject constructor(preferencesController: Preferenc
     override fun getUnits(): String {
         return prefs.getString(UNITS, "").orEmpty()
     }
-
 }

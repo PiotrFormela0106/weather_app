@@ -9,6 +9,6 @@ import io.reactivex.rxjava3.core.Single
 interface WeatherRepository {
 
     fun getCurrentWeather(city: String? = null, lat: Double?=null, lon: Double?=null, units: String): Single<Result<CurrentWeatherDomain>>
-    fun getForecastWeather(city: String? = null, lat: Double?=null, lon: Double?=null): Single<Result<ForecastWeatherDomain>>
+    fun getForecastWeather(city: String? = null, lat: Double?=null, lon: Double?=null, units: String): Single<Result<ForecastWeatherDomain>>
     fun getAirPollution(lat: Double, lon: Double): Single<Result<AirPollutionDomain>>
 }

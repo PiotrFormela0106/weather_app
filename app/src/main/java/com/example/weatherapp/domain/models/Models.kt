@@ -1,8 +1,6 @@
 package com.example.weatherapp.domain.models
 
-//data class AirPollution(val coordinates: Coordinates, val list: List<AirPollutionItem>)
 data class AirPollution(val coordinates: Coordinates, val list: List<AirPollutionItem>)
-data class CurrentAndForecast(val currentWeather: CurrentWeather, val forecast: ForecastWeather)
 data class ForecastWeather(val city: City, val list: List<ForecastItem>)
 
 data class CurrentWeather(
@@ -12,7 +10,8 @@ data class CurrentWeather(
     val weather: List<Weather>,
     val clouds: Clouds,
     val sys: Sun,
-    val wind: Wind
+    val wind: Wind,
+    val response: Int
 )
 
 data class ForecastItem (

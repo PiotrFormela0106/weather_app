@@ -11,13 +11,11 @@ typealias SunDomain = com.example.weatherapp.domain.models.Sun
 typealias WindDomain = com.example.weatherapp.domain.models.Wind
 typealias CoordinatesDomain = com.example.weatherapp.domain.models.Coordinates
 typealias ForecastItemDomain = com.example.weatherapp.domain.models.ForecastItem
-typealias CurrentAndForecastDomain = com.example.weatherapp.domain.models.CurrentAndForecast
 typealias AirPollutionDomain = com.example.weatherapp.domain.models.AirPollution
 typealias AirQualityIndexDomain = com.example.weatherapp.domain.models.AirQualityIndex
 typealias AirPollutionItemDomain = com.example.weatherapp.domain.models.AirPollutionItem
 typealias ComponentsDomain = com.example.weatherapp.domain.models.Components
 
-typealias CurrentAndForecastData = com.example.weatherapp.data.models.CurrentAndForecast
 typealias CurrentWeatherData = com.example.weatherapp.data.models.CurrentWeather
 typealias ForecastWeatherData = com.example.weatherapp.data.models.ForecastWeather
 typealias MainInfoData = com.example.weatherapp.data.models.MainInfo
@@ -93,7 +91,8 @@ fun CurrentWeatherData.toDomain(): CurrentWeatherDomain = CurrentWeatherDomain(
     weather = weather.map{it.toDomain()},
     clouds = clouds.toDomain(),
     sys = sys.toDomain(),
-    wind = wind.toDomain()
+    wind = wind.toDomain(),
+    response = response
 )
 
 fun CityData.toDomain(): CityDomain = CityDomain(
@@ -127,11 +126,6 @@ fun ForecastItemData.toDomain(): ForecastItemDomain = ForecastItemDomain(
 fun ForecastWeatherData.toDomain(): ForecastWeatherDomain = ForecastWeatherDomain(
     city = city.toDomain(),
     list = list.map{it.toDomain()}
-)
-
-fun CurrentAndForecastData.toDomain(): CurrentAndForecastDomain = CurrentAndForecastDomain(
-    currentWeather = currentWeather.toDomain(),
-    forecast = forecast.toDomain()
 )
 
 
