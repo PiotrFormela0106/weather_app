@@ -3,6 +3,7 @@ package com.example.weatherapp.ui.main
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.weatherapp.controller.PreferencesController
+import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.domain.models.AirPollution
 import com.example.weatherapp.data.repo.WeatherRepositoryImpl.LocationMethod
 import com.example.weatherapp.domain.CityError
@@ -74,8 +75,7 @@ class MainScreenViewModel @Inject constructor(
         status.postValue(Status.Loading)
         disposable.add(
             weatherRepository.getCurrentWeather(
-                city ="Somonino",
-                units = storageRepository.getUnits() ?: "metric"
+                city ="Somonino"
             )
                 .subscribeOn(Schedulers.io())
                 //.delay(3, TimeUnit.SECONDS)
