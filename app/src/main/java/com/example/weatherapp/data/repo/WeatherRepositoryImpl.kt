@@ -60,7 +60,8 @@ class WeatherRepositoryImpl @Inject constructor(
     override fun getForecastWeather(
         city: String?,
         lat: Double?,
-        lon: Double?
+        lon: Double?,
+        units: String
     ): Single<Result<ForecastWeatherDomain>> {
         return when (storageRepository.getLocationMethod()) {
             LocationMethod.City -> api.getForecastForCity(

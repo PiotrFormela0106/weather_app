@@ -35,12 +35,13 @@ class ForecastAdapter(private val forecast: ForecastWeather) :
             2 -> day = forecast.list[16]
             3 -> day = forecast.list[24]
             4 -> day = forecast.list[32]
+            5 -> day = forecast.list[39]
         }
         holder.bind(day)
     }
 
     override fun getItemCount(): Int {
-        return 5
+        return 6
     }
 }
 
@@ -48,9 +49,6 @@ class MyViewHolder(private val binding: ForecastDayBinding) :
 
     RecyclerView.ViewHolder(binding.root) {
     fun bind(day: ForecastItem) {
-        //binding.day.text = day.date
-        //binding.temp.text = day.main.temp.toString()
-        //binding.wind.text = day.wind.speed.toString()
         binding.forecast = day
         binding.executePendingBindings()
         Picasso.get()

@@ -5,6 +5,7 @@ import retrofit2.HttpException
 
 //private const val CITY_ERROR = "HTTP 404 Not Found"
 private const val CITY_ERROR = "city not found"
+private const val CITY_ERROR2 = "Nothing to geocode"
 
 sealed class Error(
     val message: String,
@@ -29,7 +30,7 @@ fun Throwable.toError(): com.example.weatherapp.domain.Error{
             val message = throwable.response()?.errorBody()?.string().orEmpty()
             Log.i("class error",message)
             when{
-                message.contains(CITY_ERROR) -> CityError(throwable = throwable)
+                message.contains(CITY_ERROR) || message.contains(CITY_ERROR2) -> CityError(throwable = throwable)
                 else -> NetworkError(throwable = this)
             }
         }

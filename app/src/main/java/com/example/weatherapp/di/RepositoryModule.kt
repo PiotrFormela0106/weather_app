@@ -1,11 +1,12 @@
 package com.example.weatherapp.di
 
-import android.app.Application
 import android.content.Context
 import com.example.weatherapp.controller.PreferencesController
 import com.example.weatherapp.data.api.RetrofitClient
+import com.example.weatherapp.data.repo.CityRepositoryImpl
 import com.example.weatherapp.data.repo.StorageRepositoryImpl
 import com.example.weatherapp.data.repo.WeatherRepositoryImpl
+import com.example.weatherapp.domain.repo.CityRepository
 import com.example.weatherapp.domain.repo.StorageRepository
 import com.example.weatherapp.domain.repo.WeatherRepository
 import dagger.Module
@@ -20,24 +21,44 @@ class RepositoryModule(val context: Context) {
     fun provideWeatherRepository(
         retrofitClient: RetrofitClient,
         storageRepository: StorageRepository
-    ): WeatherRepository{
+    ): WeatherRepository {
         return WeatherRepositoryImpl(
             retrofitClient = retrofitClient,
             storageRepository = storageRepository
         )
     }
+
+    @Singleton
+    @Provides
+    fun provideCityRepository(
+    ): CityRepository {
+        return CityRepositoryImpl(context = context)
+    }
+
     @Singleton
     @Provides
     fun provideStorageRepository(
         preferencesController: PreferencesController
-    ): StorageRepository{
+    ): StorageRepository {
         return StorageRepositoryImpl(
             preferencesController = preferencesController
         )
     }
 
     @Provides
-    fun providePreferences(): PreferencesController{
+    fun providePreferences(): PreferencesController {
         return PreferencesController(context)
     }
+
+    /*@Singleton
+    @Provides
+    fun getRoomDbInstance(): CityDatabase{
+        return CityDatabase.getInstance(provideAppContext())
+    }
+
+    @Singleton
+    @Provides
+    fun provideAppContext(): Context {
+        return application.applicationContext
+    }*/
 }
