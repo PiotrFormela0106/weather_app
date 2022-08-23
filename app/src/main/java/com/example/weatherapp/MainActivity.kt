@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.nav_menu, menu)
         return true
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {//move to Main Fragment
         return when (item.itemId) {
             R.id.settings -> {

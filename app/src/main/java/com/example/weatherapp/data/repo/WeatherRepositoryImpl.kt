@@ -61,7 +61,6 @@ class WeatherRepositoryImpl @Inject constructor(
         city: String?,
         lat: Double?,
         lon: Double?,
-        units: String
     ): Single<Result<ForecastWeatherDomain>> {
         return when (storageRepository.getLocationMethod()) {
             LocationMethod.City -> api.getForecastForCity(

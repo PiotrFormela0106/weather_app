@@ -130,7 +130,6 @@ fun ForecastWeatherData.toDomain(): ForecastWeatherDomain = ForecastWeatherDomai
     list = list.map{it.toDomain()}
 )
 
-
 fun String.toUnits(): Units {
     return if (NOT_METRIC.equals(this, true)) Units.NotMetric
     else Units.Metric

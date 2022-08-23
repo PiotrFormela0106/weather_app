@@ -34,7 +34,7 @@ class CityScreenViewModel @Inject constructor(
     val cityName = MutableLiveData<String>()
 
     fun checkCity(city: City) {
-        weatherRepository.getCurrentWeather(city = city.city, units = "metric")
+        weatherRepository.getCurrentWeather(city = city.city)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy {

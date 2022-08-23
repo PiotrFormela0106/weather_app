@@ -66,7 +66,7 @@ class MainScreenViewModel @Inject constructor(
     enum class Status { Loading, Success, Error }
 
     init {
-        Log.i("viewModel/units", storageRepository.getUnits())
+        //Log.i("viewModel/units", storageRepository.getUnits())
         storageRepository.saveLocationMethod(LocationMethod.City)
         getCurrentWeather()
         getForecastWeather()
@@ -80,7 +80,7 @@ class MainScreenViewModel @Inject constructor(
         disposable.add(
             weatherRepository.getCurrentWeather(
                 city = "Somonino",
-                units = storageRepository.getUnits() ?: "metric"
+                //units = storageRepository.getUnits() ?: "metric"
             )
                 .subscribeOn(Schedulers.io())
                 //.delay(3, TimeUnit.SECONDS)
@@ -102,7 +102,7 @@ class MainScreenViewModel @Inject constructor(
         disposable.add(
             weatherRepository.getForecastWeather(
                 city = "Somonino",
-                units = storageRepository.getUnits() ?: "metric"
+                //units = storageRepository.getUnits() ?: "metric"
             )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
