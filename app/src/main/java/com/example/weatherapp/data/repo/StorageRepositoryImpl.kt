@@ -3,8 +3,11 @@ package com.example.weatherapp.data.repo
 import androidx.core.content.edit
 import com.example.weatherapp.controller.PreferencesController
 import com.example.weatherapp.controller.PreferencesController.Companion.UNITS
+import com.example.weatherapp.data.mappers.toData
+import com.example.weatherapp.data.mappers.toUnits
 import com.example.weatherapp.domain.repo.StorageRepository
 import com.example.weatherapp.data.repo.WeatherRepositoryImpl.LocationMethod
+import com.example.weatherapp.domain.models.Units
 import javax.inject.Inject
 
 class StorageRepositoryImpl @Inject constructor(preferencesController: PreferencesController) :
@@ -31,11 +34,13 @@ class StorageRepositoryImpl @Inject constructor(preferencesController: Preferenc
         return LocationMethod.toLocationMethod(method)
     }
 
-    override fun saveUnits(units: String) {
-        prefs.edit().putString(UNITS, units).apply()
+    override fun saveUnits(units: Units) {
+        prefs.edit().putString(UNITS, units.toData()).apply()
     }
 
-    override fun getUnits(): String {
-        return prefs.getString(UNITS, "").orEmpty()
+    override fun getUnits(): Units {
+        return prefs.getString(UNITS, "").orEmpty().toUnits()
     }
 }
+
+

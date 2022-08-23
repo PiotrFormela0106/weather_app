@@ -38,21 +38,20 @@ class WeatherRepositoryImpl @Inject constructor(
     override fun getCurrentWeather(
         city: String?,
         lat: Double?,
-        lon: Double?,
-        units: String
+        lon: Double?
     ): Single<Result<CurrentWeatherDomain>> {
         return when (storageRepository.getLocationMethod()) {
             LocationMethod.City -> api.getCurrentWeatherForCity(
                 cityName = city,
                 apikey = API_KEY,
                 lang = LANG_PL,
-                units = units
+                units = getUnitsParam()
             ).compose(mapCurrentWeatherResponse())
             LocationMethod.Location -> api.getCurrentWeatherForLocation(
                 lat = lat,
                 lon = lon,
                 apikey = API_KEY,
-                units = units
+                units = getUnitsParam()
             ).compose(mapCurrentWeatherResponse())
         }
 
@@ -69,13 +68,13 @@ class WeatherRepositoryImpl @Inject constructor(
                 cityName = city,
                 apikey = API_KEY,
                 lang = LANG_PL,
-                units = units
+                units = getUnitsParam()
             ).compose(mapForecastWeatherResponse())
             LocationMethod.Location -> api.getForecastForLocation(
                 lat = lat,
                 lon = lon,
                 apikey = API_KEY,
-                units = units
+                units = getUnitsParam()
             ).compose(mapForecastWeatherResponse())
         }
     }
@@ -118,5 +117,12 @@ class WeatherRepositoryImpl @Inject constructor(
         return Result.withError<T>(error)
     }
 
+    private fun getUnitsParam(): String = storageRepository.getUnits().toQueryParam()
+}
 
+private fun Units.toQueryParam(): String {
+    return when (this) {
+        Units.Metric -> "metric"
+        Units.NotMetric -> "standard"
+    }
 }

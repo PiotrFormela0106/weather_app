@@ -43,28 +43,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun handleEvent(event: SettingsViewModel.Event) {
-        when (event) {
-            is SettingsViewModel.Event.OnRadioButtonClick -> {
-                binding.radioGroup.setOnCheckedChangeListener { group, checkedId ->
-                    when (checkedId) {
-                        R.id.metric -> {
-                            viewModel.storageRepository.saveUnits("metric")
-                            Snackbar.make(
-                                binding.root,
-                                "You have chosen ${viewModel.storageRepository.getUnits()}", Snackbar.LENGTH_SHORT).show();
-                        }
-                        R.id.non_metric -> {
-                            viewModel.storageRepository.saveUnits("standard")
-                            Snackbar.make(
-                                binding.root,
-                                "You have chosen ${viewModel.storageRepository.getUnits()}", Snackbar.LENGTH_SHORT).show();
-                        }
-                    }
-                }
 
-            }
-
-        }
     }
 
 
