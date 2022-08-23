@@ -1,5 +1,7 @@
 package com.example.weatherapp.data.mappers
 
+import com.example.weatherapp.domain.models.Units
+
 typealias CurrentWeatherDomain = com.example.weatherapp.domain.models.CurrentWeather
 typealias ForecastWeatherDomain = com.example.weatherapp.domain.models.ForecastWeather
 typealias MainInfoDomain = com.example.weatherapp.domain.models.MainInfo
@@ -133,5 +135,20 @@ fun CurrentAndForecastData.toDomain(): CurrentAndForecastDomain = CurrentAndFore
     currentWeather = currentWeather.toDomain(),
     forecast = forecast.toDomain()
 )
+
+fun String.toUnits(): Units {
+    return if (NOT_METRIC.equals(this, true)) Units.NotMetric
+    else Units.Metric
+}
+
+fun Units.toData(): String {
+    return when (this) {
+        Units.Metric -> METRIC
+        Units.NotMetric -> NOT_METRIC
+    }
+}
+
+private const val METRIC = "Metric"
+private const val NOT_METRIC = "Not metric"
 
 

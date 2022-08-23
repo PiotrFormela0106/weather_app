@@ -86,3 +86,5 @@ data class Coordinates(
     val lon: Double,
     val lat: Double
 )
+
+enum class Units { Metric, NotMetric }

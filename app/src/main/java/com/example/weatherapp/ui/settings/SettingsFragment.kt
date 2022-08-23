@@ -2,11 +2,9 @@ package com.example.weatherapp.ui.settings
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -14,6 +12,7 @@ import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentSettingsBinding
 import com.example.weatherapp.di.DaggerMainScreenComponent
 import com.example.weatherapp.di.RepositoryModule
+import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
@@ -44,24 +43,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun handleEvent(event: SettingsViewModel.Event) {
-        when (event) {
-            is SettingsViewModel.Event.OnRadioButtonClick -> {
-                binding.radioGroup.setOnCheckedChangeListener { group, checkedId ->
-                    when (checkedId) {
-                        R.id.metric -> {
-                            viewModel.storageRepository.saveUnits("metric")
-                            Log.i("units", viewModel.storageRepository.getUnits())
-                        }
-                        R.id.non_metric -> {
-                            viewModel.storageRepository.saveUnits("standard")
-                            Log.i("units", viewModel.storageRepository.getUnits())
-                        }
-                    }
-                }
 
-            }
-
-        }
     }
 
 
