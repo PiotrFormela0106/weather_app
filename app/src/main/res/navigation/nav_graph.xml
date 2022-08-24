@@ -27,7 +27,11 @@
         android:id="@+id/cityScreenFragment"
         android:name="com.example.weatherapp.ui.city.CityScreenFragment"
         android:label="Cities screen"
-        tools:layout="@layout/fragment_city_screen" />
+        tools:layout="@layout/fragment_city_screen" >
+        <action
+            android:id="@+id/navigateToMainScreen"
+            app:destination="@id/mainScreenFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.weatherapp.ui.settings.SettingsFragment"

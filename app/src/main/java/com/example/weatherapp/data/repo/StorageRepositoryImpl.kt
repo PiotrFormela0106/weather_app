@@ -2,6 +2,8 @@ package com.example.weatherapp.data.repo
 
 import androidx.core.content.edit
 import com.example.weatherapp.controller.PreferencesController
+import com.example.weatherapp.controller.PreferencesController.Companion.LAT
+import com.example.weatherapp.controller.PreferencesController.Companion.LON
 import com.example.weatherapp.controller.PreferencesController.Companion.UNITS
 import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.data.mappers.toUnits
@@ -40,6 +42,19 @@ class StorageRepositoryImpl @Inject constructor(preferencesController: Preferenc
 
     override fun getUnits(): Units {
         return prefs.getString(UNITS, "").orEmpty().toUnits()
+    }
+
+    override fun saveCoordinates(lat: Double, lon: Double) {
+        prefs.edit().putString(LAT, lat.toString()).apply()
+        prefs.edit().putString(LON, lon.toString()).apply()
+    }
+
+    override fun getLat(): Double {
+        return prefs.getString(LAT, "")!!.toDouble()
+    }
+
+    override fun getLon(): Double {
+        return prefs.getString(LON, "")!!.toDouble()
     }
 }
 

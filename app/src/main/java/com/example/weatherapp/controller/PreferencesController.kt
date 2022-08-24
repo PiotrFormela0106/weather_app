@@ -42,11 +42,23 @@ class PreferencesController @Inject constructor(context: Context) {
         return prefs.getString(UNITS, "").orEmpty().toUnits()
     }
 
+    fun saveCoordinates(lat: Double, lon: Double){
+        prefs.edit().putString(LAT, lat.toString()).apply()
+        prefs.edit().putString(LON, lon.toString()).apply()
+    }
+    fun getLat(): Double{
+        return prefs.getString(LAT, "")!!.toDouble()
+    }
+    fun getLon(): Double{
+        return prefs.getString(LON, "")!!.toDouble()
+    }
 
 
     companion object {
         const val EXTRA_CITY = "extra_city"
         const val LOCATION_METHOD = "location_method"
         const val UNITS = "units"
+        const val LAT = "lat"
+        const val LON = "lon"
     }
 }

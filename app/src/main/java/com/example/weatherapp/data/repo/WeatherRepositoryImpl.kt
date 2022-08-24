@@ -1,5 +1,6 @@
 package com.example.weatherapp.data.repo
 
+import android.util.Log
 import com.example.weatherapp.data.api.RetrofitClient
 import com.example.weatherapp.data.mappers.*
 import com.example.weatherapp.domain.CityError
@@ -117,6 +118,9 @@ class WeatherRepositoryImpl @Inject constructor(
     }
 
     private fun getUnitsParam(): String = storageRepository.getUnits().toQueryParam()
+    //private fun getLatitudeParam(): Double = storageRepository.getLat()
+    //private fun getLongitudeParam(): Double = storageRepository.getLon()
+
 }
 
 private fun Units.toQueryParam(): String {

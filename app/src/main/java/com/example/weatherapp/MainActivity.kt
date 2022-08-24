@@ -25,19 +25,5 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return findNavController(R.id.main_screen_fragment).navigateUp() || super.onSupportNavigateUp()
     }
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {//move to Main Fragment
-        menuInflater.inflate(R.menu.nav_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {//move to Main Fragment
-        return when (item.itemId) {
-            R.id.settings -> {
-                findNavController(R.id.main_screen_fragment).navigate(MainScreenFragmentDirections.navigateToSettings())
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
 
 }

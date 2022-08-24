@@ -49,6 +49,7 @@ class CityRepositoryImpl @Inject constructor(context: Context) : CityRepository 
         return cityDao.deleteAllCities()
     }
 
+
     private fun mapCities():
             SingleTransformer<List<City>, Result<List<City>>>{
         return SingleTransformer { upstream ->

@@ -10,4 +10,7 @@ interface StorageRepository {
     fun getLocationMethod(): LocationMethod
     fun saveUnits(units: Units)
     fun getUnits(): Units
+    fun saveCoordinates(lat: Double, lon: Double)
+    fun getLat(): Double
+    fun getLon(): Double
 }
