@@ -29,7 +29,9 @@ class MainScreenViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository,
     private val storageRepository: StorageRepository
 ) : ViewModel(), LifecycleObserver {
+
     private val disposable = CompositeDisposable()
+
     private val iconId = MutableLiveData<String>()
     val imageUrl = MutableLiveData<String>("https://openweathermap.org/img/wn/03d@2x.png")
     val status = MutableLiveData<Status>(Status.Loading)
@@ -37,6 +39,7 @@ class MainScreenViewModel @Inject constructor(
     val forecastData = MutableLiveData<ForecastWeather>()
     val airPollutionData = MutableLiveData<AirPollution>()
     val cityName = MutableLiveData<String>()
+
     val temperature: LiveData<String> =
         Transformations.map(weatherData) { weather -> "${weather.main.temp} C" }
     val aqi: LiveData<String> =
@@ -57,6 +60,7 @@ class MainScreenViewModel @Inject constructor(
         Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.pm10}" }
     val nh3: LiveData<String> =
         Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.nh3}" }
+
     private val uiEvents = UiEvents<Event>()
     val events: Observable<Event> = uiEvents.stream()
     val progress = MutableLiveData<Boolean>()

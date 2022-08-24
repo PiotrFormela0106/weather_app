@@ -4,8 +4,8 @@ import com.example.weatherapp.data.repo.WeatherRepositoryImpl.LocationMethod
 import com.example.weatherapp.domain.models.Units
 
 interface StorageRepository {
-    fun saveCity(city: String?)
-    fun getCity(): String
+    fun saveCity(cityName: String?)//remove, use function of CityRepository to save city to database
+    fun getCity(): String?//remove, use function of CityRepository to get city from database
     fun saveLocationMethod(method: LocationMethod)
     fun getLocationMethod(): LocationMethod
     fun saveUnits(units: Units)

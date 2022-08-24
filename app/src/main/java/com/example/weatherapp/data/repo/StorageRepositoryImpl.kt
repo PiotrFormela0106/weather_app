@@ -15,24 +15,31 @@ import javax.inject.Inject
 class StorageRepositoryImpl @Inject constructor(preferencesController: PreferencesController) :
     StorageRepository {
     private val prefs = preferencesController.prefs
-    override fun saveCity(city: String?) {
-        if (city == null) {
-            prefs.edit().remove(PreferencesController.EXTRA_CITY).apply()
-        } else {
-            prefs.edit().putString(PreferencesController.EXTRA_CITY, city).apply()
-        }
-    }
 
-    override fun getCity(): String {
-        return prefs.getString(PreferencesController.EXTRA_CITY, "").orEmpty()
+    override fun saveCity(cityName: String?) {
+        cityName?.takeIf { it.isNotEmpty() }
+            ?.let {
+                prefs.edit().putString(PreferencesController.EXTRA_CITY, it).apply()
+            }
+    }
+//    override fun saveCity(city: String?) {
+//        if (city == null) {
+//            prefs.edit().remove(PreferencesController.EXTRA_CITY).apply()
+//        } else {
+//            prefs.edit().putString(PreferencesController.EXTRA_CITY, city).apply()
+//        }
+//    }
+
+    override fun getCity(): String? {
+        return prefs.getString(PreferencesController.EXTRA_CITY, "")?.takeIf { it.isNotEmpty() }
     }
 
     override fun saveLocationMethod(method: LocationMethod) {
-        prefs.edit().putString("location_method", method.toString()).apply()
+        prefs.edit().putString("location_method", method.toString()).apply()//use private constant for "location_method"
     }
 
     override fun getLocationMethod(): LocationMethod {
-        val method = prefs.getString("location_method", "").orEmpty()
+        val method = prefs.getString("location_method", "").orEmpty()//use private constant for "location_method"
         return LocationMethod.toLocationMethod(method)
     }
 
@@ -45,16 +52,20 @@ class StorageRepositoryImpl @Inject constructor(preferencesController: Preferenc
     }
 
     override fun saveCoordinates(lat: Double, lon: Double) {
-        prefs.edit().putString(LAT, lat.toString()).apply()
-        prefs.edit().putString(LON, lon.toString()).apply()
+        prefs.edit().putFloat(LAT, lat.toFloat()).apply()
+        prefs.edit().putFloat(LON, lon.toFloat()).apply()
     }
 
+    //Lat and Lon make sense only in pair. So it's better to give single fun for fetching both
+    //create doman model Coordinates with double fields
+    //and make fun of repository getCoordinates(): Coordinates?
+    //also you can save double directly in preferences without convertation in String
     override fun getLat(): Double {
-        return prefs.getString(LAT, "")!!.toDouble()
+        return prefs.getFloat(LAT, 0F).toDouble()
     }
 
     override fun getLon(): Double {
-        return prefs.getString(LON, "")!!.toDouble()
+        return prefs.getFloat(LON, 0F).toDouble()
     }
 }
 

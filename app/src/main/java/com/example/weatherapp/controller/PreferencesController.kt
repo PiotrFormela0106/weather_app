@@ -11,7 +11,7 @@ import javax.inject.Inject
 class PreferencesController @Inject constructor(context: Context) {
     val prefs: SharedPreferences =
         context.getSharedPreferences("weather_prefs", Context.MODE_PRIVATE)
-
+//remove all below
     fun saveCity(city: String?) {
         if (city == null) {
             prefs.edit().remove(EXTRA_CITY).apply()
