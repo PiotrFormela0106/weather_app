@@ -120,7 +120,7 @@ class CityScreenFragment : Fragment() {
     private fun handleEvent(event: CityScreenViewModel.Event) {
         when (event) {
             is CityScreenViewModel.Event.OnAddCity -> {
-                val city = City(binding.inputCity.text.toString())
+                val city = City(city = binding.inputCity.text.toString())
                 viewModel.checkCity(city)
                 binding.inputCity.text.clear()
             }

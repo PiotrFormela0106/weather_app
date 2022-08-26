@@ -16,6 +16,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.finishAffinity
@@ -26,6 +27,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.weatherapp.Cache
 import com.example.weatherapp.R
 import com.example.weatherapp.data.repo.WeatherRepositoryImpl
 import com.example.weatherapp.databinding.FragmentMainScreenBinding
@@ -34,6 +36,7 @@ import com.example.weatherapp.di.RepositoryModule
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.ui.ForecastAdapter
+import com.example.weatherapp.ui.RecyclerItemClickListener
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -44,12 +47,11 @@ import javax.inject.Inject
 
 class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserver {
     private lateinit var binding: FragmentMainScreenBinding
+
     @Inject
     lateinit var viewModel: MainScreenViewModel
     lateinit var forecast: ForecastWeather
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,31 +73,18 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
 
         viewModel.events
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe{handleEvent(it)}
+            .subscribe { handleEvent(it) }
 
         setHasOptionsMenu(true)
 
-        viewModel.forecastData.observe(viewLifecycleOwner,Observer<ForecastWeather>{data ->
+        viewModel.forecastData.observe(viewLifecycleOwner, Observer<ForecastWeather> { data ->
             forecast = data
             setupRecyclerView(thisContext, forecast)
         })
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-
-        //Check permission
-        if (ActivityCompat.checkSelfPermission(requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            //When permission denied at start
-            requestPermissions(
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), MY_PERMISSIONS_REQUEST_LOCATION
-            )
-        } else {
-            //When permission granted
-            if(viewModel.storageRepository.getLocationMethod()== LocationMethod.Location)
-                getLocation()
-        }
+        checkPermission()
+        onForecastClick()
 
         return binding.root
     }
@@ -141,41 +130,76 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
         fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
             //Initialize location
             val location: Location = task.result
-            if (location != null) {
-
-                try {
-                    val geocoder = Geocoder(requireActivity(), Locale.getDefault())
-                    //Initialize address list
-                    val addresses: List<Address> = geocoder.getFromLocation(
-                        location.latitude, location.longitude, 1
-                    )
-                    viewModel.storageRepository.saveCoordinates(addresses[0].latitude,addresses[0].longitude)
-                    viewModel.getCurrentWeather()
-                    viewModel.getForecastWeather()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-
+            try {
+                val geocoder = Geocoder(requireActivity(), Locale.getDefault())
+                //Initialize address list
+                val addresses: List<Address> = geocoder.getFromLocation(
+                    location.latitude, location.longitude, 1
+                )
+                viewModel.storageRepository.saveCoordinates(
+                    addresses[0].latitude,
+                    addresses[0].longitude
+                )
+                viewModel.getCurrentWeather()
+                viewModel.getForecastWeather()
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
         }
     }
 
+    //also in cityScreen
+    //refactor to PermissionManager
+    private fun checkPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            //When permission denied at start
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), MY_PERMISSIONS_REQUEST_LOCATION
+            )
+        } else {
+            //When permission granted
+            if (viewModel.storageRepository.getLocationMethod() == LocationMethod.Location)
+                getLocation()
+        }
+    }
 
-    private fun setupRecyclerView(context: Context, forecast: ForecastWeather){
-        binding.recyclerForecast.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+    private fun onForecastClick() {
+        val recyclerView = binding.recyclerForecast
+        binding.recyclerForecast.addOnItemTouchListener(
+            RecyclerItemClickListener(
+                context,
+                recyclerView,
+                object : RecyclerItemClickListener.OnItemClickListener {
+                    override fun onItemClick(view: View?, position: Int) {
+                        val textView = view?.findViewById<TextView>(R.id.day)
+                        findNavController().navigate(MainScreenFragmentDirections.navigateToAddInfo())
+                    }
+
+                })
+        )
+    }
+
+    private fun setupRecyclerView(context: Context, forecast: ForecastWeather) {
+        binding.recyclerForecast.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerForecast.adapter = ForecastAdapter(forecast)
     }
 
     private fun handleEvent(event: MainScreenViewModel.Event) {
-        when(event){
+        when (event) {
             is MainScreenViewModel.Event.OnCitiesClick -> {
                 findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
             }
         }
     }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.nav_menu, menu)
-        super.onCreateOptionsMenu(menu,inflater);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -187,6 +211,7 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
             else -> super.onOptionsItemSelected(item)
         }
     }
+
     companion object {
         private const val MY_PERMISSIONS_REQUEST_LOCATION = 44
     }

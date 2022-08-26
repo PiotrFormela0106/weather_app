@@ -71,15 +71,12 @@ class MainScreenViewModel @Inject constructor(
         getAirPollution()
     }
 
-
     fun getCurrentWeather() {
-
         progress.postValue(true)
         status.postValue(Status.Loading)
         disposable.add(
             weatherRepository.getCurrentWeather(
-                city = storageRepository.getCity(),
-            )
+                city = storageRepository.getCity())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
@@ -99,9 +96,7 @@ class MainScreenViewModel @Inject constructor(
 
     fun getForecastWeather() {
         disposable.add(
-            weatherRepository.getForecastWeather(
-                city = storageRepository.getCity()
-            )
+            weatherRepository.getForecastWeather()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(

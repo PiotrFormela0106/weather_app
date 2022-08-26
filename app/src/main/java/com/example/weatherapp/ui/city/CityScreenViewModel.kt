@@ -44,7 +44,7 @@ class CityScreenViewModel @Inject constructor(
                     is Result.OnSuccess -> {
                         val cityName = it.data.cityName
                         if(!allCities.value!!.any { it.city == cityName})
-                            insertCity(City(it.data.cityName))
+                            insertCity(City(city = it.data.cityName))
                         else
                             uiEvents.post(Event.OnCityDuplicate)
                     }
@@ -102,12 +102,26 @@ class CityScreenViewModel @Inject constructor(
     }
 
     fun deleteAllCities() {
+        getAllCities()
         cityRepository.deleteAllCities()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onComplete = {
                     Log.i("status of data", "Data removed!")
+                    getAllCities()
+                }
+            )
+    }
+
+    fun deleteCityById(cityId: Int){
+        getAllCities()
+        cityRepository.deleteCityById(cityId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onComplete = {
+                    Log.i("removed", "$cityId removed!")
                     getAllCities()
                 }
             )
