@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
+<!--Use databinding to bind cityname with edit text-->
             <EditText
                 android:id="@+id/input_city"
                 android:layout_width="256dp"

@@ -3,7 +3,7 @@ package com.example.weatherapp
 import java.io.Serializable;
 import android.os.Parcelable
 import com.example.weatherapp.domain.models.ForecastWeather
-
+//it should be in data layer because it's used only there
 class Cache {
     private val map = HashMap<CacheKey, ForecastWeather>()
     fun cache(key: CacheKey, forecast: ForecastWeather) {

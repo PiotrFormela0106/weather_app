@@ -14,7 +14,7 @@ import com.example.weatherapp.databinding.ForecastDayBinding
 import com.example.weatherapp.domain.models.ForecastItem
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.squareup.picasso.Picasso
-
+//move this in package main
 class ForecastAdapter(private val forecast: ForecastWeather) :
     RecyclerView.Adapter<MyViewHolder>() {
     private lateinit var binding: ForecastDayBinding

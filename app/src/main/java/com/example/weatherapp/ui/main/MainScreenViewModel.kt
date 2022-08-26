@@ -174,7 +174,7 @@ class MainScreenViewModel @Inject constructor(
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreatePerformTask() {
+    fun onCreatePerformTask() {//it's not used
         Log.i("lifecycleobserver", "I\'m inside Observer of ViewModel ON_CREATE")
     }
 

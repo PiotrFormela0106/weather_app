@@ -83,7 +83,9 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
         })
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-        checkPermission()
+        checkPermission()//you should check permission and location (if location is on or off)
+        //only when location method is coordinates.
+        //otherwise if location method is city, you don't need to check permission
         onForecastClick()
 
         return binding.root
@@ -99,8 +101,9 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
         if (requestCode == MY_PERMISSIONS_REQUEST_LOCATION) {
             // Checking whether user granted the permission or not.
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
+//you should change location method in storage oONLY WHEN user clicks buttons on cities screen and never more
                 viewModel.storageRepository.saveLocationMethod(LocationMethod.Location)
+                //if we have permission, we do our job silently, show forecast without any messages
                 Toast.makeText(requireContext(), "Location Permission Granted", Toast.LENGTH_SHORT)
                     .show()
                 if (ActivityCompat.checkSelfPermission(
@@ -111,6 +114,8 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
                     getLocation()
                 }
             } else {
+                //extract some utils function for creating alerts from any screen
+                //make some directory "core" in"ui" for this
                 val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
                 alertDialogBuilder.setMessage("Allow permission for location to get weather in your region or select city")
                 alertDialogBuilder.setTitle("Location permission denied")
@@ -126,7 +131,7 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
     }
 
     @SuppressLint("MissingPermission")
-    private fun getLocation() {
+    private fun getLocation() {//move all that you can from this method to viewmodel
         fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
             //Initialize location
             val location: Location = task.result
@@ -167,7 +172,7 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
         }
     }
 
-    private fun onForecastClick() {
+    private fun onForecastClick() {//rename method to match its functionality
         val recyclerView = binding.recyclerForecast
         binding.recyclerForecast.addOnItemTouchListener(
             RecyclerItemClickListener(

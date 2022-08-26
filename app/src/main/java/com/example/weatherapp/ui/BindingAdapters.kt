@@ -8,7 +8,7 @@ import androidx.databinding.BindingAdapter
 import com.example.weatherapp.ui.main.MainScreenViewModel
 import com.example.weatherapp.ui.main.MainScreenViewModel.Status
 import com.squareup.picasso.Picasso
-
+//move this in package core inside ui
 @BindingAdapter("android:visibility")
 fun setVisibility(view: View, visible: Status) {
     view.visibility =

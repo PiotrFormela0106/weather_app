@@ -28,7 +28,11 @@ class CityRepositoryImpl @Inject constructor(context: Context) : CityRepository 
         cityDao = database!!.cityDao()
     }
 
-    override fun insertCity(city: City): Completable {
+    override fun insertCity(cityName: String): Completable {
+        return cityDao.insert(City(city = cityName))
+    }
+
+    override fun insertCity(city: City): Completable {// this should be removed
         return cityDao.insert(city)
     }
 

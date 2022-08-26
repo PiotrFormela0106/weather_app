@@ -120,6 +120,9 @@ class CityScreenFragment : Fragment() {
     private fun handleEvent(event: CityScreenViewModel.Event) {
         when (event) {
             is CityScreenViewModel.Event.OnAddCity -> {
+                //this code shoud go to viewModel
+                //and add automatical navigation to main screen after successful saving city in database
+
                 val city = City(city = binding.inputCity.text.toString())
                 viewModel.checkCity(city)
                 binding.inputCity.text.clear()
@@ -135,7 +138,7 @@ class CityScreenFragment : Fragment() {
                 ).show();
             }
             is CityScreenViewModel.Event.OnLocation -> {
-                viewModel.storageRepository.saveLocationMethod(LocationMethod.Location)
+                viewModel.storageRepository.saveLocationMethod(LocationMethod.Location)//move this line in OnClick fun in viewModel before sending event
                 findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
             }
 

@@ -4,7 +4,7 @@ import androidx.annotation.MainThread
 import androidx.annotation.UiThread
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
-
+//move this in package core
 class UiEvents<T : Any> {
     private val internalEvents = PublishSubject.create<T>()
 

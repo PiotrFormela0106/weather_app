@@ -5,7 +5,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-
+//move this in package core
 class RecyclerItemClickListener(
     context: Context?,
     recyclerView: RecyclerView,
