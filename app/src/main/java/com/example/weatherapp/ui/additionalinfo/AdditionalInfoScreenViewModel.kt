@@ -19,7 +19,9 @@ class AdditionalInfoScreenViewModel @Inject constructor(
     val forecast = MutableLiveData<ForecastWeather?>()
 
     init {
-        getCache()
+        getCache()//rename to fetchData()
+        //all other is ok here
+        //cache works under the hood inside repository
     }
 
     private fun getCache() {
