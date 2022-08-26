@@ -6,7 +6,6 @@ import androidx.lifecycle.*
 import com.example.weatherapp.controller.PreferencesController
 import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.domain.models.AirPollution
-import com.example.weatherapp.data.repo.WeatherRepositoryImpl.LocationMethod
 import com.example.weatherapp.domain.CityError
 import com.example.weatherapp.domain.Error
 import com.example.weatherapp.domain.Result
@@ -27,7 +26,7 @@ import javax.inject.Inject
 
 class MainScreenViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository,
-    private val storageRepository: StorageRepository
+    val storageRepository: StorageRepository
 ) : ViewModel(), LifecycleObserver {
 
     private val disposable = CompositeDisposable()
@@ -64,30 +63,24 @@ class MainScreenViewModel @Inject constructor(
     private val uiEvents = UiEvents<Event>()
     val events: Observable<Event> = uiEvents.stream()
     val progress = MutableLiveData<Boolean>()
-    val city = MutableLiveData(if(!storageRepository.getCity().equals("")) { storageRepository.getCity() }else{ "Somonino"})
-    val lat = MutableLiveData(if(!storageRepository.getLat().toString().equals("")) { storageRepository.getLat() }else{ 54.19})
-    val lon = MutableLiveData(if(!storageRepository.getLon().toString().equals("")) { storageRepository.getLon() }else{ 18.19})
     enum class Status { Loading, Success, Error }
 
     init {
-        storageRepository.saveLocationMethod(LocationMethod.City)
-
         getCurrentWeather()
         getForecastWeather()
         getAirPollution()
     }
 
 
-    private fun getCurrentWeather() {
+    fun getCurrentWeather() {
 
         progress.postValue(true)
         status.postValue(Status.Loading)
         disposable.add(
             weatherRepository.getCurrentWeather(
-                city = city.value
+                city = storageRepository.getCity(),
             )
                 .subscribeOn(Schedulers.io())
-                //.delay(3, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onSuccess = {
@@ -95,7 +88,6 @@ class MainScreenViewModel @Inject constructor(
                         when (it) {
                             is Result.OnSuccess -> {
                                 handleSuccess(it.data)
-                                storageRepository.saveCoordinates(it.data.coordinates.lat,it.data.coordinates.lon)
                             }
                             is Result.OnError -> {
                                 handleError(it.error)
@@ -105,10 +97,10 @@ class MainScreenViewModel @Inject constructor(
         )
     }
 
-    private fun getForecastWeather() {
+    fun getForecastWeather() {
         disposable.add(
             weatherRepository.getForecastWeather(
-                city = city.value
+                city = storageRepository.getCity()
             )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -145,7 +137,7 @@ class MainScreenViewModel @Inject constructor(
 
     private fun getAirPollution() {
         disposable.add(
-            weatherRepository.getAirPollution(lat = lat.value!!, lon = lon.value!!)
+            weatherRepository.getAirPollution(lat = 51.19, lon = 18.19)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
@@ -180,9 +172,6 @@ class MainScreenViewModel @Inject constructor(
 
     private fun handleError(error: Error?) {
         status.postValue(Status.Error)
-        if (error is CityError) {
-            uiEvents.post(Event.OnCityError(error.message))
-        }
     }
 
     fun onCitiesClick() {
@@ -202,7 +191,6 @@ class MainScreenViewModel @Inject constructor(
 
     sealed class Event {
         object OnCitiesClick : Event()
-        class OnCityError(val message: String) : Event()
     }
 
 }

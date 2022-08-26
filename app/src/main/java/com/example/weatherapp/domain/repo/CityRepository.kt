@@ -15,4 +15,5 @@ interface CityRepository {
     fun getAllCities(): Single<Result<List<City>>>
     fun deleteAllCities(): Completable
     fun getCurrentCity(): Single<Result<City>>
+    fun deleteCityById(cityId: Int): Completable
 }

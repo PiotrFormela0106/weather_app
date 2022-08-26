@@ -92,4 +92,11 @@ dependencies {
     kapt("androidx.room:room-compiler:$room_version")
     // To use Kotlin Symbol Processing (KSP)
     //ksp("androidx.room:room-compiler:$room_version")
+
+    //Location
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
+
+    // For developers using AndroidX in their applications
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
 }

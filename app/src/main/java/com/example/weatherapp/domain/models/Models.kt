@@ -87,3 +87,15 @@ data class Coordinates(
 )
 
 enum class Units { Metric, NotMetric }
+
+enum class LocationMethod {
+    City, Location;
+
+
+
+    /*companion object {
+        fun toLocationMethod(methodString: String): LocationMethod {
+            return valueOf(methodString)
+        }
+    }*/
+}

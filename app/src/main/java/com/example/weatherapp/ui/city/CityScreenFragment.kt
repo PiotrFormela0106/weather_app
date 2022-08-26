@@ -15,12 +15,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import com.example.weatherapp.R
+import com.example.weatherapp.data.repo.WeatherRepositoryImpl
 import com.example.weatherapp.data.room.City
 import com.example.weatherapp.databinding.FragmentCityScreenBinding
 import com.example.weatherapp.di.DaggerCityScreenComponent
 import com.example.weatherapp.di.RepositoryModule
+import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.ui.CityAdapter
 import com.example.weatherapp.ui.RecyclerItemClickListener
+import com.example.weatherapp.ui.main.MainScreenFragmentDirections
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
@@ -51,6 +54,8 @@ class CityScreenFragment : Fragment() {
         viewModel.events
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { handleEvent(it) }
+
+        setHasOptionsMenu(true)
 
         return binding.root
     }
@@ -93,6 +98,7 @@ class CityScreenFragment : Fragment() {
                 recyclerView,
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(view: View?, position: Int) {
+                        viewModel.storageRepository.saveLocationMethod(LocationMethod.City)
                         val textView = view?.findViewById<TextView>(R.id.cityName)
                         viewModel.storageRepository.saveCity(textView?.text.toString())
                         findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
@@ -118,9 +124,6 @@ class CityScreenFragment : Fragment() {
                 viewModel.checkCity(city)
                 binding.inputCity.text.clear()
             }
-            is CityScreenViewModel.Event.OnRemoveCities -> {
-                viewModel.deleteAllCities()
-            }
             is CityScreenViewModel.Event.OnCityError -> {
                 Snackbar.make(binding.root, event.message, Snackbar.LENGTH_SHORT).show();
             }
@@ -131,7 +134,26 @@ class CityScreenFragment : Fragment() {
                     Snackbar.LENGTH_SHORT
                 ).show();
             }
+            is CityScreenViewModel.Event.OnLocation -> {
+                viewModel.storageRepository.saveLocationMethod(LocationMethod.Location)
+                findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
+            }
 
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.nav_bin, menu)
+        super.onCreateOptionsMenu(menu,inflater);
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.bin -> {
+                viewModel.deleteAllCities()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
 }

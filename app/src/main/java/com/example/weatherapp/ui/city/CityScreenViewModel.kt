@@ -21,6 +21,7 @@ import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 import com.example.weatherapp.domain.Error
+import com.example.weatherapp.domain.models.LocationMethod
 
 
 class CityScreenViewModel @Inject constructor(
@@ -28,12 +29,13 @@ class CityScreenViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository,
     val storageRepository: StorageRepository
 ) : ViewModel(), LifecycleObserver {
-    private val uiEvents = UiEvents<CityScreenViewModel.Event>()
-    val events: Observable<CityScreenViewModel.Event> = uiEvents.stream()
+    private val uiEvents = UiEvents<Event>()
+    val events: Observable<Event> = uiEvents.stream()
     val allCities = MutableLiveData<List<City>>()
     val cityName = MutableLiveData<String>()
 
     fun checkCity(city: City) {
+        storageRepository.saveLocationMethod(LocationMethod.City)
         weatherRepository.getCurrentWeather(city = city.city)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -125,13 +127,13 @@ class CityScreenViewModel @Inject constructor(
         Event.OnAddCity.let { uiEvents.post(it) }
     }
 
-    fun removeCities() {
-        Event.OnRemoveCities.let { uiEvents.post(it) }
+    fun useLocation(){
+        Event.OnLocation.let { uiEvents.post(it) }
     }
 
     sealed class Event {
         object OnAddCity : Event()
-        object OnRemoveCities : Event()
+        object OnLocation : Event()
         class OnCityError(val message: String) : Event()
         object OnCityDuplicate : Event()
     }
