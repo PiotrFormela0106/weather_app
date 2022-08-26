@@ -2,9 +2,7 @@ package com.example.weatherapp.ui.main
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
@@ -56,6 +55,8 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe{handleEvent(it)}
 
+        setHasOptionsMenu(true);
+
         //-----------IN-PROGRESS-------------//
         viewModel.forecastData.observe(viewLifecycleOwner,Observer<ForecastWeather>{data ->
             forecast = data
@@ -81,5 +82,21 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
             }
         }
     }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {//move to Main Fragment
+        inflater.inflate(R.menu.nav_menu, menu)
+        super.onCreateOptionsMenu(menu,inflater);
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {//move to Main Fragment
+        return when (item.itemId) {
+            R.id.settings -> {
+                findNavController().navigate(MainScreenFragmentDirections.navigateToSettings())
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+
 
 }

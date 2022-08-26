@@ -26,7 +26,7 @@ import com.example.weatherapp.domain.Error
 class CityScreenViewModel @Inject constructor(
     private val cityRepository: CityRepository,
     private val weatherRepository: WeatherRepository,
-    private val storageRepository: StorageRepository
+    val storageRepository: StorageRepository
 ) : ViewModel(), LifecycleObserver {
     private val uiEvents = UiEvents<CityScreenViewModel.Event>()
     val events: Observable<CityScreenViewModel.Event> = uiEvents.stream()
@@ -34,7 +34,7 @@ class CityScreenViewModel @Inject constructor(
     val cityName = MutableLiveData<String>()
 
     fun checkCity(city: City) {
-        weatherRepository.getCurrentWeather(city = city.city, units = "metric")
+        weatherRepository.getCurrentWeather(city = city.city)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy {
@@ -44,7 +44,7 @@ class CityScreenViewModel @Inject constructor(
                         if(!allCities.value!!.any { it.city == cityName})
                             insertCity(City(it.data.cityName))
                         else
-                            Log.i("City error","There is already that city in your list!")
+                            uiEvents.post(Event.OnCityDuplicate)
                     }
                     is Result.OnError -> {
                         handleError(it.error)
@@ -122,16 +122,17 @@ class CityScreenViewModel @Inject constructor(
     }
 
     fun addCity() {
-        CityScreenViewModel.Event.OnAddCity.let { uiEvents.post(it) }
+        Event.OnAddCity.let { uiEvents.post(it) }
     }
 
     fun removeCities() {
-        CityScreenViewModel.Event.OnRemoveCities.let { uiEvents.post(it) }
+        Event.OnRemoveCities.let { uiEvents.post(it) }
     }
 
     sealed class Event {
         object OnAddCity : Event()
         object OnRemoveCities : Event()
         class OnCityError(val message: String) : Event()
+        object OnCityDuplicate : Event()
     }
 }

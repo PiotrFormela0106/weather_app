@@ -1,20 +1,22 @@
 package com.example.weatherapp.data.repo
 
+import com.example.weatherapp.BuildConfig.API_KEY
 import com.example.weatherapp.data.api.RetrofitClient
-import com.example.weatherapp.data.mappers.*
-import com.example.weatherapp.domain.CityError
-import com.example.weatherapp.domain.models.*
+import com.example.weatherapp.data.mappers.AirPollutionData
+import com.example.weatherapp.data.mappers.CurrentWeatherData
+import com.example.weatherapp.data.mappers.ForecastWeatherData
+import com.example.weatherapp.data.mappers.toDomain
+import com.example.weatherapp.domain.Result
+import com.example.weatherapp.domain.models.AirPollution
+import com.example.weatherapp.domain.models.CurrentWeather
+import com.example.weatherapp.domain.models.ForecastWeather
+import com.example.weatherapp.domain.models.Units
+import com.example.weatherapp.domain.repo.StorageRepository
 import com.example.weatherapp.domain.repo.WeatherRepository
+import com.example.weatherapp.domain.toError
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.core.SingleTransformer
-import com.example.weatherapp.domain.Result
 import javax.inject.Inject
-import com.example.weatherapp.domain.Error
-import com.example.weatherapp.domain.toError
-import com.example.weatherapp.BuildConfig
-import com.example.weatherapp.BuildConfig.API_KEY
-import com.example.weatherapp.controller.PreferencesController
-import com.example.weatherapp.domain.repo.StorageRepository
 
 private const val LANG_PL = "pl"
 private const val LANG_ENG = "eng"
@@ -24,12 +26,16 @@ class WeatherRepositoryImpl @Inject constructor(
     retrofitClient: RetrofitClient,
     val storageRepository: StorageRepository
 ) : WeatherRepository {
-    enum class LocationMethod {
+    enum class LocationMethod {//move this enum to domain.models
         City, Location;
 
-        companion object {
+        //you can remove this fun and whole companion object
+        companion object {//it's better to use extension fun
+            //like
+            //private fun String.toLocationMethod()LocationMethod
             fun toLocationMethod(methodString: String): LocationMethod {
-                return valueOf(methodString)
+                return valueOf(methodString)//this is a place to exception when String is empty
+            //use when()operator
             }
         }
     }
@@ -39,14 +45,16 @@ class WeatherRepositoryImpl @Inject constructor(
         city: String?,
         lat: Double?,
         lon: Double?
-    ): Single<Result<CurrentWeatherDomain>> {
+    ): Single<Result<CurrentWeather>> {
         return when (storageRepository.getLocationMethod()) {
+            //if city is null, you will have exception. add the check and return Result.Error
             LocationMethod.City -> api.getCurrentWeatherForCity(
                 cityName = city,
                 apikey = API_KEY,
                 lang = LANG_PL,
                 units = getUnitsParam()
             ).compose(mapCurrentWeatherResponse())
+//            if lat or lon are null you will have exception. check and return Result.Error
             LocationMethod.Location -> api.getCurrentWeatherForLocation(
                 lat = lat,
                 lon = lon,
@@ -61,8 +69,7 @@ class WeatherRepositoryImpl @Inject constructor(
         city: String?,
         lat: Double?,
         lon: Double?,
-        units: String
-    ): Single<Result<ForecastWeatherDomain>> {
+    ): Single<Result<ForecastWeather>> {
         return when (storageRepository.getLocationMethod()) {
             LocationMethod.City -> api.getForecastForCity(
                 cityName = city,
@@ -79,13 +86,13 @@ class WeatherRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getAirPollution(lat: Double, lon: Double):Single<Result<AirPollutionDomain>> {
+    override fun getAirPollution(lat: Double, lon: Double):Single<Result<AirPollution>> {
         return api.getAirPollution(lat = lat, lon = lon, apikey = API_KEY)
             .compose(mapAirPollutionResponse())
     }
 
     private fun mapCurrentWeatherResponse():
-            SingleTransformer<CurrentWeatherData, Result<CurrentWeatherDomain>> {
+            SingleTransformer<CurrentWeatherData, Result<CurrentWeather>> {
         return SingleTransformer { upstream ->
             upstream
                 .map { Result.withValue(it.toDomain()) }
@@ -95,7 +102,7 @@ class WeatherRepositoryImpl @Inject constructor(
     }
 
     private fun mapForecastWeatherResponse():
-            SingleTransformer<ForecastWeatherData, Result<ForecastWeatherDomain>> {
+            SingleTransformer<ForecastWeatherData, Result<ForecastWeather>> {
         return SingleTransformer { upstream ->
             upstream
                 .map { Result.withValue(it.toDomain()) }
@@ -104,7 +111,7 @@ class WeatherRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun mapAirPollutionResponse():SingleTransformer<AirPollutionData, Result<AirPollutionDomain>>{
+    private fun mapAirPollutionResponse():SingleTransformer<AirPollutionData, Result<AirPollution>>{
         return SingleTransformer { upstream ->
             upstream
                 .map { Result.withValue(it.toDomain()) }
@@ -118,6 +125,9 @@ class WeatherRepositoryImpl @Inject constructor(
     }
 
     private fun getUnitsParam(): String = storageRepository.getUnits().toQueryParam()
+    //private fun getLatitudeParam(): Double = storageRepository.getLat()
+    //private fun getLongitudeParam(): Double = storageRepository.getLon()
+
 }
 
 private fun Units.toQueryParam(): String {

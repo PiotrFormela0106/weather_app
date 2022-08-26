@@ -50,15 +50,4 @@ class RepositoryModule(val context: Context) {
         return PreferencesController(context)
     }
 
-    /*@Singleton
-    @Provides
-    fun getRoomDbInstance(): CityDatabase{
-        return CityDatabase.getInstance(provideAppContext())
-    }
-
-    @Singleton
-    @Provides
-    fun provideAppContext(): Context {
-        return application.applicationContext
-    }*/
 }

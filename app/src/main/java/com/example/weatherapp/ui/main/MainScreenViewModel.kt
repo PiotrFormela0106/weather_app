@@ -29,7 +29,9 @@ class MainScreenViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository,
     private val storageRepository: StorageRepository
 ) : ViewModel(), LifecycleObserver {
+
     private val disposable = CompositeDisposable()
+
     private val iconId = MutableLiveData<String>()
     val imageUrl = MutableLiveData<String>("https://openweathermap.org/img/wn/03d@2x.png")
     val status = MutableLiveData<Status>(Status.Loading)
@@ -37,6 +39,7 @@ class MainScreenViewModel @Inject constructor(
     val forecastData = MutableLiveData<ForecastWeather>()
     val airPollutionData = MutableLiveData<AirPollution>()
     val cityName = MutableLiveData<String>()
+
     val temperature: LiveData<String> =
         Transformations.map(weatherData) { weather -> "${weather.main.temp} C" }
     val aqi: LiveData<String> =
@@ -57,17 +60,18 @@ class MainScreenViewModel @Inject constructor(
         Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.pm10}" }
     val nh3: LiveData<String> =
         Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.nh3}" }
+
     private val uiEvents = UiEvents<Event>()
     val events: Observable<Event> = uiEvents.stream()
     val progress = MutableLiveData<Boolean>()
-    val lat = MutableLiveData<Double>(84.27)
-    val lon = MutableLiveData<Double>(28.19)
-
+    val city = MutableLiveData(if(!storageRepository.getCity().equals("")) { storageRepository.getCity() }else{ "Somonino"})
+    val lat = MutableLiveData(if(!storageRepository.getLat().toString().equals("")) { storageRepository.getLat() }else{ 54.19})
+    val lon = MutableLiveData(if(!storageRepository.getLon().toString().equals("")) { storageRepository.getLon() }else{ 18.19})
     enum class Status { Loading, Success, Error }
 
     init {
-        Log.i("viewModel/units", storageRepository.getUnits())
         storageRepository.saveLocationMethod(LocationMethod.City)
+
         getCurrentWeather()
         getForecastWeather()
         getAirPollution()
@@ -75,12 +79,12 @@ class MainScreenViewModel @Inject constructor(
 
 
     private fun getCurrentWeather() {
+
         progress.postValue(true)
         status.postValue(Status.Loading)
         disposable.add(
             weatherRepository.getCurrentWeather(
-                city = "Somonino",
-                units = storageRepository.getUnits() ?: "metric"
+                city = city.value
             )
                 .subscribeOn(Schedulers.io())
                 //.delay(3, TimeUnit.SECONDS)
@@ -89,7 +93,10 @@ class MainScreenViewModel @Inject constructor(
                     onSuccess = {
                         progress.postValue(false)
                         when (it) {
-                            is Result.OnSuccess -> handleSuccess(it.data)
+                            is Result.OnSuccess -> {
+                                handleSuccess(it.data)
+                                storageRepository.saveCoordinates(it.data.coordinates.lat,it.data.coordinates.lon)
+                            }
                             is Result.OnError -> {
                                 handleError(it.error)
                             }
@@ -101,8 +108,7 @@ class MainScreenViewModel @Inject constructor(
     private fun getForecastWeather() {
         disposable.add(
             weatherRepository.getForecastWeather(
-                city = "Somonino",
-                units = storageRepository.getUnits() ?: "metric"
+                city = city.value
             )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -138,12 +144,8 @@ class MainScreenViewModel @Inject constructor(
     }*/
 
     private fun getAirPollution() {
-        lat.postValue(weatherData.value?.coordinates?.lat)
-        lon.postValue(weatherData.value?.coordinates?.lat)
-        Log.i("weatherDAta", weatherData.value?.coordinates?.lat.toString())
-        Log.i("lonAir", lon.value.toString())
         disposable.add(
-            weatherRepository.getAirPollution(lat = 54.27,lon = 18.99)
+            weatherRepository.getAirPollution(lat = lat.value!!, lon = lon.value!!)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
