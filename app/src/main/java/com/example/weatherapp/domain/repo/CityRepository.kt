@@ -9,10 +9,9 @@ import com.example.weatherapp.domain.Result
 import io.reactivex.rxjava3.core.Completable
 
 interface CityRepository {
-    fun insertCity(city: City): Completable//fun insertCity(cityName: String): Completable
-    fun updateCity(city: City)
+    fun insertCity(cityName: String): Completable
     fun deleteCity(city: City): Completable
-    fun getAllCities(): Single<Result<List<City>>>
+    fun updateCities(): Single<Result<List<City>>>
     fun deleteAllCities(): Completable
     fun getCurrentCity(): Single<Result<City>>
     fun deleteCityById(cityId: Int): Completable

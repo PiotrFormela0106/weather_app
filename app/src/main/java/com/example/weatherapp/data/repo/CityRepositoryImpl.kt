@@ -19,7 +19,6 @@ import com.example.weatherapp.domain.Result
 import com.example.weatherapp.domain.toError
 import io.reactivex.rxjava3.core.SingleTransformer
 
-
 class CityRepositoryImpl @Inject constructor(context: Context) : CityRepository {
     private var cityDao: CityDao
     init{
@@ -32,19 +31,11 @@ class CityRepositoryImpl @Inject constructor(context: Context) : CityRepository 
         return cityDao.insert(City(city = cityName))
     }
 
-    override fun insertCity(city: City): Completable {// this should be removed
-        return cityDao.insert(city)
-    }
-
-    override fun updateCity(city: City) {
-        cityDao.update(city)
-    }
-
     override fun deleteCity(city: City): Completable {
         return cityDao.delete(city)
     }
 
-    override fun getAllCities(): Single<Result<List<City>>> {
+    override fun updateCities(): Single<Result<List<City>>> {
         return cityDao.getAllCities()
             .compose(mapCities())
     }

@@ -1,4 +1,4 @@
-package com.example.weatherapp.ui
+package com.example.weatherapp.ui.main
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherapp.Cache
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.ForecastDayBinding
 import com.example.weatherapp.domain.models.ForecastItem

@@ -3,7 +3,6 @@ package com.example.weatherapp.ui.city
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.view.GestureDetector.SimpleOnGestureListener
 import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -13,21 +12,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import com.example.weatherapp.R
-import com.example.weatherapp.data.repo.WeatherRepositoryImpl
 import com.example.weatherapp.data.room.City
 import com.example.weatherapp.databinding.FragmentCityScreenBinding
 import com.example.weatherapp.di.DaggerCityScreenComponent
 import com.example.weatherapp.di.RepositoryModule
 import com.example.weatherapp.domain.models.LocationMethod
-import com.example.weatherapp.ui.CityAdapter
-import com.example.weatherapp.ui.RecyclerItemClickListener
-import com.example.weatherapp.ui.main.MainScreenFragmentDirections
+import com.example.weatherapp.ui.core.RecyclerItemClickListener
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
-
 
 class CityScreenFragment : Fragment() {
     private lateinit var binding: FragmentCityScreenBinding
@@ -62,7 +56,7 @@ class CityScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getAllCities()
+        viewModel.updateCities()
         viewModel.allCities.observe(viewLifecycleOwner, Observer<List<City>> { data ->
             setupRecyclerView(data)
 
@@ -120,12 +114,7 @@ class CityScreenFragment : Fragment() {
     private fun handleEvent(event: CityScreenViewModel.Event) {
         when (event) {
             is CityScreenViewModel.Event.OnAddCity -> {
-                //this code shoud go to viewModel
-                //and add automatical navigation to main screen after successful saving city in database
-
-                val city = City(city = binding.inputCity.text.toString())
-                viewModel.checkCity(city)
-                binding.inputCity.text.clear()
+                findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
             }
             is CityScreenViewModel.Event.OnCityError -> {
                 Snackbar.make(binding.root, event.message, Snackbar.LENGTH_SHORT).show();
@@ -138,7 +127,6 @@ class CityScreenFragment : Fragment() {
                 ).show();
             }
             is CityScreenViewModel.Event.OnLocation -> {
-                viewModel.storageRepository.saveLocationMethod(LocationMethod.Location)//move this line in OnClick fun in viewModel before sending event
                 findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
             }
 

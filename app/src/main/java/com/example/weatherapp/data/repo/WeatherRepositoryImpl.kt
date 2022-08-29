@@ -1,26 +1,21 @@
 package com.example.weatherapp.data.repo
 
-import android.util.Log
 import com.example.weatherapp.data.api.RetrofitClient
 import com.example.weatherapp.data.mappers.*
-import com.example.weatherapp.domain.CityError
 import com.example.weatherapp.domain.models.*
 import com.example.weatherapp.domain.repo.WeatherRepository
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.core.SingleTransformer
 import com.example.weatherapp.domain.Result
 import javax.inject.Inject
-import com.example.weatherapp.domain.Error
 import com.example.weatherapp.domain.toError
-import com.example.weatherapp.BuildConfig
 import com.example.weatherapp.BuildConfig.API_KEY
-import com.example.weatherapp.Cache
-import com.example.weatherapp.CacheKey
-import com.example.weatherapp.controller.PreferencesController
+import com.example.weatherapp.data.Cache
+import com.example.weatherapp.data.CacheKey
 import com.example.weatherapp.domain.repo.StorageRepository
 import com.example.weatherapp.domain.models.LocationMethod
-import com.example.weatherapp.getCityCacheKey
-import com.example.weatherapp.getLocationCacheKey
+import com.example.weatherapp.data.getCityCacheKey
+import com.example.weatherapp.data.getLocationCacheKey
 
 private const val LANG_PL = "pl"
 
@@ -31,9 +26,7 @@ class WeatherRepositoryImpl @Inject constructor(
     private val api = retrofitClient.api
     private val cache = Cache()
     override fun getCurrentWeather(
-        city: String?,
-        lat: Double?,
-        lon: Double?
+        city: String?
     ): Single<Result<CurrentWeather>> {
         return when (storageRepository.getLocationMethod()) {
             LocationMethod.City -> api.getCurrentWeatherForCity(
@@ -53,9 +46,6 @@ class WeatherRepositoryImpl @Inject constructor(
     }
 
     override fun getForecastWeather(
-        city: String?,
-        lat: Double?,
-        lon: Double?,
     ): Single<Result<ForecastWeather>> {
         return when (storageRepository.getLocationMethod()) {
             LocationMethod.City -> {

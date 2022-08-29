@@ -1,15 +1,10 @@
 package com.example.weatherapp.ui.settings
 
 import androidx.lifecycle.*
-import com.example.weatherapp.R
 import com.example.weatherapp.domain.models.Units
 import com.example.weatherapp.domain.repo.StorageRepository
-import com.example.weatherapp.ui.UiEvents
-import com.example.weatherapp.ui.main.MainScreenViewModel
+import com.example.weatherapp.ui.core.UiEvents
 import io.reactivex.rxjava3.core.Observable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
