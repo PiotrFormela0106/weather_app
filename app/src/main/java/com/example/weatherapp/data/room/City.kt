@@ -4,7 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "city_table")
-data class City(val city: String) {
+data class City(
     @PrimaryKey(autoGenerate = true)
-    var userId: Int = 0//rename to cityId and move in constructor
-}
+    val cityId: Int = 0,
+    val city: String
+)

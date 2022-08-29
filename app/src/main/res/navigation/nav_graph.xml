@@ -17,12 +17,16 @@
         <action
             android:id="@+id/navigateToSettings"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/navigateToAddInfo"
+            app:destination="@id/additionalInfoScreenFragment" />
     </fragment>
     <fragment
         android:id="@+id/additionalInfoScreenFragment"
         android:name="com.example.weatherapp.ui.additionalinfo.AdditionalInfoScreenFragment"
         android:label="Additional info"
-        tools:layout="@layout/fragment_additional_info_screen" />
+        tools:layout="@layout/fragment_additional_info_screen" >
+    </fragment>
     <fragment
         android:id="@+id/cityScreenFragment"
         android:name="com.example.weatherapp.ui.city.CityScreenFragment"

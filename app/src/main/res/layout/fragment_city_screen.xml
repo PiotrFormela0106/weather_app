@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -7,47 +9,51 @@
             type="com.example.weatherapp.ui.city.CityScreenViewModel" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/background_color"
         android:orientation="vertical"
         tools:context=".ui.city.CityScreenFragment">
 
-        <EditText
-            android:id="@+id/input_city"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
-            android:hint="Enter city name..." />
-
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/add_city_button"
+            android:id="@+id/use_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="64dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="64dp"
+            android:onClick="@{()->viewModel.useLocation()}"
+            android:text="USE YOUR LOCATION"
+            app:backgroundTint="@color/teal_200"
+            app:cornerRadius="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+<!--Use databinding to bind cityname with edit text-->
+            <EditText
+                android:id="@+id/input_city"
+                android:layout_width="256dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:hint="Enter city name..." />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_city_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:onClick="@{()->viewModel.addCity()}"
             android:text="ADD CITY"
             app:backgroundTint="@color/teal_200"
             app:cornerRadius="16dp" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/remove_all"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="64dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="64dp"
-            android:onClick="@{()->viewModel.removeCities()}"
-            android:text="REMOVE ALL CITIES"
-            app:backgroundTint="@color/teal_200"
-            app:cornerRadius="16dp" />
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerCity"

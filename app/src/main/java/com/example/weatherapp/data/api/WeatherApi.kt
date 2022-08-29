@@ -40,7 +40,8 @@ interface WeatherApi {
         @Query("lat") lat: Double?,
         @Query("lon") lon: Double?,
         @Query("appid") apikey: String,
-        @Query("units") units: String
+        @Query("units") units: String,
+        @Query("lang") lang: String
     )
             : Single<ForecastWeather>
 

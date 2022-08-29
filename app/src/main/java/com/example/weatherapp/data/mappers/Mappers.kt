@@ -1,5 +1,6 @@
 package com.example.weatherapp.data.mappers
 
+import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.domain.models.Units
 
 typealias CurrentWeatherDomain = com.example.weatherapp.domain.models.CurrentWeather
@@ -142,6 +143,9 @@ fun Units.toData(): String {
     }
 }
 
+fun String.toLocationMethod(method: String): LocationMethod {
+    return LocationMethod.valueOf(method)
+}
 private const val METRIC = "Metric"
 private const val NOT_METRIC = "Not metric"
 

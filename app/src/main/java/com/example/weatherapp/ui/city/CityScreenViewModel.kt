@@ -2,25 +2,22 @@ package com.example.weatherapp.ui.city
 
 import android.util.Log
 import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.weatherapp.data.repo.CityRepositoryImpl
-import com.example.weatherapp.data.room.City
+import com.example.weatherapp.data.room.City//don't use data classes in ui layer
 import com.example.weatherapp.domain.CityError
+import com.example.weatherapp.domain.Error
 import com.example.weatherapp.domain.Result
+import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.domain.repo.CityRepository
 import com.example.weatherapp.domain.repo.StorageRepository
 import com.example.weatherapp.domain.repo.WeatherRepository
 import com.example.weatherapp.ui.UiEvents
-import com.example.weatherapp.ui.main.MainScreenViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
-import com.example.weatherapp.domain.Error
 
 
 class CityScreenViewModel @Inject constructor(
@@ -28,12 +25,13 @@ class CityScreenViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository,
     val storageRepository: StorageRepository
 ) : ViewModel(), LifecycleObserver {
-    private val uiEvents = UiEvents<CityScreenViewModel.Event>()
-    val events: Observable<CityScreenViewModel.Event> = uiEvents.stream()
+    private val uiEvents = UiEvents<Event>()
+    val events: Observable<Event> = uiEvents.stream()
     val allCities = MutableLiveData<List<City>>()
     val cityName = MutableLiveData<String>()
 
-    fun checkCity(city: City) {
+    fun checkCity(city: City) {//make it            private fun checkCity(cityName: String)
+        storageRepository.saveLocationMethod(LocationMethod.City)//move this line right in OnAddCityClick
         weatherRepository.getCurrentWeather(city = city.city)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -42,7 +40,7 @@ class CityScreenViewModel @Inject constructor(
                     is Result.OnSuccess -> {
                         val cityName = it.data.cityName
                         if(!allCities.value!!.any { it.city == cityName})
-                            insertCity(City(it.data.cityName))
+                            insertCity(City(city = it.data.cityName))
                         else
                             uiEvents.post(Event.OnCityDuplicate)
                     }
@@ -53,7 +51,8 @@ class CityScreenViewModel @Inject constructor(
             }
     }
 
-    fun insertCity(city: City) {
+    //it can be private if you call this in init block of viewModel instead of onViewCreated fragment
+    fun insertCity(city: City) {//private fun saveCity(cityName: String)
         cityRepository.insertCity(city)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -66,7 +65,7 @@ class CityScreenViewModel @Inject constructor(
 
     }
 
-    fun updateCity(city: City) {
+    fun updateCity(city: City) {//never used
         cityRepository.updateCity(city)
 
     }
@@ -83,7 +82,7 @@ class CityScreenViewModel @Inject constructor(
             )
     }
 
-    fun getAllCities() {
+    fun getAllCities() {//rename to updateCities()
         cityRepository.getAllCities()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -100,12 +99,26 @@ class CityScreenViewModel @Inject constructor(
     }
 
     fun deleteAllCities() {
+        getAllCities()
         cityRepository.deleteAllCities()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onComplete = {
                     Log.i("status of data", "Data removed!")
+                    getAllCities()
+                }
+            )
+    }
+
+    fun deleteCityById(cityId: Int){
+        getAllCities()
+        cityRepository.deleteCityById(cityId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onComplete = {
+                    Log.i("removed", "$cityId removed!")
                     getAllCities()
                 }
             )
@@ -122,16 +135,18 @@ class CityScreenViewModel @Inject constructor(
     }
 
     fun addCity() {
-        Event.OnAddCity.let { uiEvents.post(it) }
+        Event.OnAddCity.let { uiEvents.post(it) }//no need to post event here
+        //just do logic here
+        checkCity(City(city=cityName.value.orEmpty()))
     }
 
-    fun removeCities() {
-        Event.OnRemoveCities.let { uiEvents.post(it) }
+    fun useLocation(){
+        Event.OnLocation.let { uiEvents.post(it) }
     }
 
     sealed class Event {
         object OnAddCity : Event()
-        object OnRemoveCities : Event()
+        object OnLocation : Event()
         class OnCityError(val message: String) : Event()
         object OnCityDuplicate : Event()
     }

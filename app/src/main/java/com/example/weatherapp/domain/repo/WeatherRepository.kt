@@ -12,3 +12,10 @@ interface WeatherRepository {
     fun getForecastWeather(city: String? = null, lat: Double?=null, lon: Double?=null): Single<Result<ForecastWeather>>
     fun getAirPollution(lat: Double, lon: Double): Single<Result<AirPollution>>
 }
+//finally it should be
+//interface WeatherRepository {
+//
+  //  fun getCurrentWeather(): Single<Result<CurrentWeather>>
+  //  fun getForecastWeather(): Single<Result<ForecastWeather>>
+  //  fun getAirPollution(): Single<Result<AirPollution>>
+//}
