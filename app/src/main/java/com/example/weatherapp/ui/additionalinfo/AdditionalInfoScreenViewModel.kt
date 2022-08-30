@@ -17,6 +17,7 @@ class AdditionalInfoScreenViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository
 ) : ViewModel(), LifecycleObserver {
     val forecast = MutableLiveData<ForecastWeather?>()
+    var dayValue = MutableLiveData<String>()
 
     init {
         fetchData()

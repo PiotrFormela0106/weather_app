@@ -22,6 +22,7 @@ interface WeatherApi {
         @Query("lat") lat: Double?,
         @Query("lon") lon: Double?,
         @Query("appid") apikey: String,
+        @Query("lang") lang: String,
         @Query("units") units: String
     )       : Single<CurrentWeather>
 

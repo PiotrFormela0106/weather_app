@@ -7,18 +7,28 @@
             type="com.example.weatherapp.ui.additionalinfo.AdditionalInfoScreenViewModel"/>
     </data>
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.additionalinfo.AdditionalInfoScreenFragment">
-
+        android:orientation="vertical"
+        android:background="@drawable/background_color">
         <TextView
-            android:id="@+id/textViewAdd"
+            android:id="@+id/date"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@{viewModel.forecast.city.name}" />
+            android:textSize="24sp"
+            android:textColor="@color/black"
+            android:text="@{viewModel.dayValue}"/>
 
-    </FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerForecastDetailed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/forecast_day_detailed" />
+    </LinearLayout>
 </layout>

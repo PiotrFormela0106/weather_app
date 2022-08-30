@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.Navigation.findNavController
 import com.example.weatherapp.data.room.City//don't use data classes in ui layer
 import com.example.weatherapp.domain.CityError
 import com.example.weatherapp.domain.Error
@@ -20,7 +19,6 @@ import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
-
 class CityScreenViewModel @Inject constructor(
     private val cityRepository: CityRepository,
     private val weatherRepository: WeatherRepository,
@@ -31,7 +29,7 @@ class CityScreenViewModel @Inject constructor(
     val allCities = MutableLiveData<List<City>>()
     val cityName = MutableLiveData<String>()
 
-    fun checkCity(city: String) {
+    private fun checkCity(city: String) {
         weatherRepository.getCurrentWeather(city = city)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -102,19 +100,6 @@ class CityScreenViewModel @Inject constructor(
             .subscribeBy(
                 onComplete = {
                     Log.i("status of data", "Data removed!")
-                    updateCities()
-                }
-            )
-    }
-
-    fun deleteCityById(cityId: Int){
-        updateCities()
-        cityRepository.deleteCityById(cityId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(
-                onComplete = {
-                    Log.i("removed", "$cityId removed!")
                     updateCities()
                 }
             )

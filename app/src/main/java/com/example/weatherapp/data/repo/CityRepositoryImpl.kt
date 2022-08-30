@@ -49,10 +49,6 @@ class CityRepositoryImpl @Inject constructor(context: Context) : CityRepository 
         return Single.just(Result.withValue(City(city = "Krakow")))
     }
 
-    override fun deleteCityById(cityId: Int): Completable {
-        return cityDao.deleteCityById(cityId)
-    }
-
     private fun mapCities():
             SingleTransformer<List<City>, Result<List<City>>>{
         return SingleTransformer { upstream ->

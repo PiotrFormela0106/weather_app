@@ -17,6 +17,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
@@ -181,7 +182,8 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
                 recyclerView,
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(view: View?, position: Int) {
-                        findNavController().navigate(MainScreenFragmentDirections.navigateToAddInfo())
+                        val textView = view?.findViewById<TextView>(R.id.day)
+                        findNavController().navigate(MainScreenFragmentDirections.navigateToAddInfo(textView?.text.toString()))
                     }
 
                 })

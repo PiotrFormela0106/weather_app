@@ -39,6 +39,7 @@ class WeatherRepositoryImpl @Inject constructor(
                 lat = getLatitudeParam(),
                 lon = getLongitudeParam(),
                 apikey = API_KEY,
+                lang = LANG_PL,
                 units = getUnitsParam()
             ).compose(mapCurrentWeatherResponse())
         }

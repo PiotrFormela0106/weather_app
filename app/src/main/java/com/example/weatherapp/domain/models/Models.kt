@@ -19,7 +19,7 @@ data class ForecastItem(
     val weather: List<Weather>,
     val clouds: Clouds,
     val wind: Wind,
-    val date: String,
+    var date: String,
     val rain: Rain? = null
 )
 
