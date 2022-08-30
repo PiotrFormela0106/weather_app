@@ -1,13 +1,11 @@
 package com.example.weatherapp.data.repo
 
-import androidx.core.content.edit
 import com.example.weatherapp.controller.PreferencesController
 import com.example.weatherapp.controller.PreferencesController.Companion.LAT
 import com.example.weatherapp.controller.PreferencesController.Companion.LOCATION_METHOD
 import com.example.weatherapp.controller.PreferencesController.Companion.LON
 import com.example.weatherapp.controller.PreferencesController.Companion.UNITS
 import com.example.weatherapp.data.mappers.toData
-import com.example.weatherapp.data.mappers.toLocationMethod
 import com.example.weatherapp.data.mappers.toUnits
 import com.example.weatherapp.domain.repo.StorageRepository
 import com.example.weatherapp.domain.models.LocationMethod
@@ -34,9 +32,8 @@ class StorageRepositoryImpl @Inject constructor(preferencesController: Preferenc
     }
 
     override fun getLocationMethod(): LocationMethod {
-        val method = prefs.getString(LOCATION_METHOD, LocationMethod.City.toString()).orEmpty()
-        //return LocationMethod.toLocationMethod(method)
-        return method.toLocationMethod(method)
+        val method = prefs.getString(LOCATION_METHOD, LocationMethod.Location.toString()).orEmpty()
+        return LocationMethod.valueOf(method)
     }
 
     override fun saveUnits(units: Units) {

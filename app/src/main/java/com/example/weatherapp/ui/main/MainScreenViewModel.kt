@@ -1,27 +1,24 @@
 package com.example.weatherapp.ui.main
 
+import android.annotation.SuppressLint
 import android.util.Log
-import androidx.databinding.ObservableField
 import androidx.lifecycle.*
-import com.example.weatherapp.controller.PreferencesController
-import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.domain.models.AirPollution
-import com.example.weatherapp.domain.CityError
 import com.example.weatherapp.domain.Error
 import com.example.weatherapp.domain.Result
 import com.example.weatherapp.domain.models.CurrentWeather
 import com.example.weatherapp.domain.models.ForecastWeather
+import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.domain.repo.StorageRepository
 import com.example.weatherapp.domain.repo.WeatherRepository
-import com.example.weatherapp.ui.UiEvents
+import com.example.weatherapp.ui.core.UiEvents
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.functions.BiFunction
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 class MainScreenViewModel @Inject constructor(
@@ -30,15 +27,25 @@ class MainScreenViewModel @Inject constructor(
 ) : ViewModel(), LifecycleObserver {
 
     private val disposable = CompositeDisposable()
-
     private val iconId = MutableLiveData<String>()
-    val imageUrl = MutableLiveData<String>("https://openweathermap.org/img/wn/03d@2x.png")
-    val status = MutableLiveData<Status>(Status.Loading)
+    val imageUrl = MutableLiveData("https://openweathermap.org/img/wn/03d@2x.png")
+    val status = MutableLiveData(Status.Loading)
     val weatherData = MutableLiveData<CurrentWeather>()
     val forecastData = MutableLiveData<ForecastWeather>()
-    val airPollutionData = MutableLiveData<AirPollution>()
+    private val airPollutionData = MutableLiveData<AirPollution>()
     val cityName = MutableLiveData<String>()
-
+    private val sunriseFormat = MutableLiveData<String>()
+    private val sunsetFormat = MutableLiveData<String>()
+    val sunrise: LiveData<String> =
+        Transformations.map(sunriseFormat) { sunrise -> "Sunrise: $sunrise" }
+    val sunset: LiveData<String> =
+        Transformations.map(sunsetFormat) { sunset -> "Sunset: $sunset" }
+    val wind: LiveData<String> =
+        Transformations.map(weatherData) { weather -> "Wind speed: ${weather.wind.speed} m/s" }
+    val humidity: LiveData<String> =
+        Transformations.map(weatherData) { weather -> "Humidity: ${weather.main.humidity} %" }
+    val pressure: LiveData<String> =
+        Transformations.map(weatherData) { weather -> "Pressure: ${weather.main.pressure} hPa" }
     val temperature: LiveData<String> =
         Transformations.map(weatherData) { weather -> "${weather.main.temp} C" }
     val aqi: LiveData<String> =
@@ -110,25 +117,6 @@ class MainScreenViewModel @Inject constructor(
                     })
         )
     }
-    /*private fun getCurrentWeather() {
-        progress.postValue(true)
-        status.postValue(Status.Loading)
-        weatherRepository.getCurrentWeather(
-            city = "Somonino",
-            units = storageRepository.getUnits() ?: "metric"
-        )
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-    }
-
-    private fun getForecastWeather() {
-            weatherRepository.getForecastWeather(
-                city = "Somonino",
-                units = storageRepository.getUnits() ?: "metric"
-            )
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-    }*/
 
     private fun getAirPollution() {
         disposable.add(
@@ -155,6 +143,16 @@ class MainScreenViewModel @Inject constructor(
         iconId.value = data.weather[0].icon
         imageUrl.value = "https://openweathermap.org/img/wn/${iconId.value}@2x.png"
         storageRepository.saveCity(data.cityName)
+
+        @SuppressLint("SimpleDateFormat")
+        val sdf = SimpleDateFormat("HH:mm:ss")
+        val sunrise = Date(data.sys.sunrise*1000)
+        val sunriseTime = sdf.format(sunrise)
+        sunriseFormat.postValue(sunriseTime)
+
+        val sunset = Date(data.sys.sunset*1000)
+        val sunsetTime = sdf.format(sunset)
+        sunsetFormat.postValue(sunsetTime)
     }
 
     private fun handleSuccess(data: ForecastWeather) {
@@ -170,12 +168,8 @@ class MainScreenViewModel @Inject constructor(
     }
 
     fun onCitiesClick() {
+        storageRepository.saveLocationMethod(LocationMethod.Location)
         Event.OnCitiesClick.let { uiEvents.post(it) }
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreatePerformTask() {//it's not used
-        Log.i("lifecycleobserver", "I\'m inside Observer of ViewModel ON_CREATE")
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)

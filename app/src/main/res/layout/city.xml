@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="city"
@@ -13,7 +13,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="start|center_vertical">
+        android:layout_gravity="start|center_vertical"
+        app:cardBackgroundColor="@color/lightX_blue"
+        app:cardCornerRadius="8dp">
 
         <TextView
             android:id="@+id/cityName"
@@ -22,7 +24,8 @@
             android:layout_gravity="start|center_vertical"
             android:text="@{city.city}"
             android:textColor="@color/black"
-            android:textSize="34sp" />
+            android:textSize="34sp"
+            android:padding="8dp"/>
     </androidx.cardview.widget.CardView>
 </FrameLayout>
 </layout>

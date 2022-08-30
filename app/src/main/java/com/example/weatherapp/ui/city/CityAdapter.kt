@@ -1,4 +1,4 @@
-package com.example.weatherapp.ui
+package com.example.weatherapp.ui.city
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.data.room.City
 import com.example.weatherapp.databinding.CityBinding
 
-//move this in package city
 class CityAdapter(private val listOfCites: List<City>): RecyclerView.Adapter<CityViewHolder>(){
     private lateinit var binding: CityBinding
     override fun onCreateViewHolder(

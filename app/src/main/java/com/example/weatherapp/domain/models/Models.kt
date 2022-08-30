@@ -14,12 +14,12 @@ data class CurrentWeather(
     val response: Int
 )
 
-data class ForecastItem (
+data class ForecastItem(
     val main: MainInfo,
     val weather: List<Weather>,
     val clouds: Clouds,
     val wind: Wind,
-    val date: String,
+    var date: String,
     val rain: Rain? = null
 )
 
@@ -41,21 +41,21 @@ data class Components(
     var so2: Double,
     var pm2_5: Double,
     var pm10: Double,
-    var nh3 : Double
+    var nh3: Double
 )
 
-data class MainInfo (
+data class MainInfo(
     val temp: Double,
     val feelsLike: Double,
     val pressure: Long,
     val humidity: Long,
 )
 
-data class Rain (
+data class Rain(
     val the3H: Double
 )
 
-data class City (
+data class City(
     val name: String,
     val coordinates: Coordinates,
     val country: String,
@@ -69,15 +69,16 @@ data class Weather(
     val icon: String
 )
 
-data class Clouds (
+data class Clouds(
     val all: Long
 )
 
-data class Sun (
+data class Sun(
     val sunrise: Long,
     val sunset: Long
 )
-data class Wind (
+
+data class Wind(
     val speed: Double
 )
 
@@ -90,12 +91,4 @@ enum class Units { Metric, NotMetric }
 
 enum class LocationMethod {
     City, Location;
-
-
-
-    /*companion object {
-        fun toLocationMethod(methodString: String): LocationMethod {
-            return valueOf(methodString)
-        }
-    }*/
 }

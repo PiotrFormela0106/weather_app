@@ -26,6 +26,9 @@
         android:name="com.example.weatherapp.ui.additionalinfo.AdditionalInfoScreenFragment"
         android:label="Additional info"
         tools:layout="@layout/fragment_additional_info_screen" >
+        <argument
+            android:name="day"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/cityScreenFragment"

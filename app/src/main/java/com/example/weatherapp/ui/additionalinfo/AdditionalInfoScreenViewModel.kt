@@ -17,14 +17,13 @@ class AdditionalInfoScreenViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository
 ) : ViewModel(), LifecycleObserver {
     val forecast = MutableLiveData<ForecastWeather?>()
+    var dayValue = MutableLiveData<String>()
 
     init {
-        getCache()//rename to fetchData()
-        //all other is ok here
-        //cache works under the hood inside repository
+        fetchData()
     }
 
-    private fun getCache() {
+    private fun fetchData() {
         weatherRepository.getForecastWeather()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

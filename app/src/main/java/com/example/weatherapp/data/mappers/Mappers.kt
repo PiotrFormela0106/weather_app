@@ -142,10 +142,6 @@ fun Units.toData(): String {
         Units.NotMetric -> NOT_METRIC
     }
 }
-
-fun String.toLocationMethod(method: String): LocationMethod {
-    return LocationMethod.valueOf(method)
-}
 private const val METRIC = "Metric"
 private const val NOT_METRIC = "Not metric"
 
