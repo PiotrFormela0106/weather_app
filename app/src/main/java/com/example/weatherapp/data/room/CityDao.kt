@@ -12,7 +12,7 @@ interface CityDao {
     @Insert
     fun insert(city: City): Completable
     @Update
-    fun update(city: City)
+    fun update(city: City)//it's not used
     @Delete
     fun delete(city: City): Completable
     @Query("SELECT * FROM city_table")

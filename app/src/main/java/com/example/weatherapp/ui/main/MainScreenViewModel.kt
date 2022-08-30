@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.example.weatherapp.domain.models.AirPollution
 import com.example.weatherapp.domain.Error
 import com.example.weatherapp.domain.Result
+import com.example.weatherapp.domain.models.AirPollutionItem
 import com.example.weatherapp.domain.models.CurrentWeather
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.models.LocationMethod
@@ -21,6 +22,17 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
+
+//Let's assume that viewModel is a smart thing that work with business logic
+//On this screen your viewModel does 2 jobs: make some logic and display data.
+//There are too much code for one class.
+//In such cases usually logic is devided.
+
+//Let's create class ViewState inside ViewModel and move there all logic about displaying data
+//Do fetch data in viewModel
+//and transform data in livedata in viewstate.
+//ViewState is dumb class just for displaying data. It contains livedatas and clicklisteners.
+//This way you will have cleaner code
 class MainScreenViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository,
     val storageRepository: StorageRepository
@@ -48,24 +60,26 @@ class MainScreenViewModel @Inject constructor(
         Transformations.map(weatherData) { weather -> "Pressure: ${weather.main.pressure} hPa" }
     val temperature: LiveData<String> =
         Transformations.map(weatherData) { weather -> "${weather.main.temp} C" }
+
+    private val pollution: LiveData<AirPollutionItem> =  Transformations.map(airPollutionData) { it.list[0] }
     val aqi: LiveData<String> =
-        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].main.aqi}" }
+        Transformations.map(pollution) { "${it.main.aqi}" }
     val co: LiveData<String> =
-        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.co}" }
+        Transformations.map(pollution) { "${it.components.co}" }
     val no: LiveData<String> =
-        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.no}" }
+        Transformations.map(pollution) { "${it.components.no}" }
     val no2: LiveData<String> =
-        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.no2}" }
+        Transformations.map(pollution) { "${it.components.no2}" }
     val o3: LiveData<String> =
-        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.o3}" }
+        Transformations.map(pollution) { "${it.components.o3}" }
     val so2: LiveData<String> =
-        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.so2}" }
+        Transformations.map(pollution) { "${it.components.so2}" }
     val pm2_5: LiveData<String> =
-        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.pm2_5}" }
+        Transformations.map(pollution) { "${it.components.pm2_5}" }
     val pm10: LiveData<String> =
-        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.pm10}" }
+        Transformations.map(pollution) { "${it.components.pm10}" }
     val nh3: LiveData<String> =
-        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.nh3}" }
+        Transformations.map(pollution) { "${it.components.nh3}" }
 
     private val uiEvents = UiEvents<Event>()
     val events: Observable<Event> = uiEvents.stream()

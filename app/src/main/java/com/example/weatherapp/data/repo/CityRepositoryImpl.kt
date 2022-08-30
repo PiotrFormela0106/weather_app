@@ -24,7 +24,7 @@ class CityRepositoryImpl @Inject constructor(context: Context) : CityRepository 
     init{
         val database = CityDatabase
             .getInstance(context.applicationContext)
-        cityDao = database!!.cityDao()
+        cityDao = database.cityDao()
     }
 
     override fun insertCity(cityName: String): Completable {

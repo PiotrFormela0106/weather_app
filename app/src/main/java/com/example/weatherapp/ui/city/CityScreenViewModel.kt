@@ -76,7 +76,7 @@ class CityScreenViewModel @Inject constructor(
             )
     }
 
-    fun updateCities() {
+    fun updateCities() {//rename to fetchCities
         cityRepository.updateCities()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

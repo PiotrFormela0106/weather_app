@@ -3,6 +3,13 @@ package com.example.weatherapp.data
 import com.example.weatherapp.domain.models.ForecastWeather
 
 class Cache {
+    //modify class Cache to add here expiration by time
+    //use timestamps
+
+    //create other Map<CacheKey, String(timestamp)>
+    //put timestamp in map when you cache
+    //check timestamp and timeout when you get from cache
+    //timeout = 5 minutes
     private val map = HashMap<CacheKey, ForecastWeather>()
     fun cache(key: CacheKey, forecast: ForecastWeather) {
         map[key] = forecast

@@ -5,14 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [City::class], version = 3, exportSchema = false)
+@Database(entities = [City::class], version = 3, exportSchema = false)//version 1 until it's not released
 abstract class CityDatabase: RoomDatabase() {
     abstract fun cityDao(): CityDao
 
     companion object{
         private var instance: CityDatabase? = null
 
-        fun getInstance(context: Context): CityDatabase?{
+        fun getInstance(context: Context): CityDatabase{
             if (instance==null)
             {
                 instance = Room.databaseBuilder(
@@ -22,7 +22,7 @@ abstract class CityDatabase: RoomDatabase() {
                     .fallbackToDestructiveMigration()
                     .build()
             }
-            return instance
+            return instance!!
         }
 
         fun deleteInstanceOfDatabase(){

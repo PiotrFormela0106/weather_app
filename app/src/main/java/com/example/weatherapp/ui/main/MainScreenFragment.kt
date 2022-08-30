@@ -115,16 +115,17 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
     }
 
     private fun alert(message: String, title: String) {
-        val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-        alertDialogBuilder.setMessage(message)
-        alertDialogBuilder.setTitle(title)
-        alertDialogBuilder.setNegativeButton(
-            "ok"
-        ) { _, _ ->
-            findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
+        AlertDialog.Builder(requireContext()).apply {
+            setMessage(message)
+            setTitle(title)
+            setPositiveButton(
+                "ok"
+            ) { _, _ ->
+                findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
+            }
         }
-        val alertDialog = alertDialogBuilder.create()
-        alertDialog.show()
+            .create()
+            .show()
     }
 
     @SuppressLint("MissingPermission")
