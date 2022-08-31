@@ -14,8 +14,7 @@ interface WeatherApi {
         @Query("appid") apikey: String,
         @Query("lang") lang: String,
         @Query("units") units: String
-    )
-            : Single<CurrentWeather>
+    ): Single<CurrentWeather>
 
     @GET("weather")
     fun getCurrentWeatherForLocation(
@@ -24,8 +23,7 @@ interface WeatherApi {
         @Query("appid") apikey: String,
         @Query("lang") lang: String,
         @Query("units") units: String
-    )       : Single<CurrentWeather>
-
+    ): Single<CurrentWeather>
 
     @GET("forecast")
     fun getForecastForCity(
@@ -33,8 +31,7 @@ interface WeatherApi {
         @Query("appid") apikey: String?,
         @Query("lang") lang: String,
         @Query("units") units: String
-    )
-            : Single<ForecastWeather>
+    ): Single<ForecastWeather>
 
     @GET("forecast")
     fun getForecastForLocation(
@@ -43,13 +40,12 @@ interface WeatherApi {
         @Query("appid") apikey: String,
         @Query("units") units: String,
         @Query("lang") lang: String
-    )
-            : Single<ForecastWeather>
+    ): Single<ForecastWeather>
 
     @GET("air_pollution")
     fun getAirPollution(
         @Query("lat") lat: Double,
         @Query("lon") lon: Double,
         @Query("appid") apikey: String,
-    ):Single<AirPollution>
+    ): Single<AirPollution>
 }

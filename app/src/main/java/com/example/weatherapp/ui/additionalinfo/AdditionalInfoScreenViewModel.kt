@@ -4,14 +4,13 @@ import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.Result
+import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.repo.WeatherRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
-
 
 class AdditionalInfoScreenViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository
@@ -37,6 +36,7 @@ class AdditionalInfoScreenViewModel @Inject constructor(
                             Log.i("result", "error")
                         }
                     }
-                })
+                }
+            )
     }
 }

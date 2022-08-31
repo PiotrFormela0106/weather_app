@@ -100,5 +100,7 @@ dependencies {
     // For developers using AndroidX in their applications
     implementation 'pub.devrel:easypermissions:3.0.0'
 
+    //Places Autocomplete
+    implementation 'com.google.android.libraries.places:places:2.6.0'
 
 }

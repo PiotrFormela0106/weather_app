@@ -18,13 +18,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.R
@@ -50,7 +48,8 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(
@@ -87,7 +86,6 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
 
         return binding.root
     }
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -128,7 +126,7 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
     }
 
     @SuppressLint("MissingPermission")
-    private fun getLocation() {//move all that you can from this method to viewmodel
+    private fun getLocation() { // move all that you can from this method to viewmodel
         fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
             val location: Location = task.result
             try {
@@ -164,7 +162,7 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
-        ) { //When permission denied at start
+        ) { // When permission denied at start
             requestPermissions(
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 MY_PERMISSIONS_REQUEST_LOCATION
@@ -185,8 +183,8 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
                         val textView = view?.findViewById<TextView>(R.id.day)
                         findNavController().navigate(MainScreenFragmentDirections.navigateToAddInfo(textView?.text.toString()))
                     }
-
-                })
+                }
+            )
         )
     }
 
@@ -206,7 +204,7 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.nav_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater);
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -222,6 +220,4 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
     companion object {
         private const val MY_PERMISSIONS_REQUEST_LOCATION = 44
     }
-
-
 }

@@ -7,10 +7,9 @@ import com.example.weatherapp.controller.PreferencesController.Companion.LON
 import com.example.weatherapp.controller.PreferencesController.Companion.UNITS
 import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.data.mappers.toUnits
-import com.example.weatherapp.domain.repo.StorageRepository
 import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.domain.models.Units
-
+import com.example.weatherapp.domain.repo.StorageRepository
 import javax.inject.Inject
 
 class StorageRepositoryImpl @Inject constructor(preferencesController: PreferencesController) :
@@ -44,16 +43,14 @@ class StorageRepositoryImpl @Inject constructor(preferencesController: Preferenc
         return prefs.getString(UNITS, "").orEmpty().toUnits()
     }
 
-    override fun saveCoordinates(lat: Double, lon: Double){
+    override fun saveCoordinates(lat: Double, lon: Double) {
         prefs.edit().putFloat(LAT, lat.toFloat()).apply()
         prefs.edit().putFloat(LON, lon.toFloat()).apply()
     }
-    override fun getLatitude(): Double{
+    override fun getLatitude(): Double {
         return prefs.getFloat(LAT, 0F).toDouble()
     }
-    override fun getLongitude(): Double{
+    override fun getLongitude(): Double {
         return prefs.getFloat(LON, 0F).toDouble()
     }
 }
-
-

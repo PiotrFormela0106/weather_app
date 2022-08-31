@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/drawable/forecast_detailed.xml" value="0.113" />
         <entry key="app/src/main/res/drawable/forecast_rectangle.xml" value="0.22" />
         <entry key="app/src/main/res/drawable/ic_bin.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_location.xml" value="0.2005" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="app/src/main/res/layout/air_pollution.xml" value="0.45" />
         <entry key="app/src/main/res/layout/city.xml" value="0.2517289073305671" />
@@ -18,7 +19,7 @@
         <entry key="app/src/main/res/layout/fragment_additional_info_screen.xml" value="0.26313405797101447" />
         <entry key="app/src/main/res/layout/fragment_city_screen.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_main_screen.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.33" />
         <entry key="app/src/main/res/menu/nav_bin.xml" value="0.375" />
         <entry key="app/src/main/res/menu/nav_menu.xml" value="0.2490740740740741" />
       </map>

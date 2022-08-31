@@ -25,8 +25,7 @@ class SettingsViewModel @Inject constructor(
         selection.postValue(finalValue)
     }
 
-    sealed class Event {
-    }
+    sealed class Event
 }
 
 private fun Units.switchUnits(): Units {

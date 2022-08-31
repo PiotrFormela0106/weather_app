@@ -30,7 +30,8 @@ class CityScreenFragment : Fragment() {
     @Inject
     lateinit var viewModel: CityScreenViewModel
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(
@@ -51,39 +52,45 @@ class CityScreenFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
+        binding.addCity.setEndIconOnClickListener {
+            viewModel.addCity()
+        }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.updateCities()
-        viewModel.allCities.observe(viewLifecycleOwner, Observer<List<City>> { data ->
-            setupRecyclerView(data)
+        viewModel.allCities.observe(
+            viewLifecycleOwner,
+            Observer<List<City>> { data ->
+                setupRecyclerView(data)
 
-            val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
-                ItemTouchHelper.SimpleCallback(
-                    0,
-                    ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.DOWN or ItemTouchHelper.UP
-                ) {
-                override fun onMove(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
-                ): Boolean {
-                    return false
+                val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
+                    ItemTouchHelper.SimpleCallback(
+                        0,
+                        ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.DOWN or ItemTouchHelper.UP
+                    ) {
+                    override fun onMove(
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder,
+                        target: RecyclerView.ViewHolder
+                    ): Boolean {
+                        return false
+                    }
+
+                    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+                        val position = viewHolder.adapterPosition
+                        viewModel.deleteCity(data[position])
+                        adapter.notifyItemRemoved(position)
+                        Toast.makeText(activity, "${adapter.itemCount}", Toast.LENGTH_SHORT).show()
+                    }
                 }
-
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
-                    val position = viewHolder.adapterPosition
-                    viewModel.deleteCity(data[position])
-                    adapter.notifyItemRemoved(position)
-                    Toast.makeText(activity, "${adapter.itemCount}", Toast.LENGTH_SHORT).show()
-                }
-
+                val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
+                itemTouchHelper.attachToRecyclerView(binding.recyclerCity)
             }
-            val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
-            itemTouchHelper.attachToRecyclerView(binding.recyclerCity)
-        })
+        )
 
         val recyclerView = binding.recyclerCity
         binding.recyclerCity.addOnItemTouchListener(
@@ -96,12 +103,10 @@ class CityScreenFragment : Fragment() {
                         val textView = view?.findViewById<TextView>(R.id.cityName)
                         viewModel.storageRepository.saveCity(textView?.text.toString())
                         findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
-
                     }
-
-                })
+                }
+            )
         )
-
     }
 
     private fun setupRecyclerView(list: List<City>) {
@@ -117,25 +122,24 @@ class CityScreenFragment : Fragment() {
                 findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
             }
             is CityScreenViewModel.Event.OnCityError -> {
-                Snackbar.make(binding.root, event.message, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.root, event.message, Snackbar.LENGTH_SHORT).show()
             }
             is CityScreenViewModel.Event.OnCityDuplicate -> {
                 Snackbar.make(
                     binding.root,
                     "This city is already added to list",
                     Snackbar.LENGTH_SHORT
-                ).show();
+                ).show()
             }
             is CityScreenViewModel.Event.OnLocation -> {
                 findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
             }
-
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.nav_bin, menu)
-        super.onCreateOptionsMenu(menu,inflater);
+        super.onCreateOptionsMenu(menu, inflater)
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -146,5 +150,4 @@ class CityScreenFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
 }

@@ -30,8 +30,7 @@ class RepositoryModule(val context: Context) {
 
     @Singleton
     @Provides
-    fun provideCityRepository(
-    ): CityRepository {
+    fun provideCityRepository(): CityRepository {
         return CityRepositoryImpl(context = context)
     }
 
@@ -49,5 +48,4 @@ class RepositoryModule(val context: Context) {
     fun providePreferences(): PreferencesController {
         return PreferencesController(context)
     }
-
 }

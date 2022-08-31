@@ -11,7 +11,6 @@ class Cache {
     fun getForecast(key: CacheKey): ForecastWeather? {
         return map[key]
     }
-
 }
 
 internal fun getCityCacheKey(city: String, units: String, lang: String): CacheKey.CityCacheKey {

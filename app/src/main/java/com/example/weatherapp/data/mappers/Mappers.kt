@@ -1,6 +1,5 @@
 package com.example.weatherapp.data.mappers
 
-import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.domain.models.Units
 
 typealias CurrentWeatherDomain = com.example.weatherapp.domain.models.CurrentWeather
@@ -34,8 +33,6 @@ typealias AirPollutionData = com.example.weatherapp.data.models.AirPollution
 typealias AirQualityIndexData = com.example.weatherapp.data.models.AirQualityIndex
 typealias AirPollutionItemData = com.example.weatherapp.data.models.AirPollutionItem
 typealias ComponentsData = com.example.weatherapp.data.models.Components
-
-
 
 fun AirPollutionData.toDomain(): AirPollutionDomain = AirPollutionDomain(
     coordinates = coordinates.toDomain(),
@@ -91,7 +88,7 @@ fun CurrentWeatherData.toDomain(): CurrentWeatherDomain = CurrentWeatherDomain(
     cityName = cityName,
     main = main.toDomain(),
     coordinates = coordinates.toDomain(),
-    weather = weather.map{it.toDomain()},
+    weather = weather.map { it.toDomain() },
     clouds = clouds.toDomain(),
     sys = sys.toDomain(),
     wind = wind.toDomain(),
@@ -119,7 +116,7 @@ fun RainData.toDomain(): RainDomain = RainDomain(
 
 fun ForecastItemData.toDomain(): ForecastItemDomain = ForecastItemDomain(
     main = main.toDomain(),
-    weather = weather.map{it.toDomain()},
+    weather = weather.map { it.toDomain() },
     clouds = clouds.toDomain(),
     wind = wind.toDomain(),
     date = date,
@@ -128,7 +125,7 @@ fun ForecastItemData.toDomain(): ForecastItemDomain = ForecastItemDomain(
 
 fun ForecastWeatherData.toDomain(): ForecastWeatherDomain = ForecastWeatherDomain(
     city = city.toDomain(),
-    list = list.map{it.toDomain()}
+    list = list.map { it.toDomain() }
 )
 
 fun String.toUnits(): Units {
@@ -144,5 +141,3 @@ fun Units.toData(): String {
 }
 private const val METRIC = "Metric"
 private const val NOT_METRIC = "Not metric"
-
-

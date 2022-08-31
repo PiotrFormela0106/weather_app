@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.weatherapp.data.room.City//don't use data classes in ui layer
+import com.example.weatherapp.data.room.City // don't use data classes in ui layer
 import com.example.weatherapp.domain.CityError
 import com.example.weatherapp.domain.Error
 import com.example.weatherapp.domain.Result
@@ -37,12 +37,11 @@ class CityScreenViewModel @Inject constructor(
                 when (it) {
                     is Result.OnSuccess -> {
                         val cityName1 = it.data.cityName
-                        if(!allCities.value!!.any { it.city == cityName1}) {
+                        if (!allCities.value!!.any { it.city == cityName1 }) {
                             insertCity(city = it.data.cityName)
                             storageRepository.saveCity(it.data.cityName)
                             Event.OnAddCity.let { uiEvents.post(it) }
-                        }
-                        else {
+                        } else {
                             uiEvents.post(Event.OnCityDuplicate)
                         }
                     }
@@ -117,10 +116,10 @@ class CityScreenViewModel @Inject constructor(
 
     fun addCity() {
         storageRepository.saveLocationMethod(LocationMethod.City)
-        checkCity(city=cityName.value.orEmpty())
+        checkCity(city = cityName.value.orEmpty())
     }
 
-    fun useLocation(){
+    fun useLocation() {
         storageRepository.saveLocationMethod(LocationMethod.Location)
         Event.OnLocation.let { uiEvents.post(it) }
     }

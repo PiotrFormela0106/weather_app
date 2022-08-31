@@ -1,11 +1,8 @@
 package com.example.weatherapp.data.room
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
-import com.example.weatherapp.domain.Result
-
 
 @Dao
 interface CityDao {

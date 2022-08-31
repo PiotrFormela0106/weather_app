@@ -29,11 +29,13 @@ class RecyclerItemClickListener(
     override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
 
     init {
-        mGestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-            override fun onSingleTapUp(e: MotionEvent): Boolean {
-                return true
+        mGestureDetector = GestureDetector(
+            context,
+            object : GestureDetector.SimpleOnGestureListener() {
+                override fun onSingleTapUp(e: MotionEvent): Boolean {
+                    return true
+                }
             }
-
-        })
+        )
     }
 }

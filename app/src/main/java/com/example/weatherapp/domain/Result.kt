@@ -1,6 +1,5 @@
 package com.example.weatherapp.domain
-import com.example.weatherapp.domain.Error
-sealed class Result<T>{
+sealed class Result<T> {
     data class OnSuccess<T>(val data: T) : Result<T>()
     data class OnError<T>(val error: Error) : Result<T>()
 

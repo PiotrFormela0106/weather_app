@@ -3,9 +3,9 @@ package com.example.weatherapp.ui.main
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.weatherapp.domain.models.AirPollution
 import com.example.weatherapp.domain.Error
 import com.example.weatherapp.domain.Result
+import com.example.weatherapp.domain.models.AirPollution
 import com.example.weatherapp.domain.models.CurrentWeather
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.models.LocationMethod
@@ -83,7 +83,8 @@ class MainScreenViewModel @Inject constructor(
         status.postValue(Status.Loading)
         disposable.add(
             weatherRepository.getCurrentWeather(
-                city = storageRepository.getCity())
+                city = storageRepository.getCity()
+            )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
@@ -97,7 +98,8 @@ class MainScreenViewModel @Inject constructor(
                                 handleError(it.error)
                             }
                         }
-                    })
+                    }
+                )
         )
     }
 
@@ -114,7 +116,8 @@ class MainScreenViewModel @Inject constructor(
                                 handleError(it.error)
                             }
                         }
-                    })
+                    }
+                )
         )
     }
 
@@ -146,11 +149,11 @@ class MainScreenViewModel @Inject constructor(
 
         @SuppressLint("SimpleDateFormat")
         val sdf = SimpleDateFormat("HH:mm:ss")
-        val sunrise = Date(data.sys.sunrise*1000)
+        val sunrise = Date(data.sys.sunrise * 1000)
         val sunriseTime = sdf.format(sunrise)
         sunriseFormat.postValue(sunriseTime)
 
-        val sunset = Date(data.sys.sunset*1000)
+        val sunset = Date(data.sys.sunset * 1000)
         val sunsetTime = sdf.format(sunset)
         sunsetFormat.postValue(sunsetTime)
     }
@@ -181,5 +184,4 @@ class MainScreenViewModel @Inject constructor(
     sealed class Event {
         object OnCitiesClick : Event()
     }
-
 }

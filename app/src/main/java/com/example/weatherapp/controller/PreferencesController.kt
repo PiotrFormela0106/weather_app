@@ -2,9 +2,6 @@ package com.example.weatherapp.controller
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.weatherapp.data.mappers.toData
-import com.example.weatherapp.data.mappers.toUnits
-import com.example.weatherapp.domain.models.Units
 import javax.inject.Inject
 
 class PreferencesController @Inject constructor(context: Context) {

@@ -1,44 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-<data>
-    <variable
-        name="viewModel"
-        type="com.example.weatherapp.ui.settings.SettingsViewModel" />
-</data>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginEnd="8dp">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.weatherapp.ui.settings.SettingsViewModel" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/blue_sky"
+        android:orientation="vertical"
         tools:context=".ui.settings.SettingsFragment">
 
         <RadioGroup
             android:id="@+id/radio_group"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <RadioButton
                 android:id="@+id/metric"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Metric"
                 android:checked="@{viewModel.metric}"
+                android:gravity="center"
                 android:onClick="@{()->viewModel.switchUnitsClick()}"
+                android:text="Metric"
                 android:textSize="24sp" />
 
             <RadioButton
                 android:id="@+id/non_metric"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Not metric"
+                android:layout_marginStart="16dp"
                 android:checked="@{viewModel.notMetric}"
+                android:gravity="center"
                 android:onClick="@{()->viewModel.switchUnitsClick()}"
+                android:text="Not metric"
                 android:textSize="24sp" />
         </RadioGroup>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Dark theme"
+            android:textSize="24sp" />
+    </LinearLayout>
 </layout>

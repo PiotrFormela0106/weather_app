@@ -1,12 +1,9 @@
 package com.example.weatherapp.domain.repo
 
-import android.app.Application
-import androidx.lifecycle.LiveData
 import com.example.weatherapp.data.room.City
-import com.example.weatherapp.data.room.CityDatabase
-import io.reactivex.rxjava3.core.Single
 import com.example.weatherapp.domain.Result
 import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
 
 interface CityRepository {
     fun insertCity(cityName: String): Completable

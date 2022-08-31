@@ -1,14 +1,10 @@
 package com.example.weatherapp
 
-
-import android.location.LocationManager
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.weatherapp.databinding.ActivityMainBinding
-import com.google.android.gms.location.FusedLocationProviderClient
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -23,5 +19,4 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return findNavController(R.id.main_screen_fragment).navigateUp() || super.onSupportNavigateUp()
     }
-
 }

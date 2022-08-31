@@ -16,7 +16,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_color"
         android:orientation="vertical"
         tools:context=".ui.main.MainScreenFragment">
 
@@ -31,19 +30,19 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:text="@{viewModel.cityName}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:textColor="@color/black"
                 android:textSize="24sp"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                style="@style/Theme.WeatherApp"/>
+
 
             <ImageButton
                 android:id="@+id/imageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/blue_sky"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:onClick="@{()->viewModel.onCitiesClick()}"
                 app:layout_constraintEnd_toStartOf="@+id/city_name"
                 app:layout_constraintHorizontal_bias="0.101"
