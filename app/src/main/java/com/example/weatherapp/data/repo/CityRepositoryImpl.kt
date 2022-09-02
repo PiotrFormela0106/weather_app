@@ -14,14 +14,15 @@ import javax.inject.Inject
 
 class CityRepositoryImpl @Inject constructor(context: Context) : CityRepository {
     private var cityDao: CityDao
+
     init {
         val database = CityDatabase
             .getInstance(context.applicationContext)
-        cityDao = database!!.cityDao()
+        cityDao = database.cityDao()
     }
 
-    override fun insertCity(cityName: String): Completable {
-        return cityDao.insert(City(city = cityName))
+    override fun insertCity(cityName: String, placeId: String): Completable {
+        return cityDao.insert(City(city = cityName, placeId = placeId))
     }
 
     override fun deleteCity(city: City): Completable {
@@ -39,17 +40,32 @@ class CityRepositoryImpl @Inject constructor(context: Context) : CityRepository 
 
     override fun getCurrentCity(): Single<Result<City>> {
         // todo add real implementation
-        return Single.just(Result.withValue(City(city = "Krakow")))
+        return Single.just(Result.withValue(City(city = "Krakow", placeId = "placeId")))
+    }
+
+    override fun getPlaceId(city: String): Single<Result<String>> {
+        return cityDao.getPlaceId(city)
+            .compose(mapPlaceId())
     }
 
     private fun mapCities():
-        SingleTransformer<List<City>, Result<List<City>>> {
+            SingleTransformer<List<City>, Result<List<City>>> {
         return SingleTransformer { upstream ->
             upstream
                 .map { Result.withValue(it) }
                 .onErrorReturn { it.toResultError() }
         }
     }
+
+    private fun mapPlaceId():
+            SingleTransformer<String, Result<String>> {
+        return SingleTransformer { upstream ->
+            upstream
+                .map { Result.withValue(it) }
+                .onErrorReturn { it.toResultError() }
+        }
+    }
+
 
     private fun <T> Throwable.toResultError(): Result<T> {
         val error = this.toError()

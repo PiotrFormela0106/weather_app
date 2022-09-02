@@ -42,8 +42,8 @@ class WeatherRepositoryImpl @Inject constructor(
                 units = getUnitsParam()
             ).compose(mapCurrentWeatherResponse())
             LocationMethod.Location -> api.getCurrentWeatherForLocation(
-                lat = getLatitudeParam(),
-                lon = getLongitudeParam(),
+                lat = getCoordinatesParam().first,
+                lon = getCoordinatesParam().second,
                 apikey = API_KEY,
                 lang = LANG_PL,
                 units = getUnitsParam()
@@ -68,8 +68,8 @@ class WeatherRepositoryImpl @Inject constructor(
             }
             LocationMethod.Location -> {
                 val cacheKey = getLocationCacheKey(
-                    getLatitudeParam(),
-                    getLongitudeParam(),
+                    getCoordinatesParam().first,
+                    getCoordinatesParam().second,
                     getUnitsParam(),
                     LANG_PL
                 )
@@ -78,8 +78,8 @@ class WeatherRepositoryImpl @Inject constructor(
                     return Single.just(Result.withValue(cachedValue))
                 }
                 api.getForecastForLocation(
-                    lat = getLatitudeParam(),
-                    lon = getLongitudeParam(),
+                    lat = getCoordinatesParam().first,
+                    lon = getCoordinatesParam().second,
                     apikey = API_KEY,
                     units = getUnitsParam(),
                     lang = LANG_PL
@@ -127,9 +127,8 @@ class WeatherRepositoryImpl @Inject constructor(
     }
 
     private fun getUnitsParam(): String = storageRepository.getUnits().toQueryParam()
-    private fun getLatitudeParam(): Double = storageRepository.getLatitude()
-    private fun getLongitudeParam(): Double = storageRepository.getLongitude()
     private fun getCityParam(): String = storageRepository.getCity()
+    private fun getCoordinatesParam(): Pair<Double,Double> = storageRepository.getCoordinates()
 }
 
 private fun Units.toQueryParam(): String {

@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.example.weatherapp.domain.Error
 import com.example.weatherapp.domain.Result
 import com.example.weatherapp.domain.models.AirPollution
+import com.example.weatherapp.domain.models.AirPollutionItem
 import com.example.weatherapp.domain.models.CurrentWeather
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.models.LocationMethod
@@ -27,55 +28,52 @@ class MainScreenViewModel @Inject constructor(
 ) : ViewModel(), LifecycleObserver {
 
     private val disposable = CompositeDisposable()
+    private val uiEvents = UiEvents<Event>()
+    private val sunriseFormat = MutableLiveData<String>()
+    private val sunsetFormat = MutableLiveData<String>()
     private val iconId = MutableLiveData<String>()
     val imageUrl = MutableLiveData("https://openweathermap.org/img/wn/03d@2x.png")
     val status = MutableLiveData(Status.Loading)
     val weatherData = MutableLiveData<CurrentWeather>()
     val forecastData = MutableLiveData<ForecastWeather>()
-    private val airPollutionData = MutableLiveData<AirPollution>()
     val cityName = MutableLiveData<String>()
-    private val sunriseFormat = MutableLiveData<String>()
-    private val sunsetFormat = MutableLiveData<String>()
-    val sunrise: LiveData<String> =
-        Transformations.map(sunriseFormat) { sunrise -> "Sunrise: $sunrise" }
-    val sunset: LiveData<String> =
-        Transformations.map(sunsetFormat) { sunset -> "Sunset: $sunset" }
-    val wind: LiveData<String> =
-        Transformations.map(weatherData) { weather -> "Wind speed: ${weather.wind.speed} m/s" }
-    val humidity: LiveData<String> =
-        Transformations.map(weatherData) { weather -> "Humidity: ${weather.main.humidity} %" }
-    val pressure: LiveData<String> =
-        Transformations.map(weatherData) { weather -> "Pressure: ${weather.main.pressure} hPa" }
-    val temperature: LiveData<String> =
-        Transformations.map(weatherData) { weather -> "${weather.main.temp} C" }
-    val aqi: LiveData<String> =
-        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].main.aqi}" }
-    val co: LiveData<String> =
-        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.co}" }
-    val no: LiveData<String> =
-        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.no}" }
-    val no2: LiveData<String> =
-        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.no2}" }
-    val o3: LiveData<String> =
-        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.o3}" }
-    val so2: LiveData<String> =
-        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.so2}" }
-    val pm2_5: LiveData<String> =
-        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.pm2_5}" }
-    val pm10: LiveData<String> =
-        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.pm10}" }
-    val nh3: LiveData<String> =
-        Transformations.map(airPollutionData) { airPollution -> "${airPollution.list[0].components.nh3}" }
-
-    private val uiEvents = UiEvents<Event>()
     val events: Observable<Event> = uiEvents.stream()
     val progress = MutableLiveData<Boolean>()
+    val airPollutionData = MutableLiveData<AirPollution>()
+    val placeId = MutableLiveData<String>()
     enum class Status { Loading, Success, Error }
+    inner class ViewState{
+        val data = airPollutionData
+        private val pollution: LiveData<AirPollutionItem> = Transformations.map(data) { it.list[0] }
+        val aqi: LiveData<String> = Transformations.map(pollution) { "${it.main.aqi}" }
+        val co: LiveData<String> = Transformations.map(pollution) { "${it.components.co}" }
+        val no: LiveData<String> = Transformations.map(pollution) { "${it.components.no}" }
+        val no2: LiveData<String> = Transformations.map(pollution) { "${it.components.no2}" }
+        val o3: LiveData<String> = Transformations.map(pollution) { "${it.components.o3}" }
+        val so2: LiveData<String> = Transformations.map(pollution) { "${it.components.so2}" }
+        val pm2_5: LiveData<String> = Transformations.map(pollution) { "${it.components.pm2_5}" }
+        val pm10: LiveData<String> = Transformations.map(pollution) { "${it.components.pm10}" }
+        val nh3: LiveData<String> = Transformations.map(pollution) { "${it.components.nh3}" }
+
+        val sunrise: LiveData<String> =
+            Transformations.map(sunriseFormat) { "Sunrise: $it" }
+        val sunset: LiveData<String> =
+            Transformations.map(sunsetFormat) { "Sunset: $it" }
+        val wind: LiveData<String> =
+            Transformations.map(weatherData) { "Wind speed: ${it.wind.speed} m/s" }
+        val humidity: LiveData<String> =
+            Transformations.map(weatherData) { "Humidity: ${it.main.humidity} %" }
+        val pressure: LiveData<String> =
+            Transformations.map(weatherData) { "Pressure: ${it.main.pressure} hPa" }
+        val temperature: LiveData<String> =
+            Transformations.map(weatherData) { "${it.main.temp} C" }
+    }
 
     init {
+        //placeId.postValue(storageRepository.getPlaceId())
         getCurrentWeather()
         getForecastWeather()
-        getAirPollution()
+        //getAirPollution()
     }
 
     fun getCurrentWeather() {

@@ -1,7 +1,7 @@
 package com.example.weatherapp.di
 
 import android.content.Context
-import com.example.weatherapp.controller.PreferencesController
+import com.example.weatherapp.data.controller.PreferencesController
 import com.example.weatherapp.data.api.RetrofitClient
 import com.example.weatherapp.data.repo.CityRepositoryImpl
 import com.example.weatherapp.data.repo.StorageRepositoryImpl

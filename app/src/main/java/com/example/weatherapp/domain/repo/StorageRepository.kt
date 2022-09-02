@@ -11,6 +11,7 @@ interface StorageRepository {
     fun saveUnits(units: Units)
     fun getUnits(): Units
     fun saveCoordinates(lat: Double, lon: Double)
-    fun getLatitude(): Double
-    fun getLongitude(): Double
+    fun getCoordinates(): Pair<Double, Double>
+    fun savePlaceId(placeId: String)
+    fun getPlaceId(): String
 }

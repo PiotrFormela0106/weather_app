@@ -2,6 +2,7 @@ package com.example.weatherapp.ui.city
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
@@ -12,6 +13,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.weatherapp.BuildConfig
+import com.example.weatherapp.BuildConfig.PLACES_API_KEY
 import com.example.weatherapp.R
 import com.example.weatherapp.data.room.City
 import com.example.weatherapp.databinding.FragmentCityScreenBinding
@@ -19,8 +22,14 @@ import com.example.weatherapp.di.DaggerCityScreenComponent
 import com.example.weatherapp.di.RepositoryModule
 import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.ui.core.RecyclerItemClickListener
+import com.google.android.gms.common.api.Status
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import org.w3c.dom.Text
 import javax.inject.Inject
 
 class CityScreenFragment : Fragment() {
@@ -29,6 +38,7 @@ class CityScreenFragment : Fragment() {
 
     @Inject
     lateinit var viewModel: CityScreenViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,16 +62,33 @@ class CityScreenFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        binding.addCity.setEndIconOnClickListener {
-            viewModel.addCity()
-        }
+        val recyclerView = binding.recyclerCity
+        binding.recyclerCity.addOnItemTouchListener(
+            RecyclerItemClickListener(context, recyclerView,
+                object : RecyclerItemClickListener.OnItemClickListener {
+                    override fun onItemClick(view: View?, position: Int) {
+                        viewModel.storageRepository.saveLocationMethod(LocationMethod.City)
+                        val textView = view?.findViewById<TextView>(R.id.cityName)
+                        viewModel.storageRepository.saveCity(textView?.text.toString())
+                        viewModel.getPlaceId(textView?.text.toString())
+
+                        viewModel.placeId.observe(viewLifecycleOwner) { id ->
+                            viewModel.storageRepository.savePlaceId(id)
+                            findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
+                        }
+
+                    }
+                }
+            )
+        )
+
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.updateCities()
+        viewModel.fetchCities()
         viewModel.allCities.observe(
             viewLifecycleOwner,
             Observer<List<City>> { data ->
@@ -89,24 +116,29 @@ class CityScreenFragment : Fragment() {
                 }
                 val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
                 itemTouchHelper.attachToRecyclerView(binding.recyclerCity)
-            }
-        )
+            })
 
-        val recyclerView = binding.recyclerCity
-        binding.recyclerCity.addOnItemTouchListener(
-            RecyclerItemClickListener(
-                context,
-                recyclerView,
-                object : RecyclerItemClickListener.OnItemClickListener {
-                    override fun onItemClick(view: View?, position: Int) {
-                        viewModel.storageRepository.saveLocationMethod(LocationMethod.City)
-                        val textView = view?.findViewById<TextView>(R.id.cityName)
-                        viewModel.storageRepository.saveCity(textView?.text.toString())
-                        findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
-                    }
-                }
-            )
-        )
+        if (!Places.isInitialized()) {
+            Places.initialize(requireContext(), PLACES_API_KEY)
+        }
+        val placesClient = Places.createClient(requireContext())
+
+        // Initialize the AutocompleteSupportFragment.
+        val autocompleteFragment: AutocompleteSupportFragment = childFragmentManager
+            .findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
+
+        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS))
+
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onError(status: Status) {
+                Log.i("error", "An error occurred: $status")
+            }
+
+            override fun onPlaceSelected(place: Place) {
+                viewModel.addCity(place)
+                viewModel.storageRepository.savePlaceId(place.id!!)
+            }
+        })
     }
 
     private fun setupRecyclerView(list: List<City>) {

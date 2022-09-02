@@ -13,6 +13,7 @@ import com.example.weatherapp.domain.repo.CityRepository
 import com.example.weatherapp.domain.repo.StorageRepository
 import com.example.weatherapp.domain.repo.WeatherRepository
 import com.example.weatherapp.ui.core.UiEvents
+import com.google.android.libraries.places.api.model.Place
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.subscribeBy
@@ -28,8 +29,9 @@ class CityScreenViewModel @Inject constructor(
     val events: Observable<Event> = uiEvents.stream()
     val allCities = MutableLiveData<List<City>>()
     val cityName = MutableLiveData<String>()
+    val placeId: MutableLiveData<String> = MutableLiveData()
 
-    private fun checkCity(city: String) {
+    fun checkCity(city: String, placeId: String) {
         weatherRepository.getCurrentWeather(city = city)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -38,7 +40,7 @@ class CityScreenViewModel @Inject constructor(
                     is Result.OnSuccess -> {
                         val cityName1 = it.data.cityName
                         if (!allCities.value!!.any { it.city == cityName1 }) {
-                            insertCity(city = it.data.cityName)
+                            insertCity(city = it.data.cityName, placeId)
                             storageRepository.saveCity(it.data.cityName)
                             Event.OnAddCity.let { uiEvents.post(it) }
                         } else {
@@ -52,14 +54,14 @@ class CityScreenViewModel @Inject constructor(
             }
     }
 
-    private fun insertCity(city: String) {
-        cityRepository.insertCity(city)
+    private fun insertCity(city: String, placeId: String) {
+        cityRepository.insertCity(city, placeId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onComplete = {
                     Log.i("inserted", "$city inserted!")
-                    updateCities()
+                    fetchCities()
                 }
             )
     }
@@ -70,12 +72,12 @@ class CityScreenViewModel @Inject constructor(
             .subscribeBy(
                 onComplete = {
                     Log.i("removed", "$city removed!")
-                    updateCities()
+                    fetchCities()
                 }
             )
     }
 
-    fun updateCities() {
+    fun fetchCities() {
         cityRepository.updateCities()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -92,16 +94,38 @@ class CityScreenViewModel @Inject constructor(
     }
 
     fun deleteAllCities() {
-        updateCities()
+        fetchCities()
         cityRepository.deleteAllCities()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onComplete = {
                     Log.i("status of data", "Data removed!")
-                    updateCities()
+                    fetchCities()
                 }
             )
+    }
+
+    fun getPlaceId(city: String){
+        fetchCities()
+        cityRepository.getPlaceId(city)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onSuccess = {
+                    when (it) {
+                        is Result.OnSuccess -> {
+                            handleSuccess(it.data)
+                        }
+                        is Result.OnError -> {}
+                    }
+                }
+            )
+
+    }
+
+    private fun handleSuccess(data: String){
+        placeId.value = data
     }
 
     private fun handleSuccess(data: List<City>) {
@@ -114,9 +138,9 @@ class CityScreenViewModel @Inject constructor(
         }
     }
 
-    fun addCity() {
+    fun addCity(place: Place) {
         storageRepository.saveLocationMethod(LocationMethod.City)
-        checkCity(city = cityName.value.orEmpty())
+        checkCity(city = place.name!!, placeId = place.id!!)
     }
 
     fun useLocation() {

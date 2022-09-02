@@ -11,6 +11,7 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -25,6 +26,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.weatherapp.BuildConfig.PLACES_API_KEY
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentMainScreenBinding
 import com.example.weatherapp.di.DaggerMainScreenComponent
@@ -32,8 +34,15 @@ import com.example.weatherapp.di.RepositoryModule
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.ui.core.RecyclerItemClickListener
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FetchPhotoRequest
+import com.google.android.libraries.places.api.net.FetchPhotoResponse
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.io.IOException
 import java.util.*
@@ -62,6 +71,7 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
             .build()
             .inject(this)
 
+        binding.viewState = viewModel.ViewState()
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         lifecycle.addObserver(viewModel)
@@ -77,12 +87,48 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
             setupRecyclerView(thisContext, forecast)
         }
 
+        if (!Places.isInitialized()) {
+            Places.initialize(requireContext(), PLACES_API_KEY)
+        }
+        val placesClient = Places.createClient(requireContext())
+        val fields = listOf(Place.Field.PHOTO_METADATAS)
+        val placeId = viewModel.storageRepository.getPlaceId()
+        val placeRequest = FetchPlaceRequest.newInstance(placeId, fields)
+        placesClient.fetchPlace(placeRequest)
+            .addOnSuccessListener { response: FetchPlaceResponse ->
+                val place = response.place
+
+                val metaData = place.photoMetadatas
+                if (metaData == null || metaData.isEmpty()) {
+                    Log.w("NO PHOTO", "No photo metadata.")
+                    return@addOnSuccessListener
+                }
+                val photoMetadata = metaData.first()
+                val attributions = photoMetadata?.attributions
+
+                val photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                    //.setMaxWidth(1000) // Optional.
+                    //.setMaxHeight(400) // Optional.
+                    .build()
+                placesClient.fetchPhoto(photoRequest)
+                    .addOnSuccessListener { fetchPhotoResponse: FetchPhotoResponse ->
+                        val bitmap = fetchPhotoResponse.bitmap
+                        binding.cityImage.setImageBitmap(bitmap)
+                    }.addOnFailureListener { exception: Exception ->
+                        if (exception is ApiException) {
+                            Log.e("Place not found", "Place not found: " + exception.message)
+                            val statusCode = exception.statusCode
+                        }
+                    }
+            }
+
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireActivity())
         if (viewModel.storageRepository.getLocationMethod() == LocationMethod.Location) {
             checkPermission()
         }
         getDetailedForecast()
+
 
         return binding.root
     }
@@ -113,16 +159,17 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
     }
 
     private fun alert(message: String, title: String) {
-        val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-        alertDialogBuilder.setMessage(message)
-        alertDialogBuilder.setTitle(title)
-        alertDialogBuilder.setNegativeButton(
-            "ok"
-        ) { _, _ ->
-            findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
+        AlertDialog.Builder(requireContext()).apply {
+            setMessage(message)
+            setTitle(title)
+            setPositiveButton(
+                "ok"
+            ) { _, _ ->
+                findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
+            }
         }
-        val alertDialog = alertDialogBuilder.create()
-        alertDialog.show()
+            .create()
+            .show()
     }
 
     @SuppressLint("MissingPermission")
@@ -181,7 +228,11 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(view: View?, position: Int) {
                         val textView = view?.findViewById<TextView>(R.id.day)
-                        findNavController().navigate(MainScreenFragmentDirections.navigateToAddInfo(textView?.text.toString()))
+                        findNavController().navigate(
+                            MainScreenFragmentDirections.navigateToAddInfo(
+                                textView?.text.toString()
+                            )
+                        )
                     }
                 }
             )

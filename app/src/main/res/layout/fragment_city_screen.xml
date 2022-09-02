@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.example.weatherapp.ui.city.CityScreenViewModel" />
@@ -13,20 +12,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_color"
         android:orientation="vertical"
         tools:context=".ui.city.CityScreenFragment">
 
+        <fragment
+            android:id="@+id/autocomplete_fragment"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            android:layout_width="match_parent"
+            android:layout_height="80dp" />
+
         <Button
             android:id="@+id/use_location"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="64dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="64dp"
             android:onClick="@{()->viewModel.useLocation()}"
-            android:text="USE YOUR LOCATION"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:text="@string/use_your_location"
             app:cornerRadius="16dp" />
 
         <LinearLayout
@@ -40,12 +44,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:hint="Enter city name..."
-                app:endIconMode="custom"
                 app:endIconCheckable="true"
                 app:endIconDrawable="@android:drawable/ic_input_add"
+                app:endIconMode="custom"
                 app:endIconTint="@color/colorPrimaryDark">
 
                 <com.google.android.material.textfield.TextInputEditText

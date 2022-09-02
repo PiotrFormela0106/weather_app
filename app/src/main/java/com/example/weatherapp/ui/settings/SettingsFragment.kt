@@ -11,7 +11,6 @@ import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentSettingsBinding
 import com.example.weatherapp.di.DaggerMainScreenComponent
 import com.example.weatherapp.di.RepositoryModule
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
 class SettingsFragment : Fragment() {
@@ -34,13 +33,8 @@ class SettingsFragment : Fragment() {
             .inject(this)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
-        viewModel.events
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { handleEvent(it) }
 
         return binding.root
     }
 
-    private fun handleEvent(event: SettingsViewModel.Event) {
-    }
 }
