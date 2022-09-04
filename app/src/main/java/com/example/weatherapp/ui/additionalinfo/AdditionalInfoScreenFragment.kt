@@ -1,33 +1,28 @@
 package com.example.weatherapp.ui.additionalinfo
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentAdditionalInfoScreenBinding
-import com.example.weatherapp.di.DaggerMainScreenComponent
-import com.example.weatherapp.di.RepositoryModule
 import com.example.weatherapp.domain.models.ForecastItem
-import com.example.weatherapp.domain.models.ForecastWeather
-import com.example.weatherapp.ui.main.ForecastAdapter
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-class AdditionalInfoScreenFragment : Fragment() {
+class AdditionalInfoScreenFragment : DaggerFragment() {
     private lateinit var binding: FragmentAdditionalInfoScreenBinding
 
     @Inject
-    lateinit var viewModel: AdditionalInfoScreenViewModel
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel: AdditionalInfoScreenViewModel by viewModels { viewModelFactory }
     private val args: AdditionalInfoScreenFragmentArgs by navArgs()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,11 +33,6 @@ class AdditionalInfoScreenFragment : Fragment() {
         )
         binding.lifecycleOwner = this
         val thisContext: Context = container?.context!!
-        DaggerMainScreenComponent.builder()
-            .repositoryModule(RepositoryModule(thisContext))
-            .build()
-            .inject(this)
-
         binding.viewModel = viewModel
 
         val day = args.day

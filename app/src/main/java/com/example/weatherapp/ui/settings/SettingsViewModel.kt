@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
-    val storageRepository: StorageRepository
+    private val storageRepository: StorageRepository
 ) : ViewModel() {
     private val uiEvents = UiEvents<Event>()
     val events: Observable<Event> = uiEvents.stream()

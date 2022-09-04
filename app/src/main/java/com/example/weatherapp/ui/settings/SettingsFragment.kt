@@ -1,26 +1,25 @@
 package com.example.weatherapp.ui.settings
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentSettingsBinding
-import com.example.weatherapp.di.DaggerMainScreenComponent
-import com.example.weatherapp.di.RepositoryModule
-import com.google.android.material.snackbar.Snackbar
+import dagger.android.support.DaggerFragment
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
-class SettingsFragment : Fragment() {
+class SettingsFragment : DaggerFragment() {
     private lateinit var binding: FragmentSettingsBinding
 
     @Inject
-    lateinit var viewModel: SettingsViewModel
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel: SettingsViewModel by viewModels { viewModelFactory }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,11 +27,6 @@ class SettingsFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_settings, container, false
         )
-        val thisContext: Context = container?.context!!
-        DaggerMainScreenComponent.builder()
-            .repositoryModule(RepositoryModule(thisContext))
-            .build()
-            .inject(this)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         viewModel.events

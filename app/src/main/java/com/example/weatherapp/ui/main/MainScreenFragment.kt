@@ -18,34 +18,36 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentMainScreenBinding
-import com.example.weatherapp.di.DaggerMainScreenComponent
-import com.example.weatherapp.di.RepositoryModule
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.ui.core.RecyclerItemClickListener
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import dagger.android.support.DaggerFragment
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.io.IOException
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
-class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserver {
+
+class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycleObserver {
     private lateinit var binding: FragmentMainScreenBinding
 
     @Inject
-    lateinit var viewModel: MainScreenViewModel
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel: MainScreenViewModel by viewModels { viewModelFactory }
+
     lateinit var forecast: ForecastWeather
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
@@ -58,10 +60,6 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
         )
 
         val thisContext: Context = container?.context!!
-        DaggerMainScreenComponent.builder()
-            .repositoryModule(RepositoryModule(thisContext))
-            .build()
-            .inject(this)
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
