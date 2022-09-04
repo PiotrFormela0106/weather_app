@@ -106,7 +106,7 @@ class CityScreenViewModel @Inject constructor(
             )
     }
 
-    fun getPlaceId(city: String){
+    fun getPlaceId(city: String) {
         fetchCities()
         cityRepository.getPlaceId(city)
             .subscribeOn(Schedulers.io())
@@ -121,10 +121,9 @@ class CityScreenViewModel @Inject constructor(
                     }
                 }
             )
-
     }
 
-    private fun handleSuccess(data: String){
+    private fun handleSuccess(data: String) {
         placeId.value = data
     }
 

@@ -1,7 +1,7 @@
 package com.example.weatherapp.data
 
 import com.example.weatherapp.domain.models.ForecastWeather
-import java.util.*
+import java.util.Calendar
 import kotlin.collections.HashMap
 
 private const val timeOut = 5 * 60 * 1000
@@ -17,10 +17,10 @@ class Cache {
 
     fun getForecast(key: CacheKey): ForecastWeather? {
         val value = map[key]
-        if(value != null){
+        if (value != null) {
             val timestamp = timeMap[key] ?: return null
             val currentTimestamp = Calendar.getInstance().timeInMillis
-            if(currentTimestamp - timestamp > timeOut)
+            if (currentTimestamp - timestamp > timeOut)
                 return null
         }
         return value

@@ -45,7 +45,7 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.io.IOException
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserver {
@@ -107,8 +107,8 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
                 val attributions = photoMetadata?.attributions
 
                 val photoRequest = FetchPhotoRequest.builder(photoMetadata)
-                    //.setMaxWidth(1000) // Optional.
-                    //.setMaxHeight(400) // Optional.
+                    // .setMaxWidth(1000) // Optional.
+                    // .setMaxHeight(400) // Optional.
                     .build()
                 placesClient.fetchPhoto(photoRequest)
                     .addOnSuccessListener { fetchPhotoResponse: FetchPhotoResponse ->
@@ -128,7 +128,6 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
             checkPermission()
         }
         getDetailedForecast()
-
 
         return binding.root
     }

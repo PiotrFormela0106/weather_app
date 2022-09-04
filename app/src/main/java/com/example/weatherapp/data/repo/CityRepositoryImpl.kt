@@ -49,7 +49,7 @@ class CityRepositoryImpl @Inject constructor(context: Context) : CityRepository 
     }
 
     private fun mapCities():
-            SingleTransformer<List<City>, Result<List<City>>> {
+        SingleTransformer<List<City>, Result<List<City>>> {
         return SingleTransformer { upstream ->
             upstream
                 .map { Result.withValue(it) }
@@ -58,14 +58,13 @@ class CityRepositoryImpl @Inject constructor(context: Context) : CityRepository 
     }
 
     private fun mapPlaceId():
-            SingleTransformer<String, Result<String>> {
+        SingleTransformer<String, Result<String>> {
         return SingleTransformer { upstream ->
             upstream
                 .map { Result.withValue(it) }
                 .onErrorReturn { it.toResultError() }
         }
     }
-
 
     private fun <T> Throwable.toResultError(): Result<T> {
         val error = this.toError()

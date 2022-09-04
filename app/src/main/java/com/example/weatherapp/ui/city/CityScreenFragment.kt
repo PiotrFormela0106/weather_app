@@ -3,7 +3,12 @@ package com.example.weatherapp.ui.city
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -13,7 +18,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherapp.BuildConfig
 import com.example.weatherapp.BuildConfig.PLACES_API_KEY
 import com.example.weatherapp.R
 import com.example.weatherapp.data.room.City
@@ -29,7 +33,6 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import org.w3c.dom.Text
 import javax.inject.Inject
 
 class CityScreenFragment : Fragment() {
@@ -64,7 +67,8 @@ class CityScreenFragment : Fragment() {
 
         val recyclerView = binding.recyclerCity
         binding.recyclerCity.addOnItemTouchListener(
-            RecyclerItemClickListener(context, recyclerView,
+            RecyclerItemClickListener(
+                context, recyclerView,
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(view: View?, position: Int) {
                         viewModel.storageRepository.saveLocationMethod(LocationMethod.City)
@@ -76,12 +80,10 @@ class CityScreenFragment : Fragment() {
                             viewModel.storageRepository.savePlaceId(id)
                             findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
                         }
-
                     }
                 }
             )
         )
-
 
         return binding.root
     }
@@ -116,7 +118,8 @@ class CityScreenFragment : Fragment() {
                 }
                 val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
                 itemTouchHelper.attachToRecyclerView(binding.recyclerCity)
-            })
+            }
+        )
 
         if (!Places.isInitialized()) {
             Places.initialize(requireContext(), PLACES_API_KEY)

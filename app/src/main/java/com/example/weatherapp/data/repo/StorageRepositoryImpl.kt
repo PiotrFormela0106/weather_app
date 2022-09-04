@@ -53,7 +53,7 @@ class StorageRepositoryImpl @Inject constructor(preferencesController: Preferenc
     }
 
     override fun getCoordinates(): Pair<Double, Double> {
-        return Pair(prefs.getFloat(EXTRA_LAT, 0F).toDouble(),prefs.getFloat(EXTRA_LON, 0F).toDouble())
+        return Pair(prefs.getFloat(EXTRA_LAT, 0F).toDouble(), prefs.getFloat(EXTRA_LON, 0F).toDouble())
     }
 
     override fun savePlaceId(placeId: String) {
@@ -63,5 +63,4 @@ class StorageRepositoryImpl @Inject constructor(preferencesController: Preferenc
     override fun getPlaceId(): String {
         return prefs.getString(EXTRA_PLACE_ID, "").orEmpty()
     }
-
 }
