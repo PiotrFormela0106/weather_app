@@ -2,12 +2,9 @@ package com.example.weatherapp.ui.additionalinfo
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.databinding.ForecastDayDetailedBinding
 import com.example.weatherapp.domain.models.ForecastItem
-import com.example.weatherapp.domain.models.ForecastWeather
 import com.squareup.picasso.Picasso
 
 class ForecastDetailsAdapter(private val forecast: List<ForecastItem>) :
@@ -24,14 +21,13 @@ class ForecastDetailsAdapter(private val forecast: List<ForecastItem>) :
 
     override fun onBindViewHolder(holder: DetailsViewHolder, position: Int) {
         val day: ForecastItem = forecast[position]
-        day.date = day.date.removeRange(0,11)
+        day.date = day.date.removeRange(0, 11)
         holder.bind(day)
     }
 
     override fun getItemCount(): Int {
         return forecast.size
     }
-
 }
 
 class DetailsViewHolder(private val binding: ForecastDayDetailedBinding) :

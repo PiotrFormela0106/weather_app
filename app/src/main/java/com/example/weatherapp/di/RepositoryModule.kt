@@ -1,7 +1,7 @@
 package com.example.weatherapp.di
 
 import android.content.Context
-import com.example.weatherapp.controller.PreferencesController
+import com.example.weatherapp.data.controller.PreferencesController
 import com.example.weatherapp.data.api.RetrofitClient
 import com.example.weatherapp.data.repo.CityRepositoryImpl
 import com.example.weatherapp.data.repo.StorageRepositoryImpl
@@ -30,8 +30,7 @@ class RepositoryModule(val context: Context) {
 
     @Singleton
     @Provides
-    fun provideCityRepository(
-    ): CityRepository {
+    fun provideCityRepository(): CityRepository {
         return CityRepositoryImpl(context = context)
     }
 
@@ -49,5 +48,4 @@ class RepositoryModule(val context: Context) {
     fun providePreferences(): PreferencesController {
         return PreferencesController(context)
     }
-
 }

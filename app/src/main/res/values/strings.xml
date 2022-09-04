@@ -15,5 +15,6 @@
     <string name="pm2_5">PM2.5</string>
     <string name="pm10">PM10</string>
     <string name="nh3">NH3</string>
+    <string name="use_your_location">USE YOUR LOCATION</string>
 
 </resources>

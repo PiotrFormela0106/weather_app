@@ -1,14 +1,8 @@
 package com.example.weatherapp.ui.main
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherapp.R
 import com.example.weatherapp.databinding.ForecastDayBinding
 import com.example.weatherapp.domain.models.ForecastItem
 import com.example.weatherapp.domain.models.ForecastWeather
@@ -35,8 +29,8 @@ class ForecastAdapter(private val forecast: ForecastWeather) :
             4 -> day = forecast.list[32]
             5 -> day = forecast.list[39]
         }
-        day.date = day.date.removeRange(10,19)
-        day.date = day.date.removeRange(0,5)
+        // day.date = day.date.removeRange(10,19)
+        // day.date = day.date.removeRange(0,5)
         holder.bind(day)
     }
 
@@ -49,6 +43,9 @@ class MyViewHolder(private val binding: ForecastDayBinding) :
 
     RecyclerView.ViewHolder(binding.root) {
     fun bind(day: ForecastItem) {
+        var date = day.date.removeRange(10, 19)
+        date = date.removeRange(0, 5)
+        binding.day.text = date
         binding.forecast = day
         binding.executePendingBindings()
         Picasso.get()

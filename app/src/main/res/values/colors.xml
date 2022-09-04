@@ -10,4 +10,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue_sky">#00BCD4</color>
     <color name="lightX_blue">#80D8FF</color>
+    <color name="dark_blue">#347B9A</color>
+    <color name="shrine_pink">#FEDBD0</color>
+    <color name="cyan">#00BCD4</color>
+    <color name="yellow">#FFC107</color>
+    <color name="primary">#64B5F6</color>
 </resources>

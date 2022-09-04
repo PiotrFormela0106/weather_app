@@ -6,13 +6,14 @@
         <variable
             name="viewModel"
             type="com.example.weatherapp.ui.main.MainScreenViewModel"/>
+        <variable
+            name="viewState"
+            type="com.example.weatherapp.ui.main.MainScreenViewModel.ViewState"/>
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="218dp"
     tools:showIn="@layout/fragment_main_screen">
-
-
 
     <TextView
         android:id="@+id/temperature"
@@ -20,19 +21,18 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="36dp"
-        android:text='@{viewModel.temperature}'
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="@color/black"
+        android:text='@{viewState.temperature}'
         android:textSize="34sp"
         android:visibility="@{viewModel.status}"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/Theme.WeatherApp"/>
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="128dp"
         android:layout_height="128dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:imageDefault="@{@drawable/ic_cloud}"
         android:imageUrl="@{viewModel.imageUrl}"
@@ -47,13 +47,12 @@
         android:layout_marginBottom="40dp"
         android:gravity="center"
         android:text="@{viewModel.weatherData.weather.get(0).description}"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/Theme.WeatherApp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
