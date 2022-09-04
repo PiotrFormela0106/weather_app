@@ -128,7 +128,7 @@ class WeatherRepositoryImpl @Inject constructor(
 
     private fun getUnitsParam(): String = storageRepository.getUnits().toQueryParam()
     private fun getCityParam(): String = storageRepository.getCity()
-    private fun getCoordinatesParam(): Pair<Double,Double> = storageRepository.getCoordinates()
+    private fun getCoordinatesParam(): Pair<Double, Double> = storageRepository.getCoordinates()
 }
 
 private fun Units.toQueryParam(): String {

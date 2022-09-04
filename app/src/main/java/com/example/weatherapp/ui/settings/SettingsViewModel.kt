@@ -21,7 +21,6 @@ class SettingsViewModel @Inject constructor(
         storageRepository.saveUnits(finalValue)
         selection.postValue(finalValue)
     }
-
 }
 
 private fun Units.switchUnits(): Units {

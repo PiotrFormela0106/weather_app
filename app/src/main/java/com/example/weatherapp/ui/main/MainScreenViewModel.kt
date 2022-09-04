@@ -2,7 +2,13 @@ package com.example.weatherapp.ui.main
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import com.example.weatherapp.domain.Error
 import com.example.weatherapp.domain.Result
 import com.example.weatherapp.domain.models.AirPollution
@@ -19,7 +25,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 import javax.inject.Inject
 
 class MainScreenViewModel @Inject constructor(
@@ -42,7 +48,7 @@ class MainScreenViewModel @Inject constructor(
     val airPollutionData = MutableLiveData<AirPollution>()
     val placeId = MutableLiveData<String>()
     enum class Status { Loading, Success, Error }
-    inner class ViewState{
+    inner class ViewState {
         val data = airPollutionData
         private val pollution: LiveData<AirPollutionItem> = Transformations.map(data) { it.list[0] }
         val aqi: LiveData<String> = Transformations.map(pollution) { "${it.main.aqi}" }
@@ -70,10 +76,10 @@ class MainScreenViewModel @Inject constructor(
     }
 
     init {
-        //placeId.postValue(storageRepository.getPlaceId())
+        // placeId.postValue(storageRepository.getPlaceId())
         getCurrentWeather()
         getForecastWeather()
-        //getAirPollution()
+        // getAirPollution()
     }
 
     fun getCurrentWeather() {
