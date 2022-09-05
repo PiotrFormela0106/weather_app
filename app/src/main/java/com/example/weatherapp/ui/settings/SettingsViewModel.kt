@@ -9,7 +9,7 @@ import com.example.weatherapp.domain.repo.StorageRepository
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
-    val storageRepository: StorageRepository
+    private val storageRepository: StorageRepository
 ) : ViewModel() {
     private val selection = MutableLiveData(storageRepository.getUnits())
     val metric: LiveData<Boolean> = Transformations.map(selection) { it == Units.Metric }

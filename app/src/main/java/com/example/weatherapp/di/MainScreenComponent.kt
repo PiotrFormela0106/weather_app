@@ -1,5 +1,5 @@
 package com.example.weatherapp.di
-
+/*
 import com.example.weatherapp.ui.additionalinfo.AdditionalInfoScreenFragment
 import com.example.weatherapp.ui.main.MainScreenFragment
 import com.example.weatherapp.ui.settings.SettingsFragment
@@ -13,3 +13,4 @@ interface MainScreenComponent {
     fun inject(fragment: SettingsFragment)
     fun inject(fragment: AdditionalInfoScreenFragment)
 }
+*/

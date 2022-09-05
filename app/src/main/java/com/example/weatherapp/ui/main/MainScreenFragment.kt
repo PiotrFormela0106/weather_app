@@ -1,5 +1,7 @@
 package com.example.weatherapp.ui.main
 
+import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -19,6 +21,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.addCallback
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -29,7 +32,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.BuildConfig.PLACES_API_KEY
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentMainScreenBinding
-import com.example.weatherapp.di.DaggerMainScreenComponent
 import com.example.weatherapp.di.RepositoryModule
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.models.LocationMethod
@@ -43,16 +45,19 @@ import com.google.android.libraries.places.api.net.FetchPhotoRequest
 import com.google.android.libraries.places.api.net.FetchPhotoResponse
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FetchPlaceResponse
+import dagger.android.support.DaggerFragment
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
 
-class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserver {
+class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycleObserver {
     private lateinit var binding: FragmentMainScreenBinding
 
     @Inject
-    lateinit var viewModel: MainScreenViewModel
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel: MainScreenViewModel by viewModels { viewModelFactory }
     lateinit var forecast: ForecastWeather
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
@@ -66,10 +71,6 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
         )
 
         val thisContext: Context = container?.context!!
-        DaggerMainScreenComponent.builder()
-            .repositoryModule(RepositoryModule(thisContext))
-            .build()
-            .inject(this)
 
         binding.viewState = viewModel.ViewState()
         binding.viewModel = viewModel
@@ -79,6 +80,7 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
         viewModel.events
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { handleEvent(it) }
+
 
         setHasOptionsMenu(true)
 
@@ -247,7 +249,8 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
     private fun handleEvent(event: MainScreenViewModel.Event) {
         when (event) {
             is MainScreenViewModel.Event.OnCitiesClick -> {
-                findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
+                if(findNavController().currentDestination?.id==R.id.mainScreenFragment)
+                    findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
             }
         }
     }

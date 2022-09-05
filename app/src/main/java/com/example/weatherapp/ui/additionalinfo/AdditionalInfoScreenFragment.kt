@@ -11,16 +11,21 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentAdditionalInfoScreenBinding
-import com.example.weatherapp.di.DaggerMainScreenComponent
 import com.example.weatherapp.di.RepositoryModule
 import com.example.weatherapp.domain.models.ForecastItem
 import javax.inject.Inject
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import dagger.android.support.DaggerFragment
 
-class AdditionalInfoScreenFragment : Fragment() {
+class AdditionalInfoScreenFragment : DaggerFragment() {
     private lateinit var binding: FragmentAdditionalInfoScreenBinding
 
     @Inject
-    lateinit var viewModel: AdditionalInfoScreenViewModel
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel: AdditionalInfoScreenViewModel by viewModels { viewModelFactory }
     private val args: AdditionalInfoScreenFragmentArgs by navArgs()
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,10 +37,7 @@ class AdditionalInfoScreenFragment : Fragment() {
         )
         binding.lifecycleOwner = this
         val thisContext: Context = container?.context!!
-        DaggerMainScreenComponent.builder()
-            .repositoryModule(RepositoryModule(thisContext))
-            .build()
-            .inject(this)
+
 
         binding.viewModel = viewModel
 
@@ -57,4 +59,5 @@ class AdditionalInfoScreenFragment : Fragment() {
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.recyclerForecastDetailed.adapter = ForecastDetailsAdapter(forecast)
     }
+
 }

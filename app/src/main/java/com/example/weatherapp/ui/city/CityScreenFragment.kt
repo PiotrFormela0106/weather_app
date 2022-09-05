@@ -22,7 +22,6 @@ import com.example.weatherapp.BuildConfig.PLACES_API_KEY
 import com.example.weatherapp.R
 import com.example.weatherapp.data.room.City
 import com.example.weatherapp.databinding.FragmentCityScreenBinding
-import com.example.weatherapp.di.DaggerCityScreenComponent
 import com.example.weatherapp.di.RepositoryModule
 import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.ui.core.RecyclerItemClickListener
@@ -34,13 +33,18 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import dagger.android.support.DaggerFragment
 
-class CityScreenFragment : Fragment() {
+class CityScreenFragment : DaggerFragment() {
     private lateinit var binding: FragmentCityScreenBinding
     private lateinit var adapter: CityAdapter
 
     @Inject
-    lateinit var viewModel: CityScreenViewModel
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel: CityScreenViewModel by viewModels { viewModelFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,12 +54,6 @@ class CityScreenFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_city_screen, container, false
         )
-        val thisContext: Context = container?.context!!
-
-        DaggerCityScreenComponent.builder()
-            .repositoryModule(RepositoryModule(thisContext))
-            .build()
-            .inject(this)
 
         binding.viewModel = viewModel
 

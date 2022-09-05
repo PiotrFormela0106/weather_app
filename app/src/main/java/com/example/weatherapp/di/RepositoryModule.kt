@@ -14,7 +14,12 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class RepositoryModule(val context: Context) {
+class RepositoryModule {
+
+    @Provides
+    fun providePreferences(context: Context): PreferencesController {
+        return PreferencesController(context)
+    }
 
     @Singleton
     @Provides
@@ -30,12 +35,6 @@ class RepositoryModule(val context: Context) {
 
     @Singleton
     @Provides
-    fun provideCityRepository(): CityRepository {
-        return CityRepositoryImpl(context = context)
-    }
-
-    @Singleton
-    @Provides
     fun provideStorageRepository(
         preferencesController: PreferencesController
     ): StorageRepository {
@@ -44,8 +43,9 @@ class RepositoryModule(val context: Context) {
         )
     }
 
+    @Singleton
     @Provides
-    fun providePreferences(): PreferencesController {
-        return PreferencesController(context)
+    fun provideCityRepository(context: Context): CityRepository {
+        return CityRepositoryImpl(context = context)
     }
 }
