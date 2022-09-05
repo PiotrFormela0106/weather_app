@@ -33,35 +33,6 @@
             android:text="@string/use_your_location"
             app:cornerRadius="16dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/add_city"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:hint="Enter city name..."
-                app:endIconCheckable="true"
-                app:endIconDrawable="@android:drawable/ic_input_add"
-                app:endIconMode="custom"
-                app:endIconTint="@color/colorPrimaryDark">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/input_city"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@={viewModel.cityName}" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerCity"
             android:layout_width="match_parent"

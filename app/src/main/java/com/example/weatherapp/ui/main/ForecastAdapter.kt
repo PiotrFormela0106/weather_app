@@ -44,7 +44,7 @@ class MyViewHolder(private val binding: ForecastDayBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(day: ForecastItem) {
         var date = day.date.removeRange(10, 19)
-        date = date.removeRange(0, 5)
+        // date = date.removeRange(0, 5)
         binding.day.text = date
         binding.forecast = day
         binding.executePendingBindings()

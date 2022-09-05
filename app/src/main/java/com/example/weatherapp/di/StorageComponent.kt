@@ -1,6 +1,6 @@
 package com.example.weatherapp.di
 
-import com.example.weatherapp.ui.city.CityScreenFragment
+/*import com.example.weatherapp.ui.city.CityScreenFragment
 import com.example.weatherapp.ui.settings.SettingsFragment
 import dagger.Component
 import javax.inject.Singleton
@@ -11,3 +11,4 @@ interface StorageComponent {
     fun inject(fragment: SettingsFragment)
     fun inject(fragment: CityScreenFragment)
 }
+*/
