@@ -21,7 +21,7 @@ class ForecastDetailsAdapter(private val forecast: List<ForecastItem>) :
 
     override fun onBindViewHolder(holder: DetailsViewHolder, position: Int) {
         val day: ForecastItem = forecast[position]
-        //day.date = day.date.removeRange(0, 11)
+        // day.date = day.date.removeRange(0, 11)
         holder.bind(day)
     }
 
@@ -38,7 +38,7 @@ class DetailsViewHolder(private val binding: ForecastDayDetailedBinding) :
         val windSpeed = "Wind speed: ${day.wind.speed} m/s"
         val pressure = "Pressure: ${day.main.pressure} hPa"
 
-        val date = day.date.removeRange(0,11)
+        val date = day.date.removeRange(0, 11)
         binding.hour.text = date
         binding.tempDetailed.text = temperature
         binding.humidity.text = humidity

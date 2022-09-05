@@ -6,18 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentAdditionalInfoScreenBinding
-import com.example.weatherapp.di.RepositoryModule
 import com.example.weatherapp.domain.models.ForecastItem
-import javax.inject.Inject
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
 class AdditionalInfoScreenFragment : DaggerFragment() {
     private lateinit var binding: FragmentAdditionalInfoScreenBinding
@@ -37,7 +34,6 @@ class AdditionalInfoScreenFragment : DaggerFragment() {
         )
         binding.lifecycleOwner = this
         val thisContext: Context = container?.context!!
-
 
         binding.viewModel = viewModel
 
@@ -59,5 +55,4 @@ class AdditionalInfoScreenFragment : DaggerFragment() {
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.recyclerForecastDetailed.adapter = ForecastDetailsAdapter(forecast)
     }
-
 }

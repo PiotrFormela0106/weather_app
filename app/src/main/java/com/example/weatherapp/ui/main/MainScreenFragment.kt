@@ -1,7 +1,5 @@
 package com.example.weatherapp.ui.main
 
-import androidx.lifecycle.ViewModelProvider
-import androidx.fragment.app.viewModels
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -21,18 +19,17 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.activity.addCallback
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.BuildConfig.PLACES_API_KEY
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentMainScreenBinding
-import com.example.weatherapp.di.RepositoryModule
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.ui.core.RecyclerItemClickListener
@@ -80,7 +77,6 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
         viewModel.events
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { handleEvent(it) }
-
 
         setHasOptionsMenu(true)
 
@@ -249,7 +245,7 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
     private fun handleEvent(event: MainScreenViewModel.Event) {
         when (event) {
             is MainScreenViewModel.Event.OnCitiesClick -> {
-                if(findNavController().currentDestination?.id==R.id.mainScreenFragment)
+                if (findNavController().currentDestination?.id == R.id.mainScreenFragment)
                     findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
             }
         }

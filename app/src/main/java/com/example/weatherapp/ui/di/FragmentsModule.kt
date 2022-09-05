@@ -14,5 +14,4 @@ import dagger.Module
         SettingsFragmentModule::class
     ]
 )
-abstract class FragmentsModule {
-}
+abstract class FragmentsModule

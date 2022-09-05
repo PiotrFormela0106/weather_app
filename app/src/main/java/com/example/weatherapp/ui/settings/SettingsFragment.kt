@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentSettingsBinding
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 
 class SettingsFragment : DaggerFragment() {
     private lateinit var binding: FragmentSettingsBinding

@@ -14,7 +14,6 @@ class MainActivity : DaggerAppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupActionBarWithNavController(navController = findNavController(R.id.main_screen_fragment))
-
     }
 
     override fun onSupportNavigateUp(): Boolean {
