@@ -25,10 +25,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.BuildConfig.PLACES_API_KEY
 import com.example.weatherapp.R
+import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.databinding.FragmentMainScreenBinding
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.models.LocationMethod
@@ -63,10 +65,10 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setLang(viewModel.storageRepository.getLanguage().toData())
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_main_screen, container, false
         )
-
         val thisContext: Context = container?.context!!
 
         binding.viewState = viewModel.ViewState()
@@ -102,11 +104,9 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
                     return@addOnSuccessListener
                 }
                 val photoMetadata = metaData.first()
-                val attributions = photoMetadata?.attributions
-
                 val photoRequest = FetchPhotoRequest.builder(photoMetadata)
-                    // .setMaxWidth(1000) // Optional.
-                    // .setMaxHeight(400) // Optional.
+                    //.setMaxWidth(1000) // Optional.
+                    //.setMaxHeight(400) // Optional.
                     .build()
                 placesClient.fetchPhoto(photoRequest)
                     .addOnSuccessListener { fetchPhotoResponse: FetchPhotoResponse ->
@@ -115,7 +115,6 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
                     }.addOnFailureListener { exception: Exception ->
                         if (exception is ApiException) {
                             Log.e("Place not found", "Place not found: " + exception.message)
-                            val statusCode = exception.statusCode
                         }
                     }
             }
@@ -130,6 +129,10 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
         return binding.root
     }
 
+    override fun onResume() {
+        super<DaggerFragment>.onResume()
+        setLang(viewModel.storageRepository.getLanguage().toData())
+    }
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -240,6 +243,15 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
         binding.recyclerForecast.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerForecast.adapter = ForecastAdapter(forecast)
+    }
+
+    private fun setLang(lang: String){
+        val resources = resources
+        val metrics = resources.displayMetrics
+        val configuration = resources.configuration
+        configuration.locale = Locale(lang)
+        resources.updateConfiguration(configuration,metrics)
+        onConfigurationChanged(configuration)
     }
 
     private fun handleEvent(event: MainScreenViewModel.Event) {

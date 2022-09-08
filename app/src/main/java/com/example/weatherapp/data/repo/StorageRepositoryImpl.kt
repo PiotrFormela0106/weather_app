@@ -2,7 +2,9 @@ package com.example.weatherapp.data.repo
 
 import com.example.weatherapp.data.controller.PreferencesController
 import com.example.weatherapp.data.mappers.toData
+import com.example.weatherapp.data.mappers.toLanguage
 import com.example.weatherapp.data.mappers.toUnits
+import com.example.weatherapp.domain.models.Language
 import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.domain.models.Units
 import com.example.weatherapp.domain.repo.StorageRepository
@@ -14,6 +16,7 @@ private const val EXTRA_UNITS = "units"
 private const val EXTRA_LAT = "lat"
 private const val EXTRA_LON = "lon"
 private const val EXTRA_PLACE_ID = "place_id"
+private const val EXTRA_LANGUAGE = "language"
 
 class StorageRepositoryImpl @Inject constructor(preferencesController: PreferencesController) :
     StorageRepository {
@@ -62,5 +65,13 @@ class StorageRepositoryImpl @Inject constructor(preferencesController: Preferenc
 
     override fun getPlaceId(): String {
         return prefs.getString(EXTRA_PLACE_ID, "").orEmpty()
+    }
+
+    override fun saveLanguage(lang: Language) {
+        prefs.edit().putString(EXTRA_LANGUAGE, lang.toData()).apply()
+    }
+
+    override fun getLanguage(): Language {
+        return prefs.getString(EXTRA_LANGUAGE, "").orEmpty().toLanguage()
     }
 }

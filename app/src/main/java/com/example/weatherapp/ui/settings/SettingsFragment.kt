@@ -1,5 +1,6 @@
 package com.example.weatherapp.ui.settings
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +9,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherapp.R
+import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.databinding.FragmentSettingsBinding
 import dagger.android.support.DaggerFragment
+import java.util.*
 import javax.inject.Inject
 
 class SettingsFragment : DaggerFragment() {
@@ -33,4 +36,6 @@ class SettingsFragment : DaggerFragment() {
 
         return binding.root
     }
+
+
 }

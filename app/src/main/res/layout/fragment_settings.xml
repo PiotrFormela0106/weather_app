@@ -50,13 +50,38 @@
                 android:text="Not metric"
                 android:textSize="24sp" />
         </RadioGroup>
-
-        <Switch
-            android:id="@+id/switch1"
+        <RadioGroup
+            android:id="@+id/languages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="Dark theme"
-            android:textSize="24sp" />
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioButton
+                android:id="@+id/polish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{viewModel.polish}"
+                android:gravity="center"
+                android:onClick="@{()->viewModel.switchLanguageClick()}"
+                android:text="PL"
+                android:textSize="24sp" />
+
+            <RadioButton
+                android:id="@+id/english"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:checked="@{viewModel.english}"
+                android:gravity="center"
+                android:onClick="@{()->viewModel.switchLanguageClick()}"
+                android:text="ENG"
+                android:textSize="24sp" />
+        </RadioGroup>
+
     </LinearLayout>
 </layout>

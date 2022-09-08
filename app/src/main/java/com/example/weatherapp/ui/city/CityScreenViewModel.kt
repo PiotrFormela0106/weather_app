@@ -31,24 +31,29 @@ class CityScreenViewModel @Inject constructor(
     val cityName = MutableLiveData<String>()
     val placeId: MutableLiveData<String> = MutableLiveData()
 
-    fun checkCity(city: String, placeId: String) {
-        weatherRepository.getCurrentWeather(city = city)
+    private fun checkCity(city: String, placeId: String) {
+        val currentCity = storageRepository.getCity()
+        storageRepository.saveCity(city)
+        weatherRepository.getCurrentWeather()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy {
                 when (it) {
                     is Result.OnSuccess -> {
-                        val cityName1 = it.data.cityName
-                        if (!allCities.value!!.any { it.city == cityName1 }) {
+                        val cityName = it.data.cityName
+                        if (!allCities.value!!.any { it.city == cityName }) {
                             insertCity(city = it.data.cityName, placeId)
                             storageRepository.saveCity(it.data.cityName)
+                            storageRepository.savePlaceId(placeId)
                             Event.OnAddCity.let { uiEvents.post(it) }
                         } else {
                             uiEvents.post(Event.OnCityDuplicate)
+                            storageRepository.saveCity(currentCity)
                         }
                     }
                     is Result.OnError -> {
                         handleError(it.error)
+                        storageRepository.saveCity(currentCity)
                     }
                 }
             }

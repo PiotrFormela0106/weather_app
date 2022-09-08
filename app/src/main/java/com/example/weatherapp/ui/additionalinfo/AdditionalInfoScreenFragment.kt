@@ -53,6 +53,6 @@ class AdditionalInfoScreenFragment : DaggerFragment() {
     private fun setupRecyclerView(context: Context, forecast: List<ForecastItem>) {
         binding.recyclerForecastDetailed.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.recyclerForecastDetailed.adapter = ForecastDetailsAdapter(forecast)
+        binding.recyclerForecastDetailed.adapter = ForecastDetailsAdapter(forecast, requireContext())
     }
 }

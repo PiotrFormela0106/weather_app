@@ -18,7 +18,9 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         tools:showIn="@layout/fragment_main_screen"
-        style="@style/Theme.WeatherApp">
+        style="@style/Theme.WeatherApp"
+        android:background="@drawable/air_pollution_bground"
+        android:layout_margin="8dp">
 
         <TextView
             android:id="@+id/aqi"

@@ -29,8 +29,6 @@ class ForecastAdapter(private val forecast: ForecastWeather) :
             4 -> day = forecast.list[32]
             5 -> day = forecast.list[39]
         }
-        // day.date = day.date.removeRange(10,19)
-        // day.date = day.date.removeRange(0,5)
         holder.bind(day)
     }
 
@@ -44,7 +42,7 @@ class MyViewHolder(private val binding: ForecastDayBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(day: ForecastItem) {
         var date = day.date.removeRange(10, 19)
-        // date = date.removeRange(0, 5)
+        date = date.removeRange(0, 5)
         binding.day.text = date
         binding.forecast = day
         binding.executePendingBindings()
