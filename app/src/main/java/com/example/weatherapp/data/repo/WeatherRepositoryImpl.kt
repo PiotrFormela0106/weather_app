@@ -14,6 +14,7 @@ import com.example.weatherapp.domain.Result
 import com.example.weatherapp.domain.models.AirPollution
 import com.example.weatherapp.domain.models.CurrentWeather
 import com.example.weatherapp.domain.models.ForecastWeather
+import com.example.weatherapp.domain.models.Language
 import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.domain.models.Units
 import com.example.weatherapp.domain.repo.StorageRepository
@@ -23,38 +24,53 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.core.SingleTransformer
 import javax.inject.Inject
 
-private const val LANG_PL = "pl"
-
 class WeatherRepositoryImpl @Inject constructor(
     retrofitClient: RetrofitClient,
     val storageRepository: StorageRepository
 ) : WeatherRepository {
     private val api = retrofitClient.api
     private val cache = Cache()
-    override fun getCurrentWeather(
-        city: String?
-    ): Single<Result<CurrentWeather>> {
+    override fun getCurrentWeather(): Single<Result<CurrentWeather>> {
         return when (storageRepository.getLocationMethod()) {
-            LocationMethod.City -> api.getCurrentWeatherForCity(
-                cityName = city,
-                apikey = API_KEY,
-                lang = LANG_PL,
-                units = getUnitsParam()
-            ).compose(mapCurrentWeatherResponse())
-            LocationMethod.Location -> api.getCurrentWeatherForLocation(
-                lat = getCoordinatesParam().first,
-                lon = getCoordinatesParam().second,
-                apikey = API_KEY,
-                lang = LANG_PL,
-                units = getUnitsParam()
-            ).compose(mapCurrentWeatherResponse())
+            LocationMethod.City -> {
+                val cacheKey = getCityCacheKey(getCityParam(), getUnitsParam(), getLanguageParam())
+                val cachedValue = cache.getCurrentWeather(cacheKey)
+                if (cachedValue != null) {
+                    return Single.just(Result.withValue(cachedValue))
+                }
+                api.getCurrentWeatherForCity(
+                    cityName = getCityParam(),
+                    apikey = API_KEY,
+                    lang = getLanguageParam(),
+                    units = getUnitsParam()
+                ).compose(mapCurrentWeatherResponse(cacheKey))
+            }
+            LocationMethod.Location -> {
+                val cacheKey = getLocationCacheKey(
+                    getCoordinatesParam().first,
+                    getCoordinatesParam().second,
+                    getUnitsParam(),
+                    getLanguageParam()
+                )
+                val cachedValue = cache.getCurrentWeather(cacheKey)
+                if (cachedValue != null) {
+                    return Single.just(Result.withValue(cachedValue))
+                }
+                api.getCurrentWeatherForLocation(
+                    lat = getCoordinatesParam().first,
+                    lon = getCoordinatesParam().second,
+                    apikey = API_KEY,
+                    lang = getLanguageParam(),
+                    units = getUnitsParam()
+                ).compose(mapCurrentWeatherResponse(cacheKey))
+            }
         }
     }
 
     override fun getForecastWeather(): Single<Result<ForecastWeather>> {
         return when (storageRepository.getLocationMethod()) {
             LocationMethod.City -> {
-                val cacheKey = getCityCacheKey(getCityParam(), getUnitsParam(), LANG_PL)
+                val cacheKey = getCityCacheKey(getCityParam(), getUnitsParam(), getLanguageParam())
                 val cachedValue = cache.getForecast(cacheKey)
                 if (cachedValue != null) {
                     return Single.just(Result.withValue(cachedValue))
@@ -62,7 +78,7 @@ class WeatherRepositoryImpl @Inject constructor(
                 api.getForecastForCity(
                     cityName = getCityParam(),
                     apikey = API_KEY,
-                    lang = LANG_PL,
+                    lang = getLanguageParam(),
                     units = getUnitsParam()
                 ).compose(mapForecastWeatherResponse(cacheKey))
             }
@@ -71,7 +87,7 @@ class WeatherRepositoryImpl @Inject constructor(
                     getCoordinatesParam().first,
                     getCoordinatesParam().second,
                     getUnitsParam(),
-                    LANG_PL
+                    getLanguageParam()
                 )
                 val cachedValue = cache.getForecast(cacheKey)
                 if (cachedValue != null) {
@@ -82,7 +98,7 @@ class WeatherRepositoryImpl @Inject constructor(
                     lon = getCoordinatesParam().second,
                     apikey = API_KEY,
                     units = getUnitsParam(),
-                    lang = LANG_PL
+                    lang = getLanguageParam()
                 ).compose(mapForecastWeatherResponse(cacheKey))
             }
         }
@@ -93,11 +109,13 @@ class WeatherRepositoryImpl @Inject constructor(
             .compose(mapAirPollutionResponse())
     }
 
-    private fun mapCurrentWeatherResponse():
+    private fun mapCurrentWeatherResponse(cacheKey: CacheKey):
         SingleTransformer<CurrentWeatherData, Result<CurrentWeather>> {
         return SingleTransformer { upstream ->
             upstream
-                .map { Result.withValue(it.toDomain()) }
+                .map { it.toDomain() }
+                .doOnSuccess { cache.cache(cacheKey, it) }
+                .map { Result.withValue(it) }
                 .onErrorReturn { it.toResultError() }
         }
     }
@@ -129,11 +147,19 @@ class WeatherRepositoryImpl @Inject constructor(
     private fun getUnitsParam(): String = storageRepository.getUnits().toQueryParam()
     private fun getCityParam(): String = storageRepository.getCity()
     private fun getCoordinatesParam(): Pair<Double, Double> = storageRepository.getCoordinates()
+    private fun getLanguageParam(): String = storageRepository.getLanguage().toQueryParam()
 }
 
 private fun Units.toQueryParam(): String {
     return when (this) {
         Units.Metric -> "metric"
         Units.NotMetric -> "standard"
+    }
+}
+
+private fun Language.toQueryParam(): String {
+    return when (this) {
+        Language.ENG -> "eng"
+        Language.PL -> "pl"
     }
 }

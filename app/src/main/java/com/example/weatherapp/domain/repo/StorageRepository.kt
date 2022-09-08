@@ -1,5 +1,6 @@
 package com.example.weatherapp.domain.repo
 
+import com.example.weatherapp.domain.models.Language
 import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.domain.models.Units
 
@@ -14,4 +15,6 @@ interface StorageRepository {
     fun getCoordinates(): Pair<Double, Double>
     fun savePlaceId(placeId: String)
     fun getPlaceId(): String
+    fun saveLanguage(lang: Language)
+    fun getLanguage(): Language
 }

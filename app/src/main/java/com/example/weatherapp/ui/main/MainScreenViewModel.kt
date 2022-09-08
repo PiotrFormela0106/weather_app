@@ -1,7 +1,7 @@
 package com.example.weatherapp.ui.main
 
 import android.annotation.SuppressLint
-import android.util.Log
+import android.content.res.Resources
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
@@ -9,6 +9,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.example.weatherapp.R
+import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.domain.Error
 import com.example.weatherapp.domain.Result
 import com.example.weatherapp.domain.models.AirPollution
@@ -26,11 +28,13 @@ import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 class MainScreenViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository,
-    val storageRepository: StorageRepository
+    val storageRepository: StorageRepository,
+    val resources: Resources
 ) : ViewModel(), LifecycleObserver {
 
     private val disposable = CompositeDisposable()
@@ -46,7 +50,7 @@ class MainScreenViewModel @Inject constructor(
     val events: Observable<Event> = uiEvents.stream()
     val progress = MutableLiveData<Boolean>()
     val airPollutionData = MutableLiveData<AirPollution>()
-    val placeId = MutableLiveData<String>()
+    val locationMethod = MutableLiveData(storageRepository.getLocationMethod())
     enum class Status { Loading, Success, Error }
     inner class ViewState {
         val data = airPollutionData
@@ -62,33 +66,31 @@ class MainScreenViewModel @Inject constructor(
         val nh3: LiveData<String> = Transformations.map(pollution) { "${it.components.nh3}" }
 
         val sunrise: LiveData<String> =
-            Transformations.map(sunriseFormat) { "Sunrise: $it" }
+            Transformations.map(sunriseFormat) { "${resources.getString(R.string.sunrise)}: $it" }
         val sunset: LiveData<String> =
-            Transformations.map(sunsetFormat) { "Sunset: $it" }
+            Transformations.map(sunsetFormat) { "${resources.getString(R.string.sunset)}: $it" }
         val wind: LiveData<String> =
-            Transformations.map(weatherData) { "Wind speed: ${it.wind.speed} m/s" }
+            Transformations.map(weatherData) { "${resources.getString(R.string.wind)}: ${it.wind.speed} m/s" }
         val humidity: LiveData<String> =
-            Transformations.map(weatherData) { "Humidity: ${it.main.humidity} %" }
+            Transformations.map(weatherData) { "${resources.getString(R.string.humidity)}: ${it.main.humidity} %" }
         val pressure: LiveData<String> =
-            Transformations.map(weatherData) { "Pressure: ${it.main.pressure} hPa" }
+            Transformations.map(weatherData) { "${resources.getString(R.string.pressure)}: ${it.main.pressure} hPA" }
         val temperature: LiveData<String> =
             Transformations.map(weatherData) { "${it.main.temp} C" }
     }
 
     init {
-        // placeId.postValue(storageRepository.getPlaceId())
+        setLang(storageRepository.getLanguage().toData())
         getCurrentWeather()
         getForecastWeather()
-        // getAirPollution()
+        getAirPollution()
     }
 
     fun getCurrentWeather() {
         progress.postValue(true)
         status.postValue(Status.Loading)
         disposable.add(
-            weatherRepository.getCurrentWeather(
-                city = storageRepository.getCity()
-            )
+            weatherRepository.getCurrentWeather()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
@@ -143,6 +145,14 @@ class MainScreenViewModel @Inject constructor(
         )
     }
 
+    private fun setLang(lang: String) {
+        val metrics = resources.displayMetrics
+        val configuration = resources.configuration
+        configuration.locale = Locale(lang)
+        resources.updateConfiguration(configuration, metrics)
+        // onConfigurationChanged(configuration)
+    }
+
     private fun handleSuccess(data: CurrentWeather) {
         status.postValue(Status.Success)
         weatherData.value = data
@@ -181,8 +191,13 @@ class MainScreenViewModel @Inject constructor(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroyPerformTask() {
-        Log.i("lifecycleobserver", "I\'m inside Observer of ViewModel ON_DESTROY")
         disposable.clear()
+    }
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onResume() {
+        setLang(storageRepository.getLanguage().toData())
+        getCurrentWeather()
+        getForecastWeather()
     }
 
     sealed class Event {

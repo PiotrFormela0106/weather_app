@@ -1,5 +1,6 @@
 package com.example.weatherapp.data.mappers
 
+import com.example.weatherapp.domain.models.Language
 import com.example.weatherapp.domain.models.Units
 
 typealias CurrentWeatherDomain = com.example.weatherapp.domain.models.CurrentWeather
@@ -139,5 +140,17 @@ fun Units.toData(): String {
         Units.NotMetric -> NOT_METRIC
     }
 }
+fun Language.toData(): String {
+    return when (this) {
+        Language.ENG -> ENG
+        Language.PL -> PL
+    }
+}
+fun String.toLanguage(): Language {
+    return if (PL.equals(this, true)) Language.PL
+    else Language.ENG
+}
 private const val METRIC = "Metric"
 private const val NOT_METRIC = "Not metric"
+private const val PL = "PL"
+private const val ENG = "ENG"

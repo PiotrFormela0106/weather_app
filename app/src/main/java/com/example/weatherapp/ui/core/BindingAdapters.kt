@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.ui.main.MainScreenViewModel.Status
 import com.squareup.picasso.Picasso
 @BindingAdapter("android:visibility")
@@ -17,6 +18,15 @@ fun setVisibility(view: View, visible: Status) {
 @BindingAdapter("android:visibility")
 fun setVisibility(view: View, visible: Boolean) {
     view.visibility = if (visible) View.VISIBLE else View.GONE
+}
+
+@BindingAdapter("android:visibility")
+fun setVisibility(view: View, visible: LocationMethod) {
+    view.visibility =
+        when (visible) {
+            LocationMethod.Location -> View.GONE
+            LocationMethod.City -> View.VISIBLE
+        }
 }
 
 @BindingAdapter("android:imageUrl", "android:imageDefault")
