@@ -15,7 +15,7 @@ class ApplicationContextModule {
         return application.applicationContext
     }
     @Provides
-    fun provideResources(application: Application): Resources{
+    fun provideResources(application: Application): Resources {
         return application.resources
     }
 }

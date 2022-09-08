@@ -74,7 +74,7 @@ class CityScreenFragment : DaggerFragment() {
         searchCity()
     }
 
-    private fun onSwipedCity(list: List<City>){
+    private fun onSwipedCity(list: List<City>) {
         val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
             ItemTouchHelper.SimpleCallback(
                 0,
@@ -98,7 +98,7 @@ class CityScreenFragment : DaggerFragment() {
         itemTouchHelper.attachToRecyclerView(binding.recyclerCity)
     }
 
-    private fun onSelectedCity(){
+    private fun onSelectedCity() {
         val recyclerView = binding.recyclerCity
         binding.recyclerCity.addOnItemTouchListener(
             RecyclerItemClickListener(
@@ -119,7 +119,7 @@ class CityScreenFragment : DaggerFragment() {
         )
     }
 
-    private fun searchCity(){
+    private fun searchCity() {
         if (!Places.isInitialized()) {
             Places.initialize(requireContext(), PLACES_API_KEY)
         }
@@ -155,7 +155,8 @@ class CityScreenFragment : DaggerFragment() {
             }
             is CityScreenViewModel.Event.OnCityDuplicate -> {
                 Snackbar.make(
-                    binding.root, CITY_DUPLICATED, Snackbar.LENGTH_SHORT)
+                    binding.root, CITY_DUPLICATED, Snackbar.LENGTH_SHORT
+                )
                     .show()
             }
             is CityScreenViewModel.Event.OnLocation -> {

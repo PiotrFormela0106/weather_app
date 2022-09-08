@@ -110,7 +110,7 @@ class WeatherRepositoryImpl @Inject constructor(
     }
 
     private fun mapCurrentWeatherResponse(cacheKey: CacheKey):
-            SingleTransformer<CurrentWeatherData, Result<CurrentWeather>> {
+        SingleTransformer<CurrentWeatherData, Result<CurrentWeather>> {
         return SingleTransformer { upstream ->
             upstream
                 .map { it.toDomain() }
@@ -121,7 +121,7 @@ class WeatherRepositoryImpl @Inject constructor(
     }
 
     private fun mapForecastWeatherResponse(cacheKey: CacheKey):
-            SingleTransformer<ForecastWeatherData, Result<ForecastWeather>> {
+        SingleTransformer<ForecastWeatherData, Result<ForecastWeather>> {
         return SingleTransformer { upstream ->
             upstream
                 .map { it.toDomain() }

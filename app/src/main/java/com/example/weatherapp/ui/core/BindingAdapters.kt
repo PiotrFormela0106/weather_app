@@ -22,8 +22,8 @@ fun setVisibility(view: View, visible: Boolean) {
 
 @BindingAdapter("android:visibility")
 fun setVisibility(view: View, visible: LocationMethod) {
-    view.visibility=
-        when(visible){
+    view.visibility =
+        when (visible) {
             LocationMethod.Location -> View.GONE
             LocationMethod.City -> View.VISIBLE
         }

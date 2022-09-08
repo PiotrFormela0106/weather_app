@@ -1,7 +1,6 @@
 package com.example.weatherapp.ui.additionalinfo
 
 import android.content.Context
-import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,8 +8,6 @@ import com.example.weatherapp.R
 import com.example.weatherapp.databinding.ForecastDayDetailedBinding
 import com.example.weatherapp.domain.models.ForecastItem
 import com.squareup.picasso.Picasso
-import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 class ForecastDetailsAdapter(private val forecast: List<ForecastItem>, val context: Context) :
     RecyclerView.Adapter<DetailsViewHolder>() {
@@ -34,7 +31,7 @@ class ForecastDetailsAdapter(private val forecast: List<ForecastItem>, val conte
     }
 }
 
-class DetailsViewHolder (private val binding: ForecastDayDetailedBinding, val context: Context):
+class DetailsViewHolder(private val binding: ForecastDayDetailedBinding, val context: Context) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(day: ForecastItem) {
         val resources = context.resources

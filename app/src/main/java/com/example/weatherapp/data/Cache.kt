@@ -43,7 +43,6 @@ class Cache {
         }
         return value
     }
-
 }
 
 internal fun getCityCacheKey(city: String, units: String, lang: String): CacheKey.CityCacheKey {

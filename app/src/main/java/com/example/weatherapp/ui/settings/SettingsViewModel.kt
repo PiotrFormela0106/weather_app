@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import com.example.weatherapp.domain.models.Language
 import com.example.weatherapp.domain.models.Units
 import com.example.weatherapp.domain.repo.StorageRepository
-import java.util.*
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
@@ -29,13 +28,12 @@ class SettingsViewModel @Inject constructor(
         selection.postValue(finalValue)
     }
 
-    fun switchLanguageClick(){
+    fun switchLanguageClick() {
         val initialValue = selectionLanguage.value ?: Language.ENG
         val finalValue = initialValue.switchLanguage()
         storageRepository.saveLanguage(finalValue)
         selectionLanguage.postValue(finalValue)
     }
-
 }
 
 private fun Units.switchUnits(): Units {

@@ -25,7 +25,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.BuildConfig.PLACES_API_KEY
@@ -105,8 +104,8 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
                 }
                 val photoMetadata = metaData.first()
                 val photoRequest = FetchPhotoRequest.builder(photoMetadata)
-                    //.setMaxWidth(1000) // Optional.
-                    //.setMaxHeight(400) // Optional.
+                    // .setMaxWidth(1000) // Optional.
+                    // .setMaxHeight(400) // Optional.
                     .build()
                 placesClient.fetchPhoto(photoRequest)
                     .addOnSuccessListener { fetchPhotoResponse: FetchPhotoResponse ->
@@ -245,12 +244,12 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
         binding.recyclerForecast.adapter = ForecastAdapter(forecast)
     }
 
-    private fun setLang(lang: String){
+    private fun setLang(lang: String) {
         val resources = resources
         val metrics = resources.displayMetrics
         val configuration = resources.configuration
         configuration.locale = Locale(lang)
-        resources.updateConfiguration(configuration,metrics)
+        resources.updateConfiguration(configuration, metrics)
         onConfigurationChanged(configuration)
     }
 
