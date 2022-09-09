@@ -26,10 +26,10 @@ class CityScreenViewModel @Inject constructor(
     val storageRepository: StorageRepository
 ) : ViewModel(), LifecycleObserver {
     private val uiEvents = UiEvents<Event>()
-    val events: Observable<Event> = uiEvents.stream()
+    val events = uiEvents.stream()
     val allCities = MutableLiveData<List<City>>()
     val cityName = MutableLiveData<String>()
-    val placeId: MutableLiveData<String> = MutableLiveData()
+    val placeId = MutableLiveData<String>()
 
     private fun checkCity(city: String, placeId: String) {
         val currentCity = storageRepository.getCity()
@@ -41,7 +41,7 @@ class CityScreenViewModel @Inject constructor(
                 when (it) {
                     is Result.OnSuccess -> {
                         val cityName = it.data.cityName
-                        if (!allCities.value!!.any { it.city == cityName }) {
+                        if (allCities.value.orEmpty().any { it.city == cityName }.not()) {
                             insertCity(city = it.data.cityName, placeId)
                             storageRepository.saveCity(it.data.cityName)
                             storageRepository.savePlaceId(placeId)
@@ -144,7 +144,7 @@ class CityScreenViewModel @Inject constructor(
 
     fun addCity(place: Place) {
         storageRepository.saveLocationMethod(LocationMethod.City)
-        checkCity(city = place.name!!, placeId = place.id!!)
+        checkCity(city = place.name.orEmpty(), placeId = place.id.orEmpty())
     }
 
     fun useLocation() {

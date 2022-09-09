@@ -59,7 +59,7 @@ class CityScreenFragment : DaggerFragment() {
             .subscribe { handleEvent(it) }
 
         setHasOptionsMenu(true)
-        onSelectedCity()
+        onSelectedCity()//why it's called here?
 
         return binding.root
     }
@@ -71,7 +71,7 @@ class CityScreenFragment : DaggerFragment() {
             setupRecyclerView(data)
             onSwipedCity(data)
         }
-        searchCity()
+        searchCity()//why it's called here?
     }
 
     private fun onSwipedCity(list: List<City>) {

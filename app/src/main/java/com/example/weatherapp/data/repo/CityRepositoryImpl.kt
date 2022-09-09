@@ -29,7 +29,7 @@ class CityRepositoryImpl @Inject constructor(context: Context) : CityRepository 
         return cityDao.delete(city)
     }
 
-    override fun updateCities(): Single<Result<List<City>>> {
+    override fun updateCities(): Single<Result<List<City>>> {//this function does "getting all cities", not "updating". please rename
         return cityDao.getAllCities()
             .compose(mapCities())
     }

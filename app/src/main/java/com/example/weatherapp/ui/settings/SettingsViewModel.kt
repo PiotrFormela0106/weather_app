@@ -1,7 +1,6 @@
 package com.example.weatherapp.ui.settings
 
 import android.content.res.Resources
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
@@ -15,17 +14,19 @@ class SettingsViewModel @Inject constructor(
     val resources: Resources
 ) : ViewModel() {
     private val selectionLanguage = MutableLiveData(storageRepository.getLanguage())
-    private val selection = MutableLiveData(storageRepository.getUnits())
-    val metric: LiveData<Boolean> = Transformations.map(selection) { it == Units.Metric }
-    val notMetric: LiveData<Boolean> = Transformations.map(selection) { it == Units.NotMetric }
-    val polish: LiveData<Boolean> = Transformations.map(selectionLanguage) { it == Language.PL }
-    val english: LiveData<Boolean> = Transformations.map(selectionLanguage) { it == Language.ENG }
+    private val selectionUnits = MutableLiveData(storageRepository.getUnits())
+
+    val metric = Transformations.map(selectionUnits) { it == Units.Metric }
+    val notMetric = Transformations.map(selectionUnits) { it == Units.NotMetric }
+
+    val polish = Transformations.map(selectionLanguage) { it == Language.PL }
+    val english = Transformations.map(selectionLanguage) { it == Language.ENG }
 
     fun switchUnitsClick() {
-        val initialValue = selection.value ?: Units.Metric
+        val initialValue = selectionUnits.value ?: Units.Metric
         val finalValue = initialValue.switchUnits()
         storageRepository.saveUnits(finalValue)
-        selection.postValue(finalValue)
+        selectionUnits.postValue(finalValue)
     }
 
     fun switchLanguageClick() {
@@ -42,7 +43,7 @@ private fun Units.switchUnits(): Units {
         Units.NotMetric -> Units.Metric
     }
 }
-private fun Language.switchLanguage(): Language {
+private fun Language.switchLanguage(): Language {//change handling language for 3 languages
     return when (this) {
         Language.ENG -> Language.PL
         Language.PL -> Language.ENG

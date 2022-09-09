@@ -19,15 +19,17 @@ class ForecastAdapter(private val forecast: ForecastWeather) :
         return MyViewHolder(forecastBinding)
     }
 
+    //Show all items for every 3 hour
+
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         lateinit var day: ForecastItem
         when (position) {
-            0 -> day = forecast.list[position]
-            1 -> day = forecast.list[8]
-            2 -> day = forecast.list[16]
-            3 -> day = forecast.list[24]
-            4 -> day = forecast.list[32]
-            5 -> day = forecast.list[39]
+            0 -> day = forecast.list[position]//Possible Index out of Bound Exception
+            1 -> day = forecast.list[8]//Possible Index out of Bound Exception
+            2 -> day = forecast.list[16]//Possible Index out of Bound Exception
+            3 -> day = forecast.list[24]//Possible Index out of Bound Exception
+            4 -> day = forecast.list[32]//Possible Index out of Bound Exception
+            5 -> day = forecast.list[39]//Possible Index out of Bound Exception
         }
         holder.bind(day)
     }
@@ -41,8 +43,8 @@ class MyViewHolder(private val binding: ForecastDayBinding) :
 
     RecyclerView.ViewHolder(binding.root) {
     fun bind(day: ForecastItem) {
-        var date = day.date.removeRange(10, 19)
-        date = date.removeRange(0, 5)
+        var date = day.date.removeRange(10, 19)//Possible Index out of Bound Exception
+        date = date.removeRange(0, 5)//Possible Index out of Bound Exception
         binding.day.text = date
         binding.forecast = day
         binding.executePendingBindings()

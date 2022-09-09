@@ -89,6 +89,7 @@ data class Coordinates(
 
 enum class Units { Metric, NotMetric }
 
+//add DE language
 enum class Language { PL, ENG }
 
 enum class LocationMethod {

@@ -38,7 +38,7 @@
                 android:onClick="@{()->viewModel.switchUnitsClick()}"
                 android:text="Metric"
                 android:textSize="24sp" />
-
+<!--Use strings for text-->
             <RadioButton
                 android:id="@+id/non_metric"
                 android:layout_width="wrap_content"
@@ -50,6 +50,7 @@
                 android:text="Not metric"
                 android:textSize="24sp" />
         </RadioGroup>
+<!--        Use strings for text-->
         <RadioGroup
             android:id="@+id/languages"
             android:layout_width="match_parent"

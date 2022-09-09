@@ -184,8 +184,7 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
                     addresses[0].latitude,
                     addresses[0].longitude
                 )
-                viewModel.getCurrentWeather()
-                viewModel.getForecastWeather()
+                viewModel.fetchData()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
