@@ -256,6 +256,10 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
                 if (findNavController().currentDestination?.id == R.id.mainScreenFragment)
                     findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
             }
+            is MainScreenViewModel.Event.OnSettingsClick -> {
+                if (findNavController().currentDestination?.id == R.id.mainScreenFragment)
+                    findNavController().navigate(MainScreenFragmentDirections.navigateToSettings())
+            }
         }
     }
 

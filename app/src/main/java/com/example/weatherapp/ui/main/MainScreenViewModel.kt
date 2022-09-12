@@ -29,6 +29,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
+import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -49,10 +50,12 @@ class MainScreenViewModel @Inject constructor(
     val status = MutableLiveData(Status.Loading)
     val weatherData = MutableLiveData<CurrentWeather>()
     val forecastData = MutableLiveData<ForecastWeather>()
+    val roundedTemperature = MutableLiveData<String>()
     val cityName = MutableLiveData<String>()
     val events: Observable<Event> = uiEvents.stream()
     val airPollutionData = MutableLiveData<AirPollution>()
     val locationMethod = MutableLiveData(storageRepository.getLocationMethod())
+    val date = MutableLiveData<String>()
     enum class Status { Loading, Success, Error }
     inner class ViewState {
         val data = airPollutionData
@@ -85,7 +88,10 @@ class MainScreenViewModel @Inject constructor(
         fetchData()
     }
 
-    fun fetchData(){
+    fun fetchData() {
+        val sdf = SimpleDateFormat("EEEE, d MMMM HH:mm", Locale.getDefault())
+        val currentDate = sdf.format(Date())
+        date.postValue(currentDate.toString())
         setLang(storageRepository.getLanguage().toData())
         status.postValue(Status.Loading)
         disposable += Single.zip(
@@ -113,6 +119,7 @@ class MainScreenViewModel @Inject constructor(
                 when (val forecast = result.second) {
                     is Result.OnSuccess -> {
                         forecast.data.let { forecastData.value = it }
+                        Log.i("forecast", forecastData.value?.list?.get(0)?.date.orEmpty())
                     }
                     is Result.OnError -> {
                         handleError(forecast.error)
@@ -144,6 +151,7 @@ class MainScreenViewModel @Inject constructor(
         imageUrl.value = "https://openweathermap.org/img/wn/${iconId.value}@2x.png"
         storageRepository.saveCity(data.cityName)
         storageRepository.saveCoordinates(data.coordinates.lat, data.coordinates.lon)
+        roundedTemperature.postValue(data.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt().toString())
 
         @SuppressLint("SimpleDateFormat")
         val sdf = SimpleDateFormat("HH:mm:ss")
@@ -166,6 +174,10 @@ class MainScreenViewModel @Inject constructor(
         Event.OnCitiesClick.let { uiEvents.post(it) }
     }
 
+    fun onSettingsClick() {
+        Event.OnSettingsClick.let { uiEvents.post(it) }
+    }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy() {
         disposable.clear()
@@ -178,5 +190,6 @@ class MainScreenViewModel @Inject constructor(
 
     sealed class Event {
         object OnCitiesClick : Event()
+        object OnSettingsClick : Event()
     }
 }

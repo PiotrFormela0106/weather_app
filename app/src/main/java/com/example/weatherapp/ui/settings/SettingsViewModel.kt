@@ -1,14 +1,10 @@
 package com.example.weatherapp.ui.settings
 
 import android.content.res.Resources
-import android.util.Log
-import android.widget.RadioGroup
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.weatherapp.R
-import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.domain.models.Language
 import com.example.weatherapp.domain.models.Units
 import com.example.weatherapp.domain.repo.StorageRepository
@@ -33,7 +29,7 @@ class SettingsViewModel @Inject constructor(
 
     fun switchLanguageClick() {
         var value = selectionLanguage.value ?: Language.ENG
-        when(language.value){
+        when (language.value) {
             R.id.eng -> value = Language.ENG
             R.id.pl -> value = Language.PL
             R.id.de -> value = Language.DE
@@ -57,4 +53,3 @@ private fun Units.switchUnits(): Units {
         Units.NotMetric -> Units.Metric
     }
 }
-

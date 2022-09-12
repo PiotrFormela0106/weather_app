@@ -36,10 +36,10 @@ class AdditionalInfoScreenFragment : DaggerFragment() {
         binding.viewModel = viewModel
 
         val day = args.day
-
+        val formattedDay = day.removeRange(5, 11)
         viewModel.forecast.observe(viewLifecycleOwner) { data ->
-            viewModel.dayValue.value = day
-            val forecastList = data?.list?.filter { it -> it.date.contains(day) }.orEmpty()
+            viewModel.dayValue.value = formattedDay
+            val forecastList = data?.list?.filter { it -> it.date.contains(formattedDay) }.orEmpty()
             setupRecyclerView(requireContext(), forecastList)
         }
 

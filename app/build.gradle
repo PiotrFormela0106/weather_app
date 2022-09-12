@@ -107,4 +107,7 @@ dependencies {
     //Places Autocomplete
     implementation 'com.google.android.libraries.places:places:2.6.0'
 
+    //Expandable Panel
+    implementation 'com.robertlevonyan.view:MaterialExpansionPanel:2.1.1'
+
 }

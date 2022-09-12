@@ -1,52 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewState"
             type="com.example.weatherapp.ui.main.MainScreenViewModel.ViewState" />
     </data>
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:showIn="@layout/fragment_main_screen"
-        android:background="@drawable/current_weather_info_background"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp">
+        android:layout_margin="8dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp">
 
-
-        <TextView
-            style="@style/weather_info"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{viewState.sunrise}" />
+            android:orientation="vertical"
+            tools:showIn="@layout/fragment_main_screen">
 
-        <TextView
-            style="@style/weather_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{viewState.sunset}" />
 
-        <TextView
-            style="@style/weather_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{viewState.wind}" />
+            <TextView
+                style="@style/weather_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewState.sunrise}" />
 
-        <TextView
-            style="@style/weather_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{viewState.humidity}" />
+            <TextView
+                style="@style/weather_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewState.sunset}" />
 
-        <TextView
-            style="@style/weather_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{viewState.pressure}" />
-    </LinearLayout>
+            <TextView
+                style="@style/weather_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewState.wind}" />
+
+            <TextView
+                style="@style/weather_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewState.humidity}" />
+
+            <TextView
+                style="@style/weather_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewState.pressure}" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

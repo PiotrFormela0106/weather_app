@@ -6,6 +6,7 @@ data class AirPollution(
     @SerializedName("coord") val coordinates: Coordinates,
     val list: List<AirPollutionItem>
 )
+
 data class ForecastWeather(val city: City, val list: List<ForecastItem>)
 data class CurrentWeather(
     @SerializedName("name") val cityName: String,
