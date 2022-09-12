@@ -68,8 +68,6 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_main_screen, container, false
         )
-        val thisContext: Context = container?.context!!
-
         binding.viewState = viewModel.ViewState()
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
@@ -83,7 +81,7 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
 
         viewModel.forecastData.observe(viewLifecycleOwner) { data ->
             forecast = data
-            setupRecyclerView(thisContext, forecast)
+            setupRecyclerView(requireContext(), forecast)
         }
 
         if (!Places.isInitialized()) {
@@ -184,8 +182,7 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
                     addresses[0].latitude,
                     addresses[0].longitude
                 )
-                viewModel.getCurrentWeather()
-                viewModel.getForecastWeather()
+                viewModel.fetchData()
             } catch (e: IOException) {
                 e.printStackTrace()
             }

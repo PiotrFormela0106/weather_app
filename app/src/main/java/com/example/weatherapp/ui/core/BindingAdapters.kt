@@ -3,16 +3,29 @@ package com.example.weatherapp.ui.core
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import com.example.weatherapp.domain.models.Language
 import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.ui.main.MainScreenViewModel.Status
 import com.squareup.picasso.Picasso
+@BindingAdapter("android:progress")
+fun setProgressVisibility(view: View, visible: Status) {
+    view.visibility =
+        when (visible) {
+            Status.Loading -> View.VISIBLE
+            Status.Success, Status.Error -> View.GONE
+        }
+}
 @BindingAdapter("android:visibility")
 fun setVisibility(view: View, visible: Status) {
     view.visibility =
         when (visible) {
-            Status.Success, Status.Loading -> View.VISIBLE
-            Status.Error -> View.INVISIBLE
+            Status.Success -> View.VISIBLE
+            Status.Loading, Status.Error -> View.GONE
         }
 }
 @BindingAdapter("android:visibility")
@@ -39,3 +52,4 @@ fun loadImage(imageView: ImageView, url: String, placeholder: Drawable) {
             .into(imageView)
     }
 }
+

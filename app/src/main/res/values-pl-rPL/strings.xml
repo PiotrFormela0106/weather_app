@@ -3,9 +3,9 @@
     <string name="app_name">Weather App</string>
     <string name="air_quality_index">Indeks jakości powietrza</string>
     <string name="use_your_location">UŻYJ LOKALIZACJI</string>
-    <string name="metric">metric</string>
-    <string name="pl">pl</string>
-    <string name="eng">eng</string>
+    <string name="metric">Miarowy</string>
+    <string name="pl">Polski</string>
+    <string name="eng">Angielski</string>
     <string name="settings">Ustawienia</string>
     <string name="bin">Bin</string>
     <string name="co">CO</string>
@@ -21,5 +21,7 @@
     <string name="wind">Prędkość wiatru</string>
     <string name="humidity">Wilgotność</string>
     <string name="pressure">Ciśnienie</string>
+    <string name="not_metric">Niemiarowy</string>
+    <string name="de">Niemiecki</string>
 
 </resources>

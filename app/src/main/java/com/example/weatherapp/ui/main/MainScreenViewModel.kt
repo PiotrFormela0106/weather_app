@@ -2,6 +2,7 @@ package com.example.weatherapp.ui.main
 
 import android.annotation.SuppressLint
 import android.content.res.Resources
+import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
@@ -23,7 +24,9 @@ import com.example.weatherapp.domain.repo.WeatherRepository
 import com.example.weatherapp.ui.core.UiEvents
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.plusAssign
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.text.SimpleDateFormat
@@ -48,7 +51,6 @@ class MainScreenViewModel @Inject constructor(
     val forecastData = MutableLiveData<ForecastWeather>()
     val cityName = MutableLiveData<String>()
     val events: Observable<Event> = uiEvents.stream()
-    val progress = MutableLiveData<Boolean>()
     val airPollutionData = MutableLiveData<AirPollution>()
     val locationMethod = MutableLiveData(storageRepository.getLocationMethod())
     enum class Status { Loading, Success, Error }
@@ -80,69 +82,51 @@ class MainScreenViewModel @Inject constructor(
     }
 
     init {
+        fetchData()
+    }
+
+    fun fetchData(){
         setLang(storageRepository.getLanguage().toData())
-        getCurrentWeather()
-        getForecastWeather()
-        getAirPollution()
-    }
-
-    fun getCurrentWeather() {
-        progress.postValue(true)
         status.postValue(Status.Loading)
-        disposable.add(
-            weatherRepository.getCurrentWeather()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(
-                    onSuccess = {
-                        progress.postValue(false)
-                        when (it) {
-                            is Result.OnSuccess -> {
-                                handleSuccess(it.data)
-                            }
-                            is Result.OnError -> {
-                                handleError(it.error)
-                            }
-                        }
+        disposable += Single.zip(
+            weatherRepository.getCurrentWeather(),
+            weatherRepository.getForecastWeather(),
+            weatherRepository.getAirPollution()
+        ) { currentWeatherResult, getForecastWeatherResult, airPollutionResult ->
+            Triple(
+                first = currentWeatherResult,
+                second = getForecastWeatherResult,
+                third = airPollutionResult
+            )
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy { result ->
+                status.postValue(Status.Success)
+                when (val weather = result.first) {
+                    is Result.OnSuccess -> {
+                        handleSuccess(weather.data)
                     }
-                )
-        )
-    }
-
-    fun getForecastWeather() {
-        disposable.add(
-            weatherRepository.getForecastWeather()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(
-                    onSuccess = {
-                        when (it) {
-                            is Result.OnSuccess -> handleSuccess(it.data)
-                            is Result.OnError -> {
-                                handleError(it.error)
-                            }
-                        }
+                    is Result.OnError -> {
+                        handleError(weather.error)
                     }
-                )
-        )
-    }
-
-    private fun getAirPollution() {
-        disposable.add(
-            weatherRepository.getAirPollution(lat = 51.19, lon = 18.19)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(
-                    onSuccess = {
-                        when (it) {
-                            is Result.OnSuccess -> handleSuccess(it.data)
-                            is Result.OnError -> {
-                                handleError(it.error)
-                            }
-                        }
+                }
+                when (val forecast = result.second) {
+                    is Result.OnSuccess -> {
+                        forecast.data.let { forecastData.value = it }
                     }
-                )
-        )
+                    is Result.OnError -> {
+                        handleError(forecast.error)
+                    }
+                }
+                when (val pollution = result.third) {
+                    is Result.OnSuccess -> {
+                        pollution.data.let { airPollutionData.value = it }
+                    }
+                    is Result.OnError -> {
+                        handleError(pollution.error)
+                    }
+                }
+            }
     }
 
     private fun setLang(lang: String) {
@@ -150,7 +134,6 @@ class MainScreenViewModel @Inject constructor(
         val configuration = resources.configuration
         configuration.locale = Locale(lang)
         resources.updateConfiguration(configuration, metrics)
-        // onConfigurationChanged(configuration)
     }
 
     private fun handleSuccess(data: CurrentWeather) {
@@ -160,6 +143,7 @@ class MainScreenViewModel @Inject constructor(
         iconId.value = data.weather[0].icon
         imageUrl.value = "https://openweathermap.org/img/wn/${iconId.value}@2x.png"
         storageRepository.saveCity(data.cityName)
+        storageRepository.saveCoordinates(data.coordinates.lat, data.coordinates.lon)
 
         @SuppressLint("SimpleDateFormat")
         val sdf = SimpleDateFormat("HH:mm:ss")
@@ -172,16 +156,9 @@ class MainScreenViewModel @Inject constructor(
         sunsetFormat.postValue(sunsetTime)
     }
 
-    private fun handleSuccess(data: ForecastWeather) {
-        forecastData.value = data
-    }
-
-    private fun handleSuccess(data: AirPollution) {
-        airPollutionData.value = data
-    }
-
-    private fun handleError(error: Error?) {
+    private fun handleError(error: Error) {
         status.postValue(Status.Error)
+        Log.e(this::class.java.simpleName, error.message)
     }
 
     fun onCitiesClick() {
@@ -190,14 +167,13 @@ class MainScreenViewModel @Inject constructor(
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroyPerformTask() {
+    fun onDestroy() {
         disposable.clear()
     }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
-        setLang(storageRepository.getLanguage().toData())
-        getCurrentWeather()
-        getForecastWeather()
+        fetchData()
     }
 
     sealed class Event {

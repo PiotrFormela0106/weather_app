@@ -62,6 +62,14 @@
             android:visibility="@{viewModel.locationMethod}"
             android:layout_gravity="center"/>
 
+        <ProgressBar
+            android:id="@+id/progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:progress="@{viewModel.status}"/>
+
         <include
             layout="@layout/current_weather"
             app:viewModel="@{viewModel}"
@@ -83,13 +91,7 @@
             app:viewModel="@{viewModel}"
             app:viewState="@{viewState}"/>
 
-        <ProgressBar
-            android:id="@+id/progress"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="@{viewModel.progress}"/>
+
 
 
     </LinearLayout>

@@ -104,13 +104,17 @@ class WeatherRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getAirPollution(lat: Double, lon: Double): Single<Result<AirPollution>> {
-        return api.getAirPollution(lat = lat, lon = lon, apikey = API_KEY)
+    override fun getAirPollution(): Single<Result<AirPollution>> {
+        return api.getAirPollution(
+            lat = getCoordinatesParam().first,
+            lon = getCoordinatesParam().second,
+            apikey = API_KEY
+        )
             .compose(mapAirPollutionResponse())
     }
 
     private fun mapCurrentWeatherResponse(cacheKey: CacheKey):
-        SingleTransformer<CurrentWeatherData, Result<CurrentWeather>> {
+            SingleTransformer<CurrentWeatherData, Result<CurrentWeather>> {
         return SingleTransformer { upstream ->
             upstream
                 .map { it.toDomain() }
@@ -121,7 +125,7 @@ class WeatherRepositoryImpl @Inject constructor(
     }
 
     private fun mapForecastWeatherResponse(cacheKey: CacheKey):
-        SingleTransformer<ForecastWeatherData, Result<ForecastWeather>> {
+            SingleTransformer<ForecastWeatherData, Result<ForecastWeather>> {
         return SingleTransformer { upstream ->
             upstream
                 .map { it.toDomain() }
@@ -161,5 +165,6 @@ private fun Language.toQueryParam(): String {
     return when (this) {
         Language.ENG -> "eng"
         Language.PL -> "pl"
+        Language.DE -> "de"
     }
 }

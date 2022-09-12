@@ -2,7 +2,6 @@ package com.example.weatherapp.di
 
 import android.content.Context
 import com.example.weatherapp.data.api.RetrofitClient
-import com.example.weatherapp.data.controller.PreferencesController
 import com.example.weatherapp.data.repo.CityRepositoryImpl
 import com.example.weatherapp.data.repo.StorageRepositoryImpl
 import com.example.weatherapp.data.repo.WeatherRepositoryImpl
@@ -15,11 +14,6 @@ import javax.inject.Singleton
 
 @Module
 class RepositoryModule {
-
-    @Provides
-    fun providePreferences(context: Context): PreferencesController {
-        return PreferencesController(context)
-    }
 
     @Singleton
     @Provides
@@ -36,11 +30,9 @@ class RepositoryModule {
     @Singleton
     @Provides
     fun provideStorageRepository(
-        preferencesController: PreferencesController
+        context: Context
     ): StorageRepository {
-        return StorageRepositoryImpl(
-            preferencesController = preferencesController
-        )
+        return StorageRepositoryImpl(context = context)
     }
 
     @Singleton

@@ -1,6 +1,7 @@
 package com.example.weatherapp.data.repo
 
-import com.example.weatherapp.data.controller.PreferencesController
+import android.content.Context
+import android.content.SharedPreferences
 import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.data.mappers.toLanguage
 import com.example.weatherapp.data.mappers.toUnits
@@ -17,10 +18,12 @@ private const val EXTRA_LAT = "lat"
 private const val EXTRA_LON = "lon"
 private const val EXTRA_PLACE_ID = "place_id"
 private const val EXTRA_LANGUAGE = "language"
+private const val EXTRA_RADIO_BUTTON_LANG = "radio_button_lang"
 
-class StorageRepositoryImpl @Inject constructor(preferencesController: PreferencesController) :
+class StorageRepositoryImpl @Inject constructor(context: Context) :
     StorageRepository {
-    private val prefs = preferencesController.prefs
+    private val prefs: SharedPreferences =
+        context.getSharedPreferences("weather_prefs", Context.MODE_PRIVATE)
 
     override fun saveCity(city: String?) {
         city?.takeIf { it.isNotEmpty() }
@@ -38,7 +41,8 @@ class StorageRepositoryImpl @Inject constructor(preferencesController: Preferenc
     }
 
     override fun getLocationMethod(): LocationMethod {
-        val method = prefs.getString(EXTRA_LOCATION_METHOD, LocationMethod.Location.toString()).orEmpty()
+        val method =
+            prefs.getString(EXTRA_LOCATION_METHOD, LocationMethod.Location.toString()).orEmpty()
         return LocationMethod.valueOf(method)
     }
 
@@ -56,7 +60,10 @@ class StorageRepositoryImpl @Inject constructor(preferencesController: Preferenc
     }
 
     override fun getCoordinates(): Pair<Double, Double> {
-        return Pair(prefs.getFloat(EXTRA_LAT, 0F).toDouble(), prefs.getFloat(EXTRA_LON, 0F).toDouble())
+        return Pair(
+            prefs.getFloat(EXTRA_LAT, 0F).toDouble(),
+            prefs.getFloat(EXTRA_LON, 0F).toDouble()
+        )
     }
 
     override fun savePlaceId(placeId: String) {

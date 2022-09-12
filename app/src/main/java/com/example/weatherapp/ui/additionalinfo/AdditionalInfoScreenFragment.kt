@@ -33,18 +33,14 @@ class AdditionalInfoScreenFragment : DaggerFragment() {
             inflater, R.layout.fragment_additional_info_screen, container, false
         )
         binding.lifecycleOwner = this
-        val thisContext: Context = container?.context!!
-
         binding.viewModel = viewModel
 
         val day = args.day
 
         viewModel.forecast.observe(viewLifecycleOwner) { data ->
             viewModel.dayValue.value = day
-            val forecastList: List<ForecastItem>? = data?.list?.filter { it -> it.date.contains(day) }
-            if (forecastList != null) {
-                setupRecyclerView(thisContext, forecastList)
-            }
+            val forecastList = data?.list?.filter { it -> it.date.contains(day) }.orEmpty()
+            setupRecyclerView(requireContext(), forecastList)
         }
 
         return binding.root
@@ -53,6 +49,7 @@ class AdditionalInfoScreenFragment : DaggerFragment() {
     private fun setupRecyclerView(context: Context, forecast: List<ForecastItem>) {
         binding.recyclerForecastDetailed.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.recyclerForecastDetailed.adapter = ForecastDetailsAdapter(forecast, requireContext())
+        binding.recyclerForecastDetailed.adapter =
+            ForecastDetailsAdapter(forecast, requireContext())
     }
 }

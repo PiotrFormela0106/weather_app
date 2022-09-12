@@ -59,7 +59,6 @@ class CityScreenFragment : DaggerFragment() {
             .subscribe { handleEvent(it) }
 
         setHasOptionsMenu(true)
-        onSelectedCity()
 
         return binding.root
     }
@@ -72,6 +71,7 @@ class CityScreenFragment : DaggerFragment() {
             onSwipedCity(data)
         }
         searchCity()
+        onSelectedCity()
     }
 
     private fun onSwipedCity(list: List<City>) {

@@ -36,8 +36,8 @@
                 android:checked="@{viewModel.metric}"
                 android:gravity="center"
                 android:onClick="@{()->viewModel.switchUnitsClick()}"
-                android:text="Metric"
-                android:textSize="24sp" />
+                android:text="@string/metric"
+                android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/non_metric"
@@ -47,8 +47,8 @@
                 android:checked="@{viewModel.notMetric}"
                 android:gravity="center"
                 android:onClick="@{()->viewModel.switchUnitsClick()}"
-                android:text="Not metric"
-                android:textSize="24sp" />
+                android:text="@string/not_metric"
+                android:textSize="20sp" />
         </RadioGroup>
         <RadioGroup
             android:id="@+id/languages"
@@ -56,31 +56,39 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="center"
+            android:checkedButton="@={viewModel.language}"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <RadioButton
-                android:id="@+id/polish"
+                android:id="@+id/pl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="@{viewModel.polish}"
                 android:gravity="center"
+                android:text="@string/pl"
                 android:onClick="@{()->viewModel.switchLanguageClick()}"
-                android:text="PL"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <RadioButton
-                android:id="@+id/english"
+                android:id="@+id/eng"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:checked="@{viewModel.english}"
                 android:gravity="center"
                 android:onClick="@{()->viewModel.switchLanguageClick()}"
-                android:text="ENG"
-                android:textSize="24sp" />
+                android:text="@string/eng"
+                android:textSize="20sp" />
+            <RadioButton
+                android:id="@+id/de"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{()->viewModel.switchLanguageClick()}"
+                android:layout_marginStart="16dp"
+                android:gravity="center"
+                android:text="@string/de"
+                android:textSize="20sp" />
         </RadioGroup>
 
     </LinearLayout>

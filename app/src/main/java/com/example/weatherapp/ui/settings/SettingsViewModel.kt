@@ -1,10 +1,14 @@
 package com.example.weatherapp.ui.settings
 
 import android.content.res.Resources
+import android.util.Log
+import android.widget.RadioGroup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.example.weatherapp.R
+import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.domain.models.Language
 import com.example.weatherapp.domain.models.Units
 import com.example.weatherapp.domain.repo.StorageRepository
@@ -15,24 +19,35 @@ class SettingsViewModel @Inject constructor(
     val resources: Resources
 ) : ViewModel() {
     private val selectionLanguage = MutableLiveData(storageRepository.getLanguage())
-    private val selection = MutableLiveData(storageRepository.getUnits())
-    val metric: LiveData<Boolean> = Transformations.map(selection) { it == Units.Metric }
-    val notMetric: LiveData<Boolean> = Transformations.map(selection) { it == Units.NotMetric }
-    val polish: LiveData<Boolean> = Transformations.map(selectionLanguage) { it == Language.PL }
-    val english: LiveData<Boolean> = Transformations.map(selectionLanguage) { it == Language.ENG }
+    private val selectionUnits = MutableLiveData(storageRepository.getUnits())
+    val language = MutableLiveData(storageRepository.getLanguage().toId())
+    val metric = Transformations.map(selectionUnits) { it == Units.Metric }
+    val notMetric = Transformations.map(selectionUnits) { it == Units.NotMetric }
 
     fun switchUnitsClick() {
-        val initialValue = selection.value ?: Units.Metric
+        val initialValue = selectionUnits.value ?: Units.Metric
         val finalValue = initialValue.switchUnits()
         storageRepository.saveUnits(finalValue)
-        selection.postValue(finalValue)
+        selectionUnits.postValue(finalValue)
     }
 
     fun switchLanguageClick() {
-        val initialValue = selectionLanguage.value ?: Language.ENG
-        val finalValue = initialValue.switchLanguage()
-        storageRepository.saveLanguage(finalValue)
-        selectionLanguage.postValue(finalValue)
+        var value = selectionLanguage.value ?: Language.ENG
+        when(language.value){
+            R.id.eng -> value = Language.ENG
+            R.id.pl -> value = Language.PL
+            R.id.de -> value = Language.DE
+        }
+        storageRepository.saveLanguage(value)
+        selectionLanguage.postValue(value)
+    }
+
+    private fun Language.toId(): Int {
+        return when (this) {
+            Language.ENG -> R.id.eng
+            Language.PL -> R.id.pl
+            Language.DE -> R.id.de
+        }
     }
 }
 
@@ -42,9 +57,4 @@ private fun Units.switchUnits(): Units {
         Units.NotMetric -> Units.Metric
     }
 }
-private fun Language.switchLanguage(): Language {
-    return when (this) {
-        Language.ENG -> Language.PL
-        Language.PL -> Language.ENG
-    }
-}
+

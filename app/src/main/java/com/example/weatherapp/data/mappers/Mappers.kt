@@ -144,13 +144,18 @@ fun Language.toData(): String {
     return when (this) {
         Language.ENG -> ENG
         Language.PL -> PL
+        Language.DE -> DE
     }
 }
 fun String.toLanguage(): Language {
-    return if (PL.equals(this, true)) Language.PL
-    else Language.ENG
+    if (PL.equals(this, true)) return Language.PL
+    return if (DE.equals(this, true)) Language.DE
+    else
+        Language.ENG
 }
+
 private const val METRIC = "Metric"
 private const val NOT_METRIC = "Not metric"
-private const val PL = "PL"
-private const val ENG = "ENG"
+private const val PL = "pl"
+private const val ENG = "eng"
+private const val DE = "de"

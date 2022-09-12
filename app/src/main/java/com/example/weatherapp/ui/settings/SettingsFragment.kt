@@ -32,5 +32,6 @@ class SettingsFragment : DaggerFragment() {
         binding.lifecycleOwner = this
 
         return binding.root
+
     }
 }
