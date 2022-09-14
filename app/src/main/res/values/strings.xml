@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Weather App</string>
-    <string name="metric">metric</string>
-    <string name="pl">pl</string>
-    <string name="eng">eng</string>
+    <string name="metric">Celsius (*C)</string>
+    <string name="pl">Polish</string>
+    <string name="eng">English</string>
     <string name="settings">Settings</string>
     <string name="bin">Bin</string>
     <string name="air_quality_index">Air quality index</string>
@@ -20,5 +20,9 @@
     <string name="wind">Wind speed</string>
     <string name="humidity">Humidity</string>
     <string name="pressure">Pressure</string>
-
+    <string name="not_metric">Kelvin (K)</string>
+    <string name="de">German</string>
+    <string name="confirm">Confirm changes</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

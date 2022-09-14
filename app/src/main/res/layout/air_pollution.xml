@@ -6,211 +6,235 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="com.example.weatherapp.ui.main.MainScreenViewModel" />
-
-        <variable
             name="viewState"
             type="com.example.weatherapp.ui.main.MainScreenViewModel.ViewState" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        tools:showIn="@layout/fragment_main_screen"
-        style="@style/Theme.WeatherApp"
-        android:background="@drawable/air_pollution_bground"
-        android:layout_margin="8dp">
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp">
 
-        <TextView
-            android:id="@+id/aqi"
-            style="@style/air_pollution_aqi"
-            android:layout_width="wrap_content"
+        <com.robertlevonyan.views.expandable.Expandable
+            android:id="@+id/expandable"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{viewState.aqi}"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:padding="16dp"
+            app:exp_animateExpand="true"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.187" />
+            tools:showIn="@layout/fragment_main_screen">
 
-        <TextView
-            android:id="@+id/co"
-            style="@style/air_pollution"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:gravity="center"
-            android:text="@{viewState.co}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/aqi" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="8dp">
 
-        <TextView
-            android:id="@+id/no"
-            style="@style/air_pollution"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="32dp"
-            android:gravity="center"
-            android:text="@{viewState.no}"
-            app:layout_constraintStart_toEndOf="@+id/co"
-            app:layout_constraintTop_toBottomOf="@+id/aqi" />
+                <TextView
+                    android:id="@+id/aqi"
+                    style="@style/air_pollution_aqi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center"
+                    android:text="@{viewState.aqi}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/no2"
-            style="@style/air_pollution"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="24dp"
-            android:gravity="center"
-            android:text="@{viewState.no2}"
-            app:layout_constraintEnd_toStartOf="@+id/o3"
-            app:layout_constraintTop_toBottomOf="@+id/aqi" />
+                <TextView
+                    android:id="@+id/air_quality_index"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:gravity="center"
+                    android:text="@string/air_quality_index"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/o3"
-            style="@style/air_pollution"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
-            android:text="@{viewState.o3}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/aqi" />
 
-        <TextView
-            android:id="@+id/textView5"
-            style="@style/air_pollution"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="44dp"
-            android:gravity="center"
-            android:text="@{viewState.so2}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/co" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/textView6"
-            style="@style/air_pollution"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="44dp"
-            android:gravity="center"
-            android:text="@{viewState.pm2_5}"
-            app:layout_constraintStart_toEndOf="@+id/textView5"
-            app:layout_constraintTop_toBottomOf="@+id/no" />
+                <TextView
+                    android:id="@+id/co"
+                    style="@style/air_pollution"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="32dp"
+                    android:gravity="center"
+                    android:text="@{viewState.co}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="MissingConstraints" />
 
-        <TextView
-            android:id="@+id/textView7"
-            style="@style/air_pollution"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="44dp"
-            android:layout_marginEnd="24dp"
-            android:gravity="center"
-            android:text="@{viewState.pm10}"
-            app:layout_constraintEnd_toStartOf="@+id/textView8"
-            app:layout_constraintTop_toBottomOf="@+id/no2" />
+                <TextView
+                    android:id="@+id/no"
+                    style="@style/air_pollution"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="32dp"
+                    android:gravity="center"
+                    android:text="@{viewState.no}"
+                    app:layout_constraintStart_toEndOf="@+id/co"
+                    tools:ignore="MissingConstraints" />
 
-        <TextView
-            android:id="@+id/textView8"
-            style="@style/air_pollution"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="44dp"
-            android:layout_marginEnd="16dp"
-            android:gravity="center"
-            android:text="@{viewState.nh3}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/o3" />
+                <TextView
+                    android:id="@+id/no2"
+                    style="@style/air_pollution"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="24dp"
+                    android:gravity="center"
+                    android:text="@{viewState.no2}"
+                    app:layout_constraintEnd_toStartOf="@+id/o3"
+                    tools:ignore="MissingConstraints" />
 
-        <TextView
-            android:id="@+id/air_quality_index"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/air_quality_index"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@+id/no2"
-            app:layout_constraintStart_toEndOf="@+id/no"
-            app:layout_constraintTop_toBottomOf="@+id/aqi" />
+                <TextView
+                    android:id="@+id/o3"
+                    style="@style/air_pollution"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@{viewState.o3}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:ignore="MissingConstraints" />
 
-        <TextView
-            android:id="@+id/textView10"
-            style="@style/air_pollution_hints"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:gravity="center"
-            android:text="@string/co"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/co" />
+                <TextView
+                    android:id="@+id/textView5"
+                    style="@style/air_pollution"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="44dp"
+                    android:gravity="center"
+                    android:text="@{viewState.so2}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/co" />
 
-        <TextView
-            android:id="@+id/textView11"
-            style="@style/air_pollution_hints"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:gravity="center"
-            android:text="@string/no"
-            app:layout_constraintStart_toEndOf="@+id/textView10"
-            app:layout_constraintTop_toBottomOf="@+id/no" />
+                <TextView
+                    android:id="@+id/textView6"
+                    style="@style/air_pollution"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="44dp"
+                    android:gravity="center"
+                    android:text="@{viewState.pm2_5}"
+                    app:layout_constraintStart_toEndOf="@+id/textView5"
+                    app:layout_constraintTop_toBottomOf="@+id/no" />
 
-        <TextView
-            android:id="@+id/textView12"
-            style="@style/air_pollution_hints"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
-            android:gravity="center"
-            android:text="@string/no2"
-            app:layout_constraintEnd_toStartOf="@+id/textView13"
-            app:layout_constraintTop_toBottomOf="@+id/no2" />
+                <TextView
+                    android:id="@+id/textView7"
+                    style="@style/air_pollution"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="44dp"
+                    android:layout_marginEnd="24dp"
+                    android:gravity="center"
+                    android:text="@{viewState.pm10}"
+                    app:layout_constraintEnd_toStartOf="@+id/textView8"
+                    app:layout_constraintTop_toBottomOf="@+id/no2" />
 
-        <TextView
-            android:id="@+id/textView13"
-            style="@style/air_pollution_hints"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:gravity="center"
-            android:text="@string/o3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/o3" />
+                <TextView
+                    android:id="@+id/textView8"
+                    style="@style/air_pollution"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="44dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:text="@{viewState.nh3}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/o3" />
 
-        <TextView
-            android:id="@+id/textView14"
-            style="@style/air_pollution_hints"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:gravity="center"
-            android:text="@string/so2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                <TextView
+                    android:id="@+id/textView10"
+                    style="@style/air_pollution_hints"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:gravity="center"
+                    android:text="@string/co"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/co" />
 
-        <TextView
-            android:id="@+id/textView15"
-            style="@style/air_pollution_hints"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:gravity="center"
-            android:text="@string/pm2_5"
-            app:layout_constraintStart_toEndOf="@+id/textView14"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                <TextView
+                    android:id="@+id/textView11"
+                    style="@style/air_pollution_hints"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:gravity="center"
+                    android:text="@string/no"
+                    app:layout_constraintStart_toEndOf="@+id/textView10"
+                    app:layout_constraintTop_toBottomOf="@+id/no" />
 
-        <TextView
-            android:id="@+id/textView16"
-            style="@style/air_pollution_hints"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:gravity="center"
-            android:text="@string/nh3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+                <TextView
+                    android:id="@+id/textView12"
+                    style="@style/air_pollution_hints"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:gravity="center"
+                    android:text="@string/no2"
+                    app:layout_constraintEnd_toStartOf="@+id/textView13"
+                    app:layout_constraintTop_toBottomOf="@+id/no2" />
 
-        <TextView
-            android:id="@+id/textView17"
-            style="@style/air_pollution_hints"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
-            android:gravity="center"
-            android:text="@string/pm10"
-            app:layout_constraintEnd_toStartOf="@+id/textView16"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                <TextView
+                    android:id="@+id/textView13"
+                    style="@style/air_pollution_hints"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:text="@string/o3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/o3" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/textView14"
+                    style="@style/air_pollution_hints"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:gravity="center"
+                    android:text="@string/so2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+                <TextView
+                    android:id="@+id/textView15"
+                    style="@style/air_pollution_hints"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:gravity="center"
+                    android:text="@string/pm2_5"
+                    app:layout_constraintStart_toEndOf="@+id/textView14"
+                    app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+                <TextView
+                    android:id="@+id/textView16"
+                    style="@style/air_pollution_hints"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:text="@string/nh3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+                <TextView
+                    android:id="@+id/textView17"
+                    style="@style/air_pollution_hints"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:gravity="center"
+                    android:text="@string/pm10"
+                    app:layout_constraintEnd_toStartOf="@+id/textView16"
+                    app:layout_constraintTop_toBottomOf="@+id/textView7" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.robertlevonyan.views.expandable.Expandable>
+
+    </com.google.android.material.card.MaterialCardView>
 </layout>

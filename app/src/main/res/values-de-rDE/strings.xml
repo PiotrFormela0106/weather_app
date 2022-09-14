@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Weather App</string>
+    <string name="metric">Celsius (*C)</string>
+    <string name="pl">Polnisch</string>
+    <string name="eng">Englisch</string>
+    <string name="settings">Einstellungen</string>
+    <string name="bin">Mulleimer</string>
+    <string name="air_quality_index">Luftqualitätsindex</string>
+    <string name="co">CO</string>
+    <string name="no">NO</string>
+    <string name="no2">NO2</string>
+    <string name="o3">O3</string>
+    <string name="so2">SO2</string>
+    <string name="pm2_5">PM2.5</string>
+    <string name="pm10">PM10</string>
+    <string name="nh3">NH3</string>
+    <string name="use_your_location">Verwenden Sie Ihren Standort</string>
+    <string name="sunrise">Sonnenaufgang</string>
+    <string name="sunset">Sonnenuntergang</string>
+    <string name="wind">Windgeschwindigkeit</string>
+    <string name="humidity">Feuchtigkeit</string>
+    <string name="pressure">Druck</string>
+    <string name="not_metric">Kelvin (K)</string>
+    <string name="de">Deutsch</string>
+    <string name="confirm">Änderungen bestätigen</string>
+</resources>

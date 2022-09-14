@@ -8,6 +8,7 @@ import com.example.weatherapp.R
 import com.example.weatherapp.databinding.ForecastDayDetailedBinding
 import com.example.weatherapp.domain.models.ForecastItem
 import com.squareup.picasso.Picasso
+import java.math.RoundingMode
 
 class ForecastDetailsAdapter(private val forecast: List<ForecastItem>, val context: Context) :
     RecyclerView.Adapter<DetailsViewHolder>() {
@@ -35,12 +36,13 @@ class DetailsViewHolder(private val binding: ForecastDayDetailedBinding, val con
     RecyclerView.ViewHolder(binding.root) {
     fun bind(day: ForecastItem) {
         val resources = context.resources
-        val temperature = "${day.main.temp}"
+        val temperature = "${day.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt()}"
         val humidity = "${resources.getString(R.string.humidity)}: ${day.main.humidity} %"
         val windSpeed = "${resources.getString(R.string.wind)}: ${day.wind.speed} m/s"
         val pressure = "${resources.getString(R.string.pressure)}: ${day.main.pressure} hPa"
 
-        val date = day.date.removeRange(0, 11)
+        var date = day.date.removeRange(0, 11)
+        date = date.removeRange(5, 8)
         binding.hour.text = date
         binding.tempDetailed.text = temperature
         binding.humidity.text = humidity

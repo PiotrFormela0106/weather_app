@@ -10,5 +10,5 @@ interface WeatherRepository {
 
     fun getCurrentWeather(): Single<Result<CurrentWeather>>
     fun getForecastWeather(): Single<Result<ForecastWeather>>
-    fun getAirPollution(lat: Double, lon: Double): Single<Result<AirPollution>>
+    fun getAirPollution(): Single<Result<AirPollution>>
 }

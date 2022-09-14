@@ -6,6 +6,7 @@ data class AirPollution(
     @SerializedName("coord") val coordinates: Coordinates,
     val list: List<AirPollutionItem>
 )
+
 data class ForecastWeather(val city: City, val list: List<ForecastItem>)
 data class CurrentWeather(
     @SerializedName("name") val cityName: String,
@@ -24,7 +25,8 @@ data class ForecastItem(
     val clouds: Clouds,
     val wind: Wind,
     @SerializedName("dt_txt") val date: String,
-    val rain: Rain? = null
+    val rain: Rain? = null,
+    @SerializedName("dt") val dateLong: Long
 )
 
 data class AirPollutionItem(

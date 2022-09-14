@@ -32,8 +32,6 @@ import dagger.android.support.DaggerFragment
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
-private const val CITY_DUPLICATED = "This city is already added to list"
-
 class CityScreenFragment : DaggerFragment() {
     private lateinit var binding: FragmentCityScreenBinding
     private lateinit var adapter: CityAdapter
@@ -59,7 +57,6 @@ class CityScreenFragment : DaggerFragment() {
             .subscribe { handleEvent(it) }
 
         setHasOptionsMenu(true)
-        onSelectedCity()
 
         return binding.root
     }
@@ -67,35 +64,39 @@ class CityScreenFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.fetchCities()
+        lateinit var reversedList: MutableList<City>
         viewModel.allCities.observe(viewLifecycleOwner) { data ->
-            setupRecyclerView(data)
-            onSwipedCity(data)
+            if (data.isEmpty())
+                setupRecyclerView(data)
+            else {
+                reversedList = data.reversed().toMutableList()
+                setupRecyclerView(reversedList)
+            }
+            val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
+                ItemTouchHelper.SimpleCallback(
+                    0,
+                    ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.DOWN or ItemTouchHelper.UP
+                ) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+                    val position = viewHolder.adapterPosition
+                    viewModel.deleteCity(reversedList[position])
+                    reversedList.removeAt(position)
+                    adapter.notifyItemRemoved(position)
+                }
+            }
+            val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
+            itemTouchHelper.attachToRecyclerView(binding.recyclerCity)
         }
         searchCity()
-    }
-
-    private fun onSwipedCity(list: List<City>) {
-        val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
-            ItemTouchHelper.SimpleCallback(
-                0,
-                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.DOWN or ItemTouchHelper.UP
-            ) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
-                val position = viewHolder.adapterPosition
-                viewModel.deleteCity(list[position])
-                adapter.notifyItemRemoved(position)
-            }
-        }
-        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
-        itemTouchHelper.attachToRecyclerView(binding.recyclerCity)
+        onSelectedCity()
     }
 
     private fun onSelectedCity() {
@@ -105,6 +106,7 @@ class CityScreenFragment : DaggerFragment() {
                 context, recyclerView,
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(view: View?, position: Int) {
+
                         viewModel.storageRepository.saveLocationMethod(LocationMethod.City)
                         val textView = view?.findViewById<TextView>(R.id.cityName)
                         viewModel.storageRepository.saveCity(textView?.text.toString())
@@ -152,12 +154,6 @@ class CityScreenFragment : DaggerFragment() {
             }
             is CityScreenViewModel.Event.OnCityError -> {
                 Snackbar.make(binding.root, event.message, Snackbar.LENGTH_SHORT).show()
-            }
-            is CityScreenViewModel.Event.OnCityDuplicate -> {
-                Snackbar.make(
-                    binding.root, CITY_DUPLICATED, Snackbar.LENGTH_SHORT
-                )
-                    .show()
             }
             is CityScreenViewModel.Event.OnLocation -> {
                 findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())

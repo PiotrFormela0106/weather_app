@@ -20,7 +20,8 @@ data class ForecastItem(
     val clouds: Clouds,
     val wind: Wind,
     var date: String,
-    val rain: Rain? = null
+    val rain: Rain? = null,
+    val dateLong: Long
 )
 
 data class AirPollutionItem(
@@ -89,7 +90,7 @@ data class Coordinates(
 
 enum class Units { Metric, NotMetric }
 
-enum class Language { PL, ENG }
+enum class Language { PL, ENG, DE }
 
 enum class LocationMethod {
     City, Location;

@@ -1,11 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.WeatherApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.WeatherApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/primary</item>
         <item name="android:textColor">@color/black</item>
+        <item name="exp_backgroundColor">@color/white</item>
         <!-- Secondary brand color.
         <item name="colorSecondary">@color/teal_200</item>-->
         <item name="colorSecondary">@color/yellow</item>
@@ -54,4 +55,5 @@
     <style name="icon" parent="Widget.AppCompat.ImageButton">
         <item name="tint">@color/black</item>
     </style>
+
 </resources>

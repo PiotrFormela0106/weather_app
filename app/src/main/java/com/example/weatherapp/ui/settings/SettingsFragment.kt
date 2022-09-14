@@ -1,5 +1,7 @@
 package com.example.weatherapp.ui.settings
 
+import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,18 +9,28 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.weatherapp.R
+import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.databinding.FragmentSettingsBinding
-import dagger.android.support.DaggerFragment
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.android.support.AndroidSupportInjection
+import java.util.Locale
 import javax.inject.Inject
 
-class SettingsFragment : DaggerFragment() {
+class SettingsFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentSettingsBinding
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val viewModel: SettingsViewModel by viewModels { viewModelFactory }
+
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,5 +44,20 @@ class SettingsFragment : DaggerFragment() {
         binding.lifecycleOwner = this
 
         return binding.root
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        setLang(viewModel.storageRepository.getLanguage().toData())
+        findNavController().navigate(SettingsFragmentDirections.navigateToMainScreen())
+    }
+
+    private fun setLang(lang: String) {
+        val resources = resources
+        val metrics = resources.displayMetrics
+        val configuration = resources.configuration
+        configuration.locale = Locale(lang)
+        resources.updateConfiguration(configuration, metrics)
+        onConfigurationChanged(configuration)
     }
 }

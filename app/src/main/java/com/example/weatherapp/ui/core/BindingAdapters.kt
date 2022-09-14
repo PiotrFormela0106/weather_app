@@ -7,12 +7,20 @@ import androidx.databinding.BindingAdapter
 import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.ui.main.MainScreenViewModel.Status
 import com.squareup.picasso.Picasso
+@BindingAdapter("android:progress")
+fun setProgressVisibility(view: View, visible: Status) {
+    view.visibility =
+        when (visible) {
+            Status.Loading -> View.VISIBLE
+            Status.Success, Status.Error -> View.GONE
+        }
+}
 @BindingAdapter("android:visibility")
 fun setVisibility(view: View, visible: Status) {
     view.visibility =
         when (visible) {
-            Status.Success, Status.Loading -> View.VISIBLE
-            Status.Error -> View.INVISIBLE
+            Status.Success -> View.VISIBLE
+            Status.Loading, Status.Error -> View.GONE
         }
 }
 @BindingAdapter("android:visibility")

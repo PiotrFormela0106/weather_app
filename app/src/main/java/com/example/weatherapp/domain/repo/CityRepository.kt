@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.Single
 interface CityRepository {
     fun insertCity(cityName: String, placeId: String): Completable
     fun deleteCity(city: City): Completable
-    fun updateCities(): Single<Result<List<City>>>
+    fun fetchCities(): Single<Result<List<City>>>
     fun deleteAllCities(): Completable
     fun getCurrentCity(): Single<Result<City>>
     fun getPlaceId(city: String): Single<Result<String>>

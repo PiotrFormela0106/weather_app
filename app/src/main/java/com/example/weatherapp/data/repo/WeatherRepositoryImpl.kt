@@ -104,8 +104,12 @@ class WeatherRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getAirPollution(lat: Double, lon: Double): Single<Result<AirPollution>> {
-        return api.getAirPollution(lat = lat, lon = lon, apikey = API_KEY)
+    override fun getAirPollution(): Single<Result<AirPollution>> {
+        return api.getAirPollution(
+            lat = getCoordinatesParam().first,
+            lon = getCoordinatesParam().second,
+            apikey = API_KEY
+        )
             .compose(mapAirPollutionResponse())
     }
 
@@ -161,5 +165,6 @@ private fun Language.toQueryParam(): String {
     return when (this) {
         Language.ENG -> "eng"
         Language.PL -> "pl"
+        Language.DE -> "de"
     }
 }
