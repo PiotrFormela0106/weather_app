@@ -11,7 +11,6 @@ import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.weatherapp.R
-import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.domain.Error
 import com.example.weatherapp.domain.Result
 import com.example.weatherapp.domain.models.AirPollution
@@ -56,6 +55,7 @@ class MainScreenViewModel @Inject constructor(
     val airPollutionData = MutableLiveData<AirPollution>()
     val locationMethod = MutableLiveData(storageRepository.getLocationMethod())
     val date = MutableLiveData<String>()
+
     enum class Status { Loading, Success, Error }
     inner class ViewState {
         val data = airPollutionData
@@ -80,19 +80,17 @@ class MainScreenViewModel @Inject constructor(
             Transformations.map(weatherData) { "${resources.getString(R.string.humidity)}: ${it.main.humidity} %" }
         val pressure: LiveData<String> =
             Transformations.map(weatherData) { "${resources.getString(R.string.pressure)}: ${it.main.pressure} hPA" }
-        val temperature: LiveData<String> =
-            Transformations.map(weatherData) { "${it.main.temp} C" }
     }
 
     init {
-        fetchData()
+        if (storageRepository.getLocationMethod() == LocationMethod.City)
+            fetchData()
     }
 
     fun fetchData() {
         val sdf = SimpleDateFormat("EEEE, d MMMM HH:mm", Locale.getDefault())
         val currentDate = sdf.format(Date())
         date.postValue(currentDate.toString())
-        setLang(storageRepository.getLanguage().toData())
         status.postValue(Status.Loading)
         disposable += Single.zip(
             weatherRepository.getCurrentWeather(),
@@ -119,7 +117,6 @@ class MainScreenViewModel @Inject constructor(
                 when (val forecast = result.second) {
                     is Result.OnSuccess -> {
                         forecast.data.let { forecastData.value = it }
-                        Log.i("forecast", forecastData.value?.list?.get(0)?.date.orEmpty())
                     }
                     is Result.OnError -> {
                         handleError(forecast.error)
@@ -136,13 +133,6 @@ class MainScreenViewModel @Inject constructor(
             }
     }
 
-    private fun setLang(lang: String) {
-        val metrics = resources.displayMetrics
-        val configuration = resources.configuration
-        configuration.locale = Locale(lang)
-        resources.updateConfiguration(configuration, metrics)
-    }
-
     private fun handleSuccess(data: CurrentWeather) {
         status.postValue(Status.Success)
         weatherData.value = data
@@ -151,7 +141,9 @@ class MainScreenViewModel @Inject constructor(
         imageUrl.value = "https://openweathermap.org/img/wn/${iconId.value}@2x.png"
         storageRepository.saveCity(data.cityName)
         storageRepository.saveCoordinates(data.coordinates.lat, data.coordinates.lon)
-        roundedTemperature.postValue(data.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt().toString())
+        roundedTemperature.postValue(
+            data.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt().toString()
+        )
 
         @SuppressLint("SimpleDateFormat")
         val sdf = SimpleDateFormat("HH:mm:ss")
@@ -181,11 +173,6 @@ class MainScreenViewModel @Inject constructor(
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy() {
         disposable.clear()
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume() {
-        fetchData()
     }
 
     sealed class Event {

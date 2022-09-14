@@ -20,7 +20,8 @@ data class ForecastItem(
     val clouds: Clouds,
     val wind: Wind,
     var date: String,
-    val rain: Rain? = null
+    val rain: Rain? = null,
+    val dateLong: Long
 )
 
 data class AirPollutionItem(

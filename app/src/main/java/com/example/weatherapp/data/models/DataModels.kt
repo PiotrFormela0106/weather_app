@@ -25,7 +25,8 @@ data class ForecastItem(
     val clouds: Clouds,
     val wind: Wind,
     @SerializedName("dt_txt") val date: String,
-    val rain: Rain? = null
+    val rain: Rain? = null,
+    @SerializedName("dt") val dateLong: Long
 )
 
 data class AirPollutionItem(

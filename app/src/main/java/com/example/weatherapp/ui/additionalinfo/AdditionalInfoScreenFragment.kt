@@ -2,6 +2,7 @@ package com.example.weatherapp.ui.additionalinfo
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,8 @@ import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentAdditionalInfoScreenBinding
 import com.example.weatherapp.domain.models.ForecastItem
 import dagger.android.support.DaggerFragment
+import java.text.SimpleDateFormat
+import java.util.Date
 import javax.inject.Inject
 
 class AdditionalInfoScreenFragment : DaggerFragment() {
@@ -38,8 +41,13 @@ class AdditionalInfoScreenFragment : DaggerFragment() {
         val day = args.day
         val formattedDay = day.removeRange(5, 11)
         viewModel.forecast.observe(viewLifecycleOwner) { data ->
-            viewModel.dayValue.value = formattedDay
             val forecastList = data?.list?.filter { it -> it.date.contains(formattedDay) }.orEmpty()
+            val item = forecastList.first().dateLong * 1000
+            Log.i("item", item.toString())
+            val sdf = SimpleDateFormat("EEEE, d MMMM")
+            val dateAndTime = Date(item)
+            val dateAndTimeFormat = sdf.format(dateAndTime)
+            viewModel.dayValue.value = dateAndTimeFormat
             setupRecyclerView(requireContext(), forecastList)
         }
 

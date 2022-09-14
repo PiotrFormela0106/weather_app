@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Weather App</string>
-    <string name="metric">Metrisch</string>
+    <string name="metric">Celsius (*C)</string>
     <string name="pl">Polnisch</string>
     <string name="eng">Englisch</string>
     <string name="settings">Einstellungen</string>
@@ -21,6 +21,7 @@
     <string name="wind">Windgeschwindigkeit</string>
     <string name="humidity">Feuchtigkeit</string>
     <string name="pressure">Druck</string>
-    <string name="not_metric">Nicht metrisch</string>
+    <string name="not_metric">Kelvin (K)</string>
     <string name="de">Deutsch</string>
+    <string name="confirm">Änderungen bestätigen</string>
 </resources>

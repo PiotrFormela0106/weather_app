@@ -18,7 +18,6 @@ private const val EXTRA_LAT = "lat"
 private const val EXTRA_LON = "lon"
 private const val EXTRA_PLACE_ID = "place_id"
 private const val EXTRA_LANGUAGE = "language"
-private const val EXTRA_RADIO_BUTTON_LANG = "radio_button_lang"
 
 class StorageRepositoryImpl @Inject constructor(context: Context) :
     StorageRepository {

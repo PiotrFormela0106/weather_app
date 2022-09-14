@@ -46,8 +46,12 @@ class CityScreenViewModel @Inject constructor(
                             storageRepository.savePlaceId(placeId)
                             Event.OnAddCity.let { uiEvents.post(it) }
                         } else {
-                            uiEvents.post(Event.OnCityDuplicate)
-                            storageRepository.saveCity(currentCity)
+                            fetchCities()
+                            val duplicate = allCities.value.orEmpty().find { it.city == cityName }
+                            deleteCity(duplicate!!)
+                            storageRepository.saveCity(it.data.cityName)
+                            insertCity(city = it.data.cityName, placeId)
+                            Event.OnAddCity.let { uiEvents.post(it) }
                         }
                     }
                     is Result.OnError -> {
@@ -58,7 +62,7 @@ class CityScreenViewModel @Inject constructor(
             }
     }
 
-    private fun insertCity(city: String, placeId: String) {
+    fun insertCity(city: String, placeId: String) {
         cityRepository.insertCity(city, placeId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -155,6 +159,5 @@ class CityScreenViewModel @Inject constructor(
         object OnAddCity : Event()
         object OnLocation : Event()
         class OnCityError(val message: String) : Event()
-        object OnCityDuplicate : Event()
     }
 }

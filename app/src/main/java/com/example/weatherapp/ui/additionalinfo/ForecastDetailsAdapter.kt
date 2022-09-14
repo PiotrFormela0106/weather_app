@@ -41,7 +41,8 @@ class DetailsViewHolder(private val binding: ForecastDayDetailedBinding, val con
         val windSpeed = "${resources.getString(R.string.wind)}: ${day.wind.speed} m/s"
         val pressure = "${resources.getString(R.string.pressure)}: ${day.main.pressure} hPa"
 
-        val date = day.date.removeRange(0, 11)
+        var date = day.date.removeRange(0, 11)
+        date = date.removeRange(5, 8)
         binding.hour.text = date
         binding.tempDetailed.text = temperature
         binding.humidity.text = humidity

@@ -121,7 +121,8 @@ fun ForecastItemData.toDomain(): ForecastItemDomain = ForecastItemDomain(
     clouds = clouds.toDomain(),
     wind = wind.toDomain(),
     date = date,
-    rain = rain?.toDomain()
+    rain = rain?.toDomain(),
+    dateLong = dateLong
 )
 
 fun ForecastWeatherData.toDomain(): ForecastWeatherDomain = ForecastWeatherDomain(

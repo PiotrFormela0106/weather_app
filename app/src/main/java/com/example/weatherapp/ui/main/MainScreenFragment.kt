@@ -126,10 +126,6 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
         return binding.root
     }
 
-    override fun onResume() {
-        super<DaggerFragment>.onResume()
-        setLang(viewModel.storageRepository.getLanguage().toData())
-    }
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
