@@ -21,38 +21,44 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            tools:showIn="@layout/fragment_main_screen">
+            tools:showIn="@layout/fragment_main_screen"
+            android:paddingTop="8dp">
 
 
             <TextView
                 style="@style/weather_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewState.sunrise}" />
+                android:text="@{viewState.sunrise}"
+                app:drawableLeftCompat="@drawable/ic_sunrise"/>
 
             <TextView
                 style="@style/weather_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewState.sunset}" />
+                android:text="@{viewState.sunset}"
+                app:drawableLeftCompat="@drawable/ic_sunset"/>
 
             <TextView
                 style="@style/weather_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewState.wind}" />
+                android:text="@{viewState.wind}"
+                app:drawableLeftCompat="@drawable/ic_wind" />
 
             <TextView
                 style="@style/weather_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewState.humidity}" />
+                android:text="@{viewState.humidity}"
+                app:drawableLeftCompat="@drawable/ic_humidity"/>
 
             <TextView
                 style="@style/weather_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewState.pressure}" />
+                android:text="@{viewState.pressure}"
+                app:drawableLeftCompat="@drawable/ic_pressure"/>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

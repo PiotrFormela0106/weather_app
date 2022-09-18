@@ -20,12 +20,18 @@
         <action
             android:id="@+id/navigateToAddInfo"
             app:destination="@id/additionalInfoScreenFragment" />
+        <action
+            android:id="@+id/navigateToViewPager"
+            app:destination="@id/viewPagerFragment" />
     </fragment>
     <fragment
         android:id="@+id/additionalInfoScreenFragment"
         android:name="com.example.weatherapp.ui.additionalinfo.AdditionalInfoScreenFragment"
         android:label="Additional info"
         tools:layout="@layout/fragment_additional_info_screen" >
+        <action
+            android:id="@+id/navigateToMainScreen"
+            app:destination="@id/mainScreenFragment" />
         <argument
             android:name="day"
             app:argType="string" />
@@ -48,4 +54,15 @@
             android:id="@+id/navigateToMainScreen"
             app:destination="@id/mainScreenFragment" />
     </dialog>
+    <fragment
+        android:id="@+id/viewPagerFragment"
+        android:name="com.example.weatherapp.ui.additionalinfo.ViewPagerFragment"
+        android:label="ViewPagerFragment" >
+        <argument
+            android:name="day"
+            app:argType="string" />
+        <argument
+            android:name="days"
+            app:argType="string[]" />
+    </fragment>
 </navigation>

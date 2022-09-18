@@ -11,7 +11,6 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -27,22 +26,15 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.weatherapp.BuildConfig.PLACES_API_KEY
 import com.example.weatherapp.R
 import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.databinding.FragmentMainScreenBinding
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.ui.core.RecyclerItemClickListener
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.net.FetchPhotoRequest
-import com.google.android.libraries.places.api.net.FetchPhotoResponse
-import com.google.android.libraries.places.api.net.FetchPlaceRequest
-import com.google.android.libraries.places.api.net.FetchPlaceResponse
+import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerFragment
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.io.IOException
@@ -84,42 +76,14 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
             setupRecyclerView(requireContext(), forecast)
         }
 
-        if (!Places.isInitialized()) {
-            Places.initialize(requireContext(), PLACES_API_KEY)
-        }
-        val placesClient = Places.createClient(requireContext())
-        val fields = listOf(Place.Field.PHOTO_METADATAS)
-        val placeId = viewModel.storageRepository.getPlaceId()
-        val placeRequest = FetchPlaceRequest.newInstance(placeId, fields)
-        placesClient.fetchPlace(placeRequest)
-            .addOnSuccessListener { response: FetchPlaceResponse ->
-                val place = response.place
-
-                val metaData = place.photoMetadatas
-                if (metaData == null || metaData.isEmpty()) {
-                    Log.w("NO PHOTO", "No photo metadata.")
-                    return@addOnSuccessListener
-                }
-                val photoMetadata = metaData.first()
-                val photoRequest = FetchPhotoRequest.builder(photoMetadata)
-                    // .setMaxWidth(1000) // Optional.
-                    // .setMaxHeight(400) // Optional.
-                    .build()
-                placesClient.fetchPhoto(photoRequest)
-                    .addOnSuccessListener { fetchPhotoResponse: FetchPhotoResponse ->
-                        val bitmap = fetchPhotoResponse.bitmap
-                        binding.cityImage.setImageBitmap(bitmap)
-                    }.addOnFailureListener { exception: Exception ->
-                        if (exception is ApiException) {
-                            Log.e("Place not found", "Place not found: " + exception.message)
-                        }
-                    }
-            }
-
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireActivity())
         if (viewModel.storageRepository.getLocationMethod() == LocationMethod.Location) {
             checkPermission()
+        } else {
+            Picasso.get()
+                .load(viewModel.storageRepository.getPhotoId())
+                .into(binding.cityImage)
         }
         getDetailedForecast()
 
@@ -219,12 +183,23 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
                 recyclerView,
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(view: View?, position: Int) {
-                        val textView = view?.findViewById<TextView>(R.id.day)
-                        findNavController().navigate(
-                            MainScreenFragmentDirections.navigateToAddInfo(
-                                textView?.text.toString()
+                        viewModel.forecastData.observe(viewLifecycleOwner) { data ->
+                            val forecastWithUniqueDays = data.list.distinctBy {
+                                it.date.removeRange(10, 19).removeRange(0, 5)
+                            }
+                            val listOfDays: MutableList<String> = mutableListOf()
+                            for (day in forecastWithUniqueDays) {
+                                listOfDays.add(day.date.removeRange(10, 19).removeRange(0, 5))
+                            }
+                            val arrayList: Array<String> = listOfDays.toTypedArray()
+                            val textView = view?.findViewById<TextView>(R.id.day)
+                            findNavController().navigate(
+                                MainScreenFragmentDirections.navigateToViewPager(
+                                    textView?.text.toString(),
+                                    arrayList
+                                )
                             )
-                        )
+                        }
                     }
                 }
             )

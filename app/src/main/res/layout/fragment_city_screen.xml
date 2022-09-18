@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.weatherapp.ui.city.CityScreenViewModel" />
@@ -14,7 +15,18 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".ui.city.CityScreenFragment">
-
+        <ImageButton
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:srcCompat="@drawable/ic_cancel"
+            android:layout_gravity="start"
+            style="@style/icon"
+            android:onClick="@{()->viewModel.onBack()}"/>
         <fragment
             android:id="@+id/autocomplete_fragment"
             android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
@@ -33,16 +45,16 @@
             android:text="@string/use_your_location"
             app:cornerRadius="16dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerCity"
+        <GridView
+            android:id="@+id/grid_view_city"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:orientation="vertical"
-            android:visibility="visible"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:horizontalSpacing="6dp"
+            android:numColumns="2"
+            android:verticalSpacing="6dp"
             tools:listitem="@layout/city" />
 
 

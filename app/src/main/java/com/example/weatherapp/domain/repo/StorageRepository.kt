@@ -13,8 +13,8 @@ interface StorageRepository {
     fun getUnits(): Units
     fun saveCoordinates(lat: Double, lon: Double)
     fun getCoordinates(): Pair<Double, Double>
-    fun savePlaceId(placeId: String)
-    fun getPlaceId(): String
     fun saveLanguage(lang: Language)
     fun getLanguage(): Language
+    fun savePhotoId(photoId: String)
+    fun getPhotoId(): String
 }

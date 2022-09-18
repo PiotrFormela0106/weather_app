@@ -8,5 +8,5 @@ data class City(
     @PrimaryKey(autoGenerate = true)
     val cityId: Int = 0,
     val city: String,
-    val placeId: String
+    val photoId: String
 )

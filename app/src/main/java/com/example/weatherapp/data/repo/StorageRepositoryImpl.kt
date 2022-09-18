@@ -16,8 +16,8 @@ private const val EXTRA_LOCATION_METHOD = "location_method"
 private const val EXTRA_UNITS = "units"
 private const val EXTRA_LAT = "lat"
 private const val EXTRA_LON = "lon"
-private const val EXTRA_PLACE_ID = "place_id"
 private const val EXTRA_LANGUAGE = "language"
+private const val EXTRA_PHOTO_ID = "photo_id"
 
 class StorageRepositoryImpl @Inject constructor(context: Context) :
     StorageRepository {
@@ -65,19 +65,19 @@ class StorageRepositoryImpl @Inject constructor(context: Context) :
         )
     }
 
-    override fun savePlaceId(placeId: String) {
-        prefs.edit().putString(EXTRA_PLACE_ID, placeId).apply()
-    }
-
-    override fun getPlaceId(): String {
-        return prefs.getString(EXTRA_PLACE_ID, "").orEmpty()
-    }
-
     override fun saveLanguage(lang: Language) {
         prefs.edit().putString(EXTRA_LANGUAGE, lang.toData()).apply()
     }
 
     override fun getLanguage(): Language {
         return prefs.getString(EXTRA_LANGUAGE, "").orEmpty().toLanguage()
+    }
+
+    override fun savePhotoId(photoId: String) {
+        prefs.edit().putString(EXTRA_PHOTO_ID, photoId).apply()
+    }
+
+    override fun getPhotoId(): String {
+        return prefs.getString(EXTRA_PHOTO_ID, "").orEmpty()
     }
 }

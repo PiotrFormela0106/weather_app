@@ -1,6 +1,5 @@
 package com.example.weatherapp.ui.main
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,8 +8,12 @@ import com.example.weatherapp.domain.models.ForecastItem
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.squareup.picasso.Picasso
 import java.math.RoundingMode
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.TimeZone
+import javax.inject.Inject
 
-class ForecastAdapter(private val forecast: ForecastWeather) :
+class ForecastAdapter @Inject constructor(private val forecast: ForecastWeather) :
     RecyclerView.Adapter<MyViewHolder>() {
     private lateinit var binding: ForecastDayBinding
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -33,18 +36,15 @@ class ForecastAdapter(private val forecast: ForecastWeather) :
 }
 
 class MyViewHolder(private val binding: ForecastDayBinding) :
-
     RecyclerView.ViewHolder(binding.root) {
     fun bind(day: ForecastItem) {
-        try {
-            var date = day.date.removeRange(0, 5)
-            date = date.removeRange(11, 14)
-            binding.day.text = date
-        } catch (e: IndexOutOfBoundsException) {
-            Log.e("Exception", e.toString())
-        }
+        val sdf = SimpleDateFormat("dd-MMM HH:mm")
+        sdf.timeZone = TimeZone.getTimeZone("GMT")
+        val dateAndTimeFormat2 = sdf.format(Date(day.dateLong * 1000))
+        binding.day.text = dateAndTimeFormat2
         binding.forecast = day
-        binding.temp.text = day.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt().toString()
+        val temperature = "${day.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt()}\u00B0"
+        binding.temp.text = temperature
         binding.executePendingBindings()
         Picasso.get()
             .load("https://openweathermap.org/img/wn/${day.weather.get(0).icon}@2x.png")

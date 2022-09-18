@@ -8,6 +8,8 @@ import com.example.weatherapp.R
 import com.example.weatherapp.domain.models.Language
 import com.example.weatherapp.domain.models.Units
 import com.example.weatherapp.domain.repo.StorageRepository
+import com.example.weatherapp.ui.core.UiEvents
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
@@ -19,6 +21,8 @@ class SettingsViewModel @Inject constructor(
     val language = MutableLiveData(storageRepository.getLanguage().toId())
     val metric = Transformations.map(selectionUnits) { it == Units.Metric }
     val notMetric = Transformations.map(selectionUnits) { it == Units.NotMetric }
+    private val uiEvents = UiEvents<Event>()
+    val events: Observable<Event> = uiEvents.stream()
 
     fun switchUnitsClick() {
         val initialValue = selectionUnits.value ?: Units.Metric
@@ -45,11 +49,19 @@ class SettingsViewModel @Inject constructor(
             Language.DE -> R.id.de
         }
     }
-}
 
-private fun Units.switchUnits(): Units {
-    return when (this) {
-        Units.Metric -> Units.NotMetric
-        Units.NotMetric -> Units.Metric
+    private fun Units.switchUnits(): Units {
+        return when (this) {
+            Units.Metric -> Units.NotMetric
+            Units.NotMetric -> Units.Metric
+        }
+    }
+
+    fun onCancelClick() {
+        Event.OnCancelClick.let { uiEvents.post(it) }
+    }
+
+    sealed class Event {
+        object OnCancelClick : Event()
     }
 }

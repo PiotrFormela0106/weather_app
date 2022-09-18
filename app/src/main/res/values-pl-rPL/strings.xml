@@ -3,7 +3,7 @@
     <string name="app_name">Weather App</string>
     <string name="air_quality_index">Indeks jakości powietrza</string>
     <string name="use_your_location">UŻYJ LOKALIZACJI</string>
-    <string name="metric">Stopnie Celsjusza (*C)</string>
+    <string name="metric">Stopnie Celsjusza (°C)</string>
     <string name="pl">Polski</string>
     <string name="eng">Angielski</string>
     <string name="settings">Ustawienia</string>
@@ -24,5 +24,7 @@
     <string name="not_metric">Kelvin (K)</string>
     <string name="de">Niemiecki</string>
     <string name="confirm">Zatwierdź zmiany</string>
+    <string name="celsius">°C</string>
+    <string name="kelvin">K</string>
 
 </resources>
