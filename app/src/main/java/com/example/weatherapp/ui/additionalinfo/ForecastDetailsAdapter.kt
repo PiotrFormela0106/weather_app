@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherapp.R
 import com.example.weatherapp.databinding.ForecastDayDetailedBinding
 import com.example.weatherapp.domain.models.ForecastItem
 import com.squareup.picasso.Picasso
@@ -36,10 +35,10 @@ class DetailsViewHolder(private val binding: ForecastDayDetailedBinding, val con
     RecyclerView.ViewHolder(binding.root) {
     fun bind(day: ForecastItem) {
         val resources = context.resources
-        val temperature = "${day.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt()}"
-        val humidity = "${resources.getString(R.string.humidity)}: ${day.main.humidity} %"
-        val windSpeed = "${resources.getString(R.string.wind)}: ${day.wind.speed} m/s"
-        val pressure = "${resources.getString(R.string.pressure)}: ${day.main.pressure} hPa"
+        val temperature = "${day.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt()}\u00B0"
+        val humidity = "${day.main.humidity} %"
+        val windSpeed = "${day.wind.speed} m/s"
+        val pressure = "${day.main.pressure} hPa"
 
         var date = day.date.removeRange(0, 11)
         date = date.removeRange(5, 8)

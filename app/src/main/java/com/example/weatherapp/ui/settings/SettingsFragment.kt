@@ -15,6 +15,7 @@ import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.databinding.FragmentSettingsBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.android.support.AndroidSupportInjection
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.util.Locale
 import javax.inject.Inject
 
@@ -43,6 +44,10 @@ class SettingsFragment : BottomSheetDialogFragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
+        viewModel.events
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { handleEvent(it) }
+
         return binding.root
     }
 
@@ -59,5 +64,13 @@ class SettingsFragment : BottomSheetDialogFragment() {
         configuration.locale = Locale(lang)
         resources.updateConfiguration(configuration, metrics)
         onConfigurationChanged(configuration)
+    }
+
+    private fun handleEvent(event: SettingsViewModel.Event) {
+        when (event) {
+            is SettingsViewModel.Event.OnCancelClick -> {
+                findNavController().navigate(SettingsFragmentDirections.navigateToMainScreen())
+            }
+        }
     }
 }

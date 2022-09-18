@@ -11,6 +11,8 @@ import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.weatherapp.R
+import com.example.weatherapp.data.mappers.toData
+import com.example.weatherapp.data.mappers.toSymbol
 import com.example.weatherapp.domain.Error
 import com.example.weatherapp.domain.Result
 import com.example.weatherapp.domain.models.AirPollution
@@ -71,9 +73,9 @@ class MainScreenViewModel @Inject constructor(
         val nh3: LiveData<String> = Transformations.map(pollution) { "${it.components.nh3}" }
 
         val sunrise: LiveData<String> =
-            Transformations.map(sunriseFormat) { "${resources.getString(R.string.sunrise)}: $it" }
+            Transformations.map(sunriseFormat) { "${resources.getString(R.string.sunrise)}: ${it.removeRange(5,8)}" }
         val sunset: LiveData<String> =
-            Transformations.map(sunsetFormat) { "${resources.getString(R.string.sunset)}: $it" }
+            Transformations.map(sunsetFormat) { "${resources.getString(R.string.sunset)}: ${it.removeRange(5,8)}" }
         val wind: LiveData<String> =
             Transformations.map(weatherData) { "${resources.getString(R.string.wind)}: ${it.wind.speed} m/s" }
         val humidity: LiveData<String> =
@@ -83,6 +85,7 @@ class MainScreenViewModel @Inject constructor(
     }
 
     init {
+        setLang(storageRepository.getLanguage().toData())
         if (storageRepository.getLocationMethod() == LocationMethod.City)
             fetchData()
     }
@@ -92,6 +95,7 @@ class MainScreenViewModel @Inject constructor(
         val currentDate = sdf.format(Date())
         date.postValue(currentDate.toString())
         status.postValue(Status.Loading)
+        setLang(storageRepository.getLanguage().toData())
         disposable += Single.zip(
             weatherRepository.getCurrentWeather(),
             weatherRepository.getForecastWeather(),
@@ -142,7 +146,7 @@ class MainScreenViewModel @Inject constructor(
         storageRepository.saveCity(data.cityName)
         storageRepository.saveCoordinates(data.coordinates.lat, data.coordinates.lon)
         roundedTemperature.postValue(
-            data.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt().toString()
+            data.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt().toString() + storageRepository.getUnits().toSymbol()
         )
 
         @SuppressLint("SimpleDateFormat")
@@ -168,6 +172,14 @@ class MainScreenViewModel @Inject constructor(
 
     fun onSettingsClick() {
         Event.OnSettingsClick.let { uiEvents.post(it) }
+    }
+
+    private fun setLang(lang: String) {
+        val resources = resources
+        val metrics = resources.displayMetrics
+        val configuration = resources.configuration
+        configuration.locale = Locale(lang)
+        resources.updateConfiguration(configuration, metrics)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)

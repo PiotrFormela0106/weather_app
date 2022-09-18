@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.weatherapp.domain.Result
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.repo.WeatherRepository
+import com.example.weatherapp.ui.core.UiEvents
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -17,6 +18,8 @@ class AdditionalInfoScreenViewModel @Inject constructor(
 ) : ViewModel(), LifecycleObserver {
     val forecast = MutableLiveData<ForecastWeather?>()
     var dayValue = MutableLiveData<String>()
+    private val uiEvents = UiEvents<Event>()
+    val events = uiEvents.stream()
 
     init {
         fetchData()
@@ -38,5 +41,13 @@ class AdditionalInfoScreenViewModel @Inject constructor(
                     }
                 }
             )
+    }
+
+    fun onBack() {
+        Event.OnBack.let { uiEvents.post(it) }
+    }
+
+    sealed class Event {
+        object OnBack : Event()
     }
 }

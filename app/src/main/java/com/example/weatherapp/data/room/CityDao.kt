@@ -17,6 +17,6 @@ interface CityDao {
     fun getAllCities(): Single<List<City>>
     @Query("DELETE FROM city_table")
     fun deleteAllCities(): Completable
-    @Query("SELECT placeId FROM city_table WHERE city = :cityName")
-    fun getPlaceId(cityName: String): Single<String>
+    @Query("SELECT photoId FROM city_table WHERE city = :cityName")
+    fun getPhotoId(cityName: String): Single<String>
 }

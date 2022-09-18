@@ -21,8 +21,8 @@ class CityRepositoryImpl @Inject constructor(context: Context) : CityRepository 
         cityDao = database.cityDao()
     }
 
-    override fun insertCity(cityName: String, placeId: String): Completable {
-        return cityDao.insert(City(city = cityName, placeId = placeId))
+    override fun insertCity(cityName: String, photoId: String): Completable {
+        return cityDao.insert(City(city = cityName, photoId = photoId))
     }
 
     override fun deleteCity(city: City): Completable {
@@ -38,14 +38,9 @@ class CityRepositoryImpl @Inject constructor(context: Context) : CityRepository 
         return cityDao.deleteAllCities()
     }
 
-    override fun getCurrentCity(): Single<Result<City>> {
-        // todo add real implementation
-        return Single.just(Result.withValue(City(city = "Krakow", placeId = "placeId")))
-    }
-
-    override fun getPlaceId(city: String): Single<Result<String>> {
-        return cityDao.getPlaceId(city)
-            .compose(mapPlaceId())
+    override fun getPhotoId(city: String): Single<Result<String>> {
+        return cityDao.getPhotoId(city)
+            .compose(mapPhotoId())
     }
 
     private fun mapCities():
@@ -57,7 +52,7 @@ class CityRepositoryImpl @Inject constructor(context: Context) : CityRepository 
         }
     }
 
-    private fun mapPlaceId():
+    private fun mapPhotoId():
         SingleTransformer<String, Result<String>> {
         return SingleTransformer { upstream ->
             upstream

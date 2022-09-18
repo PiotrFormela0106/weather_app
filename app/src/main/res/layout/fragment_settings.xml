@@ -18,6 +18,18 @@
             android:orientation="vertical"
             tools:context=".ui.settings.SettingsFragment">
 
+            <ImageButton
+                android:id="@+id/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:srcCompat="@drawable/ic_cancel"
+                android:layout_gravity="end"
+                style="@style/icon"
+                android:onClick="@{()->viewModel.onCancelClick()}"/>
+
             <RadioGroup
                 android:id="@+id/radio_group"
                 android:layout_width="match_parent"
@@ -58,14 +70,14 @@
                 android:layout_marginTop="8dp"
                 android:checkedButton="@={viewModel.language}"
                 android:gravity="center"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <RadioButton
                     android:id="@+id/pl"
-                    android:layout_width="wrap_content"
+                    android:layout_width="124dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:onClick="@{()->viewModel.switchLanguageClick()}"
@@ -74,9 +86,8 @@
 
                 <RadioButton
                     android:id="@+id/eng"
-                    android:layout_width="wrap_content"
+                    android:layout_width="124dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:gravity="center"
                     android:onClick="@{()->viewModel.switchLanguageClick()}"
                     android:text="@string/eng"
@@ -84,9 +95,8 @@
 
                 <RadioButton
                     android:id="@+id/de"
-                    android:layout_width="wrap_content"
+                    android:layout_width="124dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:gravity="center"
                     android:onClick="@{()->viewModel.switchLanguageClick()}"
                     android:text="@string/de"
