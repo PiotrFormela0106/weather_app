@@ -15,18 +15,38 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".ui.city.CityScreenFragment">
-        <ImageButton
-            android:id="@+id/cancel"
-            android:layout_width="wrap_content"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:srcCompat="@drawable/ic_cancel"
-            android:layout_gravity="start"
-            style="@style/icon"
-            android:onClick="@{()->viewModel.onBack()}"/>
+            android:layout_marginTop="8dp">
+
+            <ImageButton
+                android:id="@+id/cancel"
+                style="@style/icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{()->viewModel.onBack()}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_cancel" />
+
+            <ImageButton
+                android:id="@+id/bin"
+                style="@style/icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{()->viewModel.deleteAllCities()}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_bin" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <fragment
             android:id="@+id/autocomplete_fragment"
             android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
@@ -56,7 +76,6 @@
             android:numColumns="2"
             android:verticalSpacing="6dp"
             tools:listitem="@layout/city" />
-
 
     </LinearLayout>
 </layout>

@@ -11,10 +11,8 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -27,7 +25,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.R
-import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.databinding.FragmentMainScreenBinding
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.models.LocationMethod
@@ -56,7 +53,6 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setLang(viewModel.storageRepository.getLanguage().toData())
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_main_screen, container, false
         )
@@ -81,11 +77,13 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
         if (viewModel.storageRepository.getLocationMethod() == LocationMethod.Location) {
             checkPermission()
         } else {
-            Picasso.get()
-                .load(viewModel.storageRepository.getPhotoId())
-                .into(binding.cityImage)
+            if (viewModel.storageRepository.getPhotoId().isNotEmpty()) {
+                Picasso.get()
+                    .load(viewModel.storageRepository.getPhotoId())
+                    .into(binding.cityImage)
+            }
         }
-        getDetailedForecast()
+        setupForecastRecyclerViewOnClick()
 
         return binding.root
     }
@@ -175,7 +173,7 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
         }
     }
 
-    private fun getDetailedForecast() {
+    private fun setupForecastRecyclerViewOnClick() {
         val recyclerView = binding.recyclerForecast
         binding.recyclerForecast.addOnItemTouchListener(
             RecyclerItemClickListener(
@@ -185,11 +183,19 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
                     override fun onItemClick(view: View?, position: Int) {
                         viewModel.forecastData.observe(viewLifecycleOwner) { data ->
                             val forecastWithUniqueDays = data.list.distinctBy {
-                                it.date.removeRange(10, 19).removeRange(0, 5)
+                                try {
+                                    it.date.removeRange(10, 19).removeRange(0, 5)
+                                } catch (e: IndexOutOfBoundsException) {
+                                    Log.e("error", e.toString())
+                                }
                             }
                             val listOfDays: MutableList<String> = mutableListOf()
                             for (day in forecastWithUniqueDays) {
-                                listOfDays.add(day.date.removeRange(10, 19).removeRange(0, 5))
+                                try {
+                                    listOfDays.add(day.date.removeRange(10, 19).removeRange(0, 5))
+                                } catch (e: IndexOutOfBoundsException) {
+                                    Log.e("error", e.toString())
+                                }
                             }
                             val arrayList: Array<String> = listOfDays.toTypedArray()
                             val textView = view?.findViewById<TextView>(R.id.day)
@@ -212,41 +218,25 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
         binding.recyclerForecast.adapter = ForecastAdapter(forecast)
     }
 
-    private fun setLang(lang: String) {
-        val resources = resources
-        val metrics = resources.displayMetrics
-        val configuration = resources.configuration
-        configuration.locale = Locale(lang)
-        resources.updateConfiguration(configuration, metrics)
-        onConfigurationChanged(configuration)
-    }
-
     private fun handleEvent(event: MainScreenViewModel.Event) {
         when (event) {
             is MainScreenViewModel.Event.OnCitiesClick -> {
-                if (findNavController().currentDestination?.id == R.id.mainScreenFragment)
-                    findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
+                goToLocationScreen()
             }
             is MainScreenViewModel.Event.OnSettingsClick -> {
-                if (findNavController().currentDestination?.id == R.id.mainScreenFragment)
-                    findNavController().navigate(MainScreenFragmentDirections.navigateToSettings())
+                openSettingsSheet()
             }
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.nav_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
+    private fun openSettingsSheet() {
+        if (findNavController().currentDestination?.id == R.id.mainScreenFragment)
+            findNavController().navigate(MainScreenFragmentDirections.navigateToSettings())
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.settings -> {
-                findNavController().navigate(MainScreenFragmentDirections.navigateToSettings())
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
+    private fun goToLocationScreen() {
+        if (findNavController().currentDestination?.id == R.id.mainScreenFragment)
+            findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
     }
 
     companion object {

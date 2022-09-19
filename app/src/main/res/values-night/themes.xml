@@ -54,4 +54,10 @@
     <style name="icon" parent="Widget.AppCompat.ImageButton">
         <item name="tint">@color/white</item>
     </style>
+    <style name="Theme.WeatherApp.SplashScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_image</item>
+        <item name="android:statusBarColor">@color/lightX_blue</item>
+        <item name="exp_backgroundColor">@color/light_black</item>
+        <item name="colorSecondary">@color/yellow</item>
+    </style>
 </resources>

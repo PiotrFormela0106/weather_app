@@ -10,8 +10,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.example.weatherapp.R
-import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.data.mappers.toSymbol
 import com.example.weatherapp.domain.Error
 import com.example.weatherapp.domain.Result
@@ -44,19 +42,27 @@ class MainScreenViewModel @Inject constructor(
 
     private val disposable = CompositeDisposable()
     private val uiEvents = UiEvents<Event>()
+    val events: Observable<Event> = uiEvents.stream()
+
+    val status = MutableLiveData(Status.Loading)
+    val weatherData = MutableLiveData<CurrentWeather>()
+    val forecastData = MutableLiveData<ForecastWeather>()
+    val airPollutionData = MutableLiveData<AirPollution>()
+
     private val sunriseFormat = MutableLiveData<String>()
     private val sunsetFormat = MutableLiveData<String>()
     private val iconId = MutableLiveData<String>()
     val imageUrl = MutableLiveData("https://openweathermap.org/img/wn/03d@2x.png")
-    val status = MutableLiveData(Status.Loading)
-    val weatherData = MutableLiveData<CurrentWeather>()
-    val forecastData = MutableLiveData<ForecastWeather>()
     val roundedTemperature = MutableLiveData<String>()
     val cityName = MutableLiveData<String>()
-    val events: Observable<Event> = uiEvents.stream()
-    val airPollutionData = MutableLiveData<AirPollution>()
     val locationMethod = MutableLiveData(storageRepository.getLocationMethod())
     val date = MutableLiveData<String>()
+
+    init {
+        setLang(Locale.getDefault().country)
+        if (storageRepository.getLocationMethod() == LocationMethod.City)
+            fetchData()
+    }
 
     enum class Status { Loading, Success, Error }
     inner class ViewState {
@@ -73,21 +79,15 @@ class MainScreenViewModel @Inject constructor(
         val nh3: LiveData<String> = Transformations.map(pollution) { "${it.components.nh3}" }
 
         val sunrise: LiveData<String> =
-            Transformations.map(sunriseFormat) { "${resources.getString(R.string.sunrise)}: ${it.removeRange(5,8)}" }
+            Transformations.map(sunriseFormat) { it.removeRange(5, 8) }
         val sunset: LiveData<String> =
-            Transformations.map(sunsetFormat) { "${resources.getString(R.string.sunset)}: ${it.removeRange(5,8)}" }
+            Transformations.map(sunsetFormat) { it.removeRange(5, 8) }
         val wind: LiveData<String> =
-            Transformations.map(weatherData) { "${resources.getString(R.string.wind)}: ${it.wind.speed} m/s" }
+            Transformations.map(weatherData) { "${it.wind.speed} m/s" }
         val humidity: LiveData<String> =
-            Transformations.map(weatherData) { "${resources.getString(R.string.humidity)}: ${it.main.humidity} %" }
+            Transformations.map(weatherData) { "${it.main.humidity} %" }
         val pressure: LiveData<String> =
-            Transformations.map(weatherData) { "${resources.getString(R.string.pressure)}: ${it.main.pressure} hPA" }
-    }
-
-    init {
-        setLang(storageRepository.getLanguage().toData())
-        if (storageRepository.getLocationMethod() == LocationMethod.City)
-            fetchData()
+            Transformations.map(weatherData) { "${it.main.pressure} hPA" }
     }
 
     fun fetchData() {
@@ -95,7 +95,6 @@ class MainScreenViewModel @Inject constructor(
         val currentDate = sdf.format(Date())
         date.postValue(currentDate.toString())
         status.postValue(Status.Loading)
-        setLang(storageRepository.getLanguage().toData())
         disposable += Single.zip(
             weatherRepository.getCurrentWeather(),
             weatherRepository.getForecastWeather(),

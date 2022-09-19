@@ -1,6 +1,7 @@
 package com.example.weatherapp.ui.additionalinfo
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -34,15 +35,19 @@ class ForecastDetailsAdapter(private val forecast: List<ForecastItem>, val conte
 class DetailsViewHolder(private val binding: ForecastDayDetailedBinding, val context: Context) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(day: ForecastItem) {
-        val resources = context.resources
-        val temperature = "${day.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt()}\u00B0"
+        val temperature =
+            "${day.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt()}\u00B0"
         val humidity = "${day.main.humidity} %"
         val windSpeed = "${day.wind.speed} m/s"
         val pressure = "${day.main.pressure} hPa"
 
-        var date = day.date.removeRange(0, 11)
-        date = date.removeRange(5, 8)
-        binding.hour.text = date
+        try {
+            var date = day.date.removeRange(0, 11)
+            date = date.removeRange(5, 8)
+            binding.hour.text = date
+        } catch (e: IndexOutOfBoundsException) {
+            Log.e("Error", e.toString())
+        }
         binding.tempDetailed.text = temperature
         binding.humidity.text = humidity
         binding.windSpeed.text = windSpeed

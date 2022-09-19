@@ -28,10 +28,13 @@ class CityScreenViewModel @Inject constructor(
     val events = uiEvents.stream()
     val allCities = MutableLiveData<List<City>>()
     val cityName = MutableLiveData<String>()
-    val placeId = MutableLiveData<String>()
     val photoId = MutableLiveData<String>()
 
-    private fun checkCity(city: String, photoId: String) {
+    init {
+        fetchCitiesList()
+    }
+
+    private fun checkCityWeatherData(city: String, photoId: String) {
         val currentCity = storageRepository.getCity()
         storageRepository.saveCity(city)
         weatherRepository.getCurrentWeather()
@@ -42,17 +45,18 @@ class CityScreenViewModel @Inject constructor(
                     is Result.OnSuccess -> {
                         val cityName = it.data.cityName
                         if (allCities.value.orEmpty().any { it.city == cityName }.not()) {
-                            insertCity(city = it.data.cityName, photoId)
+                            saveCityLocallyInCitiesList(city = it.data.cityName, photoId)
                             storageRepository.saveCity(it.data.cityName)
                             storageRepository.savePhotoId(photoId)
-                            Event.OnAddCity.let { uiEvents.post(it) }
+                            uiEvents.post(Event.OnAddCity)
                         } else {
-                            fetchCities()
+                            fetchCitiesList()
                             val duplicate = allCities.value.orEmpty().find { it.city == cityName }
-                            deleteCity(duplicate!!)
+                            duplicate?.let { it_ -> deleteCity(it_) }
                             storageRepository.saveCity(it.data.cityName)
-                            insertCity(city = it.data.cityName, photoId)
-                            Event.OnAddCity.let { uiEvents.post(it) }
+                            storageRepository.savePhotoId(photoId)
+                            saveCityLocallyInCitiesList(city = it.data.cityName, photoId)
+                            uiEvents.post(Event.OnAddCity)
                         }
                     }
                     is Result.OnError -> {
@@ -63,14 +67,14 @@ class CityScreenViewModel @Inject constructor(
             }
     }
 
-    private fun insertCity(city: String, photoId: String) {
+    private fun saveCityLocallyInCitiesList(city: String, photoId: String) {
         cityRepository.insertCity(city, photoId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onComplete = {
                     Log.i("inserted", "$city inserted!")
-                    fetchCities()
+                    fetchCitiesList()
                 }
             )
     }
@@ -81,12 +85,12 @@ class CityScreenViewModel @Inject constructor(
             .subscribeBy(
                 onComplete = {
                     Log.i("removed", "$city removed!")
-                    fetchCities()
+                    fetchCitiesList()
                 }
             )
     }
 
-    fun fetchCities() {
+    fun fetchCitiesList() {
         cityRepository.fetchCities()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -103,20 +107,20 @@ class CityScreenViewModel @Inject constructor(
     }
 
     fun deleteAllCities() {
-        fetchCities()
+        fetchCitiesList()
         cityRepository.deleteAllCities()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onComplete = {
                     Log.i("status of data", "Data removed!")
-                    fetchCities()
+                    fetchCitiesList()
                 }
             )
     }
 
     fun getPhotoId(city: String) {
-        fetchCities()
+        fetchCitiesList()
         cityRepository.getPhotoId(city)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -133,7 +137,6 @@ class CityScreenViewModel @Inject constructor(
     }
 
     private fun handleSuccess(data: String) {
-        placeId.value = data
         photoId.value = data
     }
 
@@ -149,7 +152,7 @@ class CityScreenViewModel @Inject constructor(
 
     fun addCity(place: Place, photoId: String) {
         storageRepository.saveLocationMethod(LocationMethod.City)
-        checkCity(city = place.name.orEmpty(), photoId = photoId)
+        checkCityWeatherData(city = place.name.orEmpty(), photoId = photoId)
     }
 
     fun useLocation() {
