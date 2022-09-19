@@ -44,17 +44,19 @@ class MainScreenViewModel @Inject constructor(
 
     private val disposable = CompositeDisposable()
     private val uiEvents = UiEvents<Event>()
+    val events: Observable<Event> = uiEvents.stream()
+
+    val status = MutableLiveData(Status.Loading)
+    val weatherData = MutableLiveData<CurrentWeather>()
+    val forecastData = MutableLiveData<ForecastWeather>()
+    val airPollutionData = MutableLiveData<AirPollution>()
+
     private val sunriseFormat = MutableLiveData<String>()
     private val sunsetFormat = MutableLiveData<String>()
     private val iconId = MutableLiveData<String>()
     val imageUrl = MutableLiveData("https://openweathermap.org/img/wn/03d@2x.png")
-    val status = MutableLiveData(Status.Loading)
-    val weatherData = MutableLiveData<CurrentWeather>()
-    val forecastData = MutableLiveData<ForecastWeather>()
     val roundedTemperature = MutableLiveData<String>()
     val cityName = MutableLiveData<String>()
-    val events: Observable<Event> = uiEvents.stream()
-    val airPollutionData = MutableLiveData<AirPollution>()
     val locationMethod = MutableLiveData(storageRepository.getLocationMethod())
     val date = MutableLiveData<String>()
 
@@ -96,6 +98,7 @@ class MainScreenViewModel @Inject constructor(
         date.postValue(currentDate.toString())
         status.postValue(Status.Loading)
         setLang(storageRepository.getLanguage().toData())
+
         disposable += Single.zip(
             weatherRepository.getCurrentWeather(),
             weatherRepository.getForecastWeather(),

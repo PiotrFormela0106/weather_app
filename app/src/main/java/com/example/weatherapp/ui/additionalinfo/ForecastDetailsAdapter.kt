@@ -40,8 +40,8 @@ class DetailsViewHolder(private val binding: ForecastDayDetailedBinding, val con
         val windSpeed = "${day.wind.speed} m/s"
         val pressure = "${day.main.pressure} hPa"
 
-        var date = day.date.removeRange(0, 11)
-        date = date.removeRange(5, 8)
+        var date = day.date.removeRange(0, 11)//  IndexOutOfBoundException
+        date = date.removeRange(5, 8)//  IndexOutOfBoundException
         binding.hour.text = date
         binding.tempDetailed.text = temperature
         binding.humidity.text = humidity

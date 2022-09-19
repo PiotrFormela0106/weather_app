@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.12" />
         <entry key="app/src/main/res/drawable/air_pollution_bground.xml" value="0.147" />
         <entry key="app/src/main/res/drawable/background_color.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/current_weather_info_background.xml" value="0.1105" />
@@ -12,6 +13,8 @@
         <entry key="app/src/main/res/drawable/ic_bin.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_cancel.xml" value="0.1355" />
         <entry key="app/src/main/res/drawable/ic_city.xml" value="0.1575" />
+        <entry key="app/src/main/res/drawable/ic_cloud.xml" value="0.12" />
+        <entry key="app/src/main/res/drawable/ic_humidity.xml" value="0.12" />
         <entry key="app/src/main/res/drawable/ic_location.xml" value="0.2005" />
         <entry key="app/src/main/res/drawable/image_view_border.xml" value="0.1895" />
         <entry key="app/src/main/res/drawable/toolbar_bg.xml" value="0.1795" />

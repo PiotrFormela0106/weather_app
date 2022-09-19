@@ -57,7 +57,7 @@ class CityScreenFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.fetchCities()
+        viewModel.fetchCities()//move this line to viewModel
         viewModel.allCities.observe(viewLifecycleOwner) { data ->
             if (data.isNotEmpty()) {
                 val reversedList = data.reversed().toMutableList()
@@ -67,7 +67,8 @@ class CityScreenFragment : DaggerFragment() {
             }
             binding.gridViewCity.onItemClickListener =
                 AdapterView.OnItemClickListener { _, view, _, _ ->
-
+//move this logic to viewModel
+                    //fragment should work only with lifecycle and navigation
                     viewModel.storageRepository.saveLocationMethod(LocationMethod.City)
                     val textView = view?.findViewById<TextView>(R.id.cityName)
                     viewModel.storageRepository.saveCity(textView?.text.toString())
@@ -80,6 +81,7 @@ class CityScreenFragment : DaggerFragment() {
         }
     }
 
+    //rename fun setupAutocompleteSearchFragment()
     private fun searchCity() {
         if (!Places.isInitialized()) {
             Places.initialize(requireContext(), PLACES_API_KEY)

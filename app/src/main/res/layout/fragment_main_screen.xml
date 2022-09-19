@@ -82,6 +82,9 @@
                 android:layout_margin="8dp"
                 android:visibility="@{viewModel.locationMethod}" />
 
+<!--ProgressBar should be for the whole screen.-->
+<!--            When progress bar is visible other views should be gone-->
+<!--            You can show only top buttons, cityName and date and time when it's in progress-->
             <ProgressBar
                 android:id="@+id/progress"
                 style="?android:attr/progressBarStyleLarge"

@@ -38,7 +38,7 @@ class ForecastAdapter @Inject constructor(private val forecast: ForecastWeather)
 class MyViewHolder(private val binding: ForecastDayBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(day: ForecastItem) {
-        val sdf = SimpleDateFormat("dd-MMM HH:mm")
+        val sdf = SimpleDateFormat("dd MMM HH:mm")
         sdf.timeZone = TimeZone.getTimeZone("GMT")
         val dateAndTimeFormat2 = sdf.format(Date(day.dateLong * 1000))
         binding.day.text = dateAndTimeFormat2
@@ -46,6 +46,8 @@ class MyViewHolder(private val binding: ForecastDayBinding) :
         val temperature = "${day.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt()}\u00B0"
         binding.temp.text = temperature
         binding.executePendingBindings()
+        // add check that day.weather.isNotEmpty
+        //because of possible IndexOutOfBoundException here day.weather.get(0)
         Picasso.get()
             .load("https://openweathermap.org/img/wn/${day.weather.get(0).icon}@2x.png")
             .into(binding.imageView2)

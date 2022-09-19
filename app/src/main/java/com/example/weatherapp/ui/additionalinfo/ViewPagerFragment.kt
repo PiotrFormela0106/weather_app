@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentViewPagerBinding
 
+//Please rename to ForecastDetailsFragment and matching viewModel and args
 class ViewPagerFragment : Fragment() {
     private lateinit var binding: FragmentViewPagerBinding
     private val args: ViewPagerFragmentArgs by navArgs()
@@ -23,17 +24,17 @@ class ViewPagerFragment : Fragment() {
             inflater, R.layout.fragment_view_pager, container, false
         )
         val days = args.days
-        val day = args.day.removeRange(2, 12)
-        val item = days.find { it.contains(day) }
+        val day = args.day.removeRange(2, 12)// what are these magical numbers? IndexOutOfBoundException
+        val item = days.find { it.contains(day) }//can be null
         val index = days.indexOf(item)
 
         val fragmentList = arrayListOf(
-            AdditionalInfoScreenFragment(days[0]),
-            AdditionalInfoScreenFragment(days[1]),
-            AdditionalInfoScreenFragment(days[2]),
-            AdditionalInfoScreenFragment(days[3]),
-            AdditionalInfoScreenFragment(days[4]),
-            AdditionalInfoScreenFragment(days[5])
+            AdditionalInfoScreenFragment(days[0]),//  IndexOutOfBoundException
+            AdditionalInfoScreenFragment(days[1]),//  IndexOutOfBoundException
+            AdditionalInfoScreenFragment(days[2]),//  IndexOutOfBoundException
+            AdditionalInfoScreenFragment(days[3]),//  IndexOutOfBoundException
+            AdditionalInfoScreenFragment(days[4]),//  IndexOutOfBoundException
+            AdditionalInfoScreenFragment(days[5])//  IndexOutOfBoundException
         )
 
         val adapter = ViewPagerAdapter(fragmentList, requireActivity().supportFragmentManager, lifecycle)

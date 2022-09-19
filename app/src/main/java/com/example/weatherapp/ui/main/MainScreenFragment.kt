@@ -56,7 +56,13 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // We shouldn't change language programmatically. It should work automatically with
+        // the language from global settings of your phone.
+        // But on the app starts we really need to know language to setup lang in API call.
+        // So indeed it should be the first step.
+        // But this should be triggered in viewModel. But you do it twice, in fragment and in viewmodel
         setLang(viewModel.storageRepository.getLanguage().toData())
+
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_main_screen, container, false
         )
@@ -81,6 +87,7 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
         if (viewModel.storageRepository.getLocationMethod() == LocationMethod.Location) {
             checkPermission()
         } else {
+            //check that viewModel.storageRepository.getPhotoId()!=null and is not empty
             Picasso.get()
                 .load(viewModel.storageRepository.getPhotoId())
                 .into(binding.cityImage)
@@ -175,6 +182,8 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
         }
     }
 
+    // This function has wrong name.
+    // It setups recycler view. Please rename function.
     private fun getDetailedForecast() {
         val recyclerView = binding.recyclerForecast
         binding.recyclerForecast.addOnItemTouchListener(
@@ -184,6 +193,11 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(view: View?, position: Int) {
                         viewModel.forecastData.observe(viewLifecycleOwner) { data ->
+
+                            //I don't understand these calculations. Please explain.
+                            //But anyway
+                            //every "removeRange" can be a place of IndexOutOfBoundsException.
+                            // Please handle possible exception.
                             val forecastWithUniqueDays = data.list.distinctBy {
                                 it.date.removeRange(10, 19).removeRange(0, 5)
                             }
@@ -223,23 +237,23 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
 
     private fun handleEvent(event: MainScreenViewModel.Event) {
         when (event) {
-            is MainScreenViewModel.Event.OnCitiesClick -> {
+            is MainScreenViewModel.Event.OnCitiesClick -> {// extract fun goToLocationScreen()
                 if (findNavController().currentDestination?.id == R.id.mainScreenFragment)
                     findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
             }
-            is MainScreenViewModel.Event.OnSettingsClick -> {
+            is MainScreenViewModel.Event.OnSettingsClick -> {// extract fun openSettingsSheet()
                 if (findNavController().currentDestination?.id == R.id.mainScreenFragment)
                     findNavController().navigate(MainScreenFragmentDirections.navigateToSettings())
             }
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {//this is not used now
         inflater.inflate(R.menu.nav_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {// this is not used now too
         return when (item.itemId) {
             R.id.settings -> {
                 findNavController().navigate(MainScreenFragmentDirections.navigateToSettings())

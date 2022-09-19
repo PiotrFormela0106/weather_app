@@ -31,6 +31,7 @@ class CityScreenViewModel @Inject constructor(
     val placeId = MutableLiveData<String>()
     val photoId = MutableLiveData<String>()
 
+    //rename fun checkCityWeatherData
     private fun checkCity(city: String, photoId: String) {
         val currentCity = storageRepository.getCity()
         storageRepository.saveCity(city)
@@ -45,14 +46,14 @@ class CityScreenViewModel @Inject constructor(
                             insertCity(city = it.data.cityName, photoId)
                             storageRepository.saveCity(it.data.cityName)
                             storageRepository.savePhotoId(photoId)
-                            Event.OnAddCity.let { uiEvents.post(it) }
+                            Event.OnAddCity.let { uiEvents.post(it) }//no need in let operator here
                         } else {
                             fetchCities()
                             val duplicate = allCities.value.orEmpty().find { it.city == cityName }
-                            deleteCity(duplicate!!)
+                            deleteCity(duplicate!!)// duplicat can be null and you'll get crash
                             storageRepository.saveCity(it.data.cityName)
                             insertCity(city = it.data.cityName, photoId)
-                            Event.OnAddCity.let { uiEvents.post(it) }
+                            Event.OnAddCity.let { uiEvents.post(it) }//no need in let operator here
                         }
                     }
                     is Result.OnError -> {
@@ -63,6 +64,7 @@ class CityScreenViewModel @Inject constructor(
             }
     }
 
+    //rename fun saveCityLocallyInCitiesList()
     private fun insertCity(city: String, photoId: String) {
         cityRepository.insertCity(city, photoId)
             .subscribeOn(Schedulers.io())
@@ -86,6 +88,8 @@ class CityScreenViewModel @Inject constructor(
             )
     }
 
+
+    // rename fun fetchCitiesList()
     fun fetchCities() {
         cityRepository.fetchCities()
             .subscribeOn(Schedulers.io())
@@ -102,7 +106,7 @@ class CityScreenViewModel @Inject constructor(
             )
     }
 
-    fun deleteAllCities() {
+    fun deleteAllCities() {// it's not used
         fetchCities()
         cityRepository.deleteAllCities()
             .subscribeOn(Schedulers.io())
