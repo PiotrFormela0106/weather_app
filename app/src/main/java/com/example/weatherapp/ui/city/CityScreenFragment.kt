@@ -66,18 +66,18 @@ class CityScreenFragment : DaggerFragment() {
             } else
                 setupGridView(data)
 
-                binding.gridViewCity.onItemClickListener =
-                    AdapterView.OnItemClickListener { _, view, _, _ ->
+            binding.gridViewCity.onItemClickListener =
+                AdapterView.OnItemClickListener { _, view, _, _ ->
 
-                        viewModel.storageRepository.saveLocationMethod(LocationMethod.City)
-                        val textView = view?.findViewById<TextView>(R.id.cityName)
-                        viewModel.storageRepository.saveCity(textView?.text.toString())
-                        viewModel.getPhotoId(textView?.text.toString())
-                        viewModel.photoId.observe(viewLifecycleOwner) { id ->
-                            viewModel.storageRepository.savePhotoId(id)
-                            findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
-                        }
+                    viewModel.storageRepository.saveLocationMethod(LocationMethod.City)
+                    val textView = view?.findViewById<TextView>(R.id.cityName)
+                    viewModel.storageRepository.saveCity(textView?.text.toString())
+                    viewModel.getPhotoId(textView?.text.toString())
+                    viewModel.photoId.observe(viewLifecycleOwner) { id ->
+                        viewModel.storageRepository.savePhotoId(id)
+                        findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
                     }
+                }
         }
     }
 
@@ -105,9 +105,9 @@ class CityScreenFragment : DaggerFragment() {
                 if (place.photoMetadatas != null) {
                     val photoId = place.photoMetadatas?.first()?.zza()
                     val url = "https://maps.googleapis.com/maps/api/place/photo?" +
-                            "maxwidth=400&" +
-                            "photo_reference=$photoId" +
-                            "&" + "key=$PLACES_API_KEY"
+                        "maxwidth=400&" +
+                        "photo_reference=$photoId" +
+                        "&" + "key=$PLACES_API_KEY"
                     viewModel.addCity(place, photoId = url)
                 } else {
                     val url =

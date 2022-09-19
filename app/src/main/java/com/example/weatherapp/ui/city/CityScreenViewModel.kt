@@ -1,13 +1,9 @@
 package com.example.weatherapp.ui.city
 
 import android.util.Log
-import android.widget.AdapterView
-import android.widget.TextView
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.fragment.findNavController
-import com.example.weatherapp.R
 import com.example.weatherapp.data.room.City // don't use data classes in ui layer
 import com.example.weatherapp.domain.CityError
 import com.example.weatherapp.domain.Error
@@ -34,7 +30,7 @@ class CityScreenViewModel @Inject constructor(
     val cityName = MutableLiveData<String>()
     val photoId = MutableLiveData<String>()
 
-    init{
+    init {
         fetchCitiesList()
     }
 

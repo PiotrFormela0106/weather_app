@@ -10,8 +10,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.example.weatherapp.R
-import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.data.mappers.toSymbol
 import com.example.weatherapp.domain.Error
 import com.example.weatherapp.domain.Result
@@ -61,6 +59,7 @@ class MainScreenViewModel @Inject constructor(
     val date = MutableLiveData<String>()
 
     init {
+        setLang(Locale.getDefault().country)
         if (storageRepository.getLocationMethod() == LocationMethod.City)
             fetchData()
     }
@@ -80,15 +79,15 @@ class MainScreenViewModel @Inject constructor(
         val nh3: LiveData<String> = Transformations.map(pollution) { "${it.components.nh3}" }
 
         val sunrise: LiveData<String> =
-            Transformations.map(sunriseFormat) { "${resources.getString(R.string.sunrise)}: ${it.removeRange(5,8)}" }
+            Transformations.map(sunriseFormat) { it.removeRange(5, 8) }
         val sunset: LiveData<String> =
-            Transformations.map(sunsetFormat) { "${resources.getString(R.string.sunset)}: ${it.removeRange(5,8)}" }
+            Transformations.map(sunsetFormat) { it.removeRange(5, 8) }
         val wind: LiveData<String> =
-            Transformations.map(weatherData) { "${resources.getString(R.string.wind)}: ${it.wind.speed} m/s" }
+            Transformations.map(weatherData) { "${it.wind.speed} m/s" }
         val humidity: LiveData<String> =
-            Transformations.map(weatherData) { "${resources.getString(R.string.humidity)}: ${it.main.humidity} %" }
+            Transformations.map(weatherData) { "${it.main.humidity} %" }
         val pressure: LiveData<String> =
-            Transformations.map(weatherData) { "${resources.getString(R.string.pressure)}: ${it.main.pressure} hPA" }
+            Transformations.map(weatherData) { "${it.main.pressure} hPA" }
     }
 
     fun fetchData() {

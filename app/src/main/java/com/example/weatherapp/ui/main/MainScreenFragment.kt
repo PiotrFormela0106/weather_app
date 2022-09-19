@@ -13,9 +13,6 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -28,7 +25,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.R
-import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.databinding.FragmentMainScreenBinding
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.models.LocationMethod
@@ -81,7 +77,7 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
         if (viewModel.storageRepository.getLocationMethod() == LocationMethod.Location) {
             checkPermission()
         } else {
-            if(viewModel.storageRepository.getPhotoId().isNotEmpty()) {
+            if (viewModel.storageRepository.getPhotoId().isNotEmpty()) {
                 Picasso.get()
                     .load(viewModel.storageRepository.getPhotoId())
                     .into(binding.cityImage)
@@ -189,16 +185,16 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
                             val forecastWithUniqueDays = data.list.distinctBy {
                                 try {
                                     it.date.removeRange(10, 19).removeRange(0, 5)
-                                }catch (e: IndexOutOfBoundsException){
-                                    Log.e("error",e.toString())
+                                } catch (e: IndexOutOfBoundsException) {
+                                    Log.e("error", e.toString())
                                 }
                             }
                             val listOfDays: MutableList<String> = mutableListOf()
                             for (day in forecastWithUniqueDays) {
                                 try {
                                     listOfDays.add(day.date.removeRange(10, 19).removeRange(0, 5))
-                                }catch(e: IndexOutOfBoundsException){
-                                    Log.e("error",e.toString())
+                                } catch (e: IndexOutOfBoundsException) {
+                                    Log.e("error", e.toString())
                                 }
                             }
                             val arrayList: Array<String> = listOfDays.toTypedArray()

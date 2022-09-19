@@ -11,7 +11,6 @@ import androidx.navigation.fragment.navArgs
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentForecastDetailsBinding
 
-
 class ForecastDetailsFragment : Fragment() {
     private lateinit var binding: FragmentForecastDetailsBinding
     private val args: ForecastDetailsFragmentArgs by navArgs()
