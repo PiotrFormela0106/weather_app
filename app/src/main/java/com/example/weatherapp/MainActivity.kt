@@ -9,7 +9,9 @@ class MainActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Thread.sleep(2000)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        setTheme(R.style.Theme_WeatherApp)
         setContentView(binding.root)
     }
 }

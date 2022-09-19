@@ -22,7 +22,7 @@
             app:destination="@id/additionalInfoScreenFragment" />
         <action
             android:id="@+id/navigateToViewPager"
-            app:destination="@id/viewPagerFragment" />
+            app:destination="@id/forecastDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/additionalInfoScreenFragment"
@@ -55,9 +55,9 @@
             app:destination="@id/mainScreenFragment" />
     </dialog>
     <fragment
-        android:id="@+id/viewPagerFragment"
-        android:name="com.example.weatherapp.ui.additionalinfo.ViewPagerFragment"
-        android:label="ViewPagerFragment" >
+        android:id="@+id/forecastDetailsFragment"
+        android:name="com.example.weatherapp.ui.additionalinfo.ForecastDetailsFragment"
+        android:label="ForecastDetailsFragment" >
         <argument
             android:name="day"
             app:argType="string" />

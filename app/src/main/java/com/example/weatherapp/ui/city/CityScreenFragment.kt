@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.weatherapp.BuildConfig.PLACES_API_KEY
 import com.example.weatherapp.R
+import com.example.weatherapp.data.room.City
 import com.example.weatherapp.databinding.FragmentCityScreenBinding
 import com.example.weatherapp.domain.models.LocationMethod
 import com.google.android.gms.common.api.Status
@@ -27,6 +28,7 @@ import javax.inject.Inject
 
 class CityScreenFragment : DaggerFragment() {
     private lateinit var binding: FragmentCityScreenBinding
+    private lateinit var adapter: GridAdapter
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -49,7 +51,7 @@ class CityScreenFragment : DaggerFragment() {
             .subscribe { handleEvent(it) }
 
         setHasOptionsMenu(true)
-        searchCity()
+        setupAutocompleteSearchFragment()
 
         return binding.root
     }
@@ -57,30 +59,29 @@ class CityScreenFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.fetchCities()
         viewModel.allCities.observe(viewLifecycleOwner) { data ->
             if (data.isNotEmpty()) {
                 val reversedList = data.reversed().toMutableList()
-                val gridAdapter =
-                    GridAdapter(listOfCities = reversedList, context = requireContext())
-                binding.gridViewCity.adapter = gridAdapter
-            }
-            binding.gridViewCity.onItemClickListener =
-                AdapterView.OnItemClickListener { _, view, _, _ ->
+                setupGridView(list = reversedList)
+            } else
+                setupGridView(data)
 
-                    viewModel.storageRepository.saveLocationMethod(LocationMethod.City)
-                    val textView = view?.findViewById<TextView>(R.id.cityName)
-                    viewModel.storageRepository.saveCity(textView?.text.toString())
-                    viewModel.getPhotoId(textView?.text.toString())
-                    viewModel.photoId.observe(viewLifecycleOwner) { id ->
-                        viewModel.storageRepository.savePhotoId(id)
-                        findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
+                binding.gridViewCity.onItemClickListener =
+                    AdapterView.OnItemClickListener { _, view, _, _ ->
+
+                        viewModel.storageRepository.saveLocationMethod(LocationMethod.City)
+                        val textView = view?.findViewById<TextView>(R.id.cityName)
+                        viewModel.storageRepository.saveCity(textView?.text.toString())
+                        viewModel.getPhotoId(textView?.text.toString())
+                        viewModel.photoId.observe(viewLifecycleOwner) { id ->
+                            viewModel.storageRepository.savePhotoId(id)
+                            findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
+                        }
                     }
-                }
         }
     }
 
-    private fun searchCity() {
+    private fun setupAutocompleteSearchFragment() {
         if (!Places.isInitialized()) {
             Places.initialize(requireContext(), PLACES_API_KEY)
         }
@@ -104,9 +105,9 @@ class CityScreenFragment : DaggerFragment() {
                 if (place.photoMetadatas != null) {
                     val photoId = place.photoMetadatas?.first()?.zza()
                     val url = "https://maps.googleapis.com/maps/api/place/photo?" +
-                        "maxwidth=400&" +
-                        "photo_reference=$photoId" +
-                        "&" + "key=$PLACES_API_KEY"
+                            "maxwidth=400&" +
+                            "photo_reference=$photoId" +
+                            "&" + "key=$PLACES_API_KEY"
                     viewModel.addCity(place, photoId = url)
                 } else {
                     val url =
@@ -115,6 +116,11 @@ class CityScreenFragment : DaggerFragment() {
                 }
             }
         })
+    }
+
+    private fun setupGridView(list: List<City>) {
+        adapter = GridAdapter(list, requireContext())
+        binding.gridViewCity.adapter = adapter
     }
 
     private fun handleEvent(event: CityScreenViewModel.Event) {

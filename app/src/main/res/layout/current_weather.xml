@@ -19,7 +19,9 @@
         android:layout_height="160dp"
         android:layout_margin="8dp"
         app:cardElevation="8dp"
-        app:cardCornerRadius="8dp">
+        app:cardCornerRadius="8dp"
+        android:visibility="@{viewModel.status}"
+        style="@style/Theme.WeatherApp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
