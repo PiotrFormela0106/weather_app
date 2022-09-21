@@ -27,4 +27,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="celsius">°C</string>
     <string name="kelvin">K</string>
+    <string name="map">Use map</string>
 </resources>

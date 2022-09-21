@@ -164,7 +164,12 @@ class CityScreenViewModel @Inject constructor(
         Event.OnBack.let { uiEvents.post(it) }
     }
 
+    fun useMap() {
+        uiEvents.post(Event.OnMaps)
+    }
+
     sealed class Event {
+        object OnMaps : Event()
         object OnBack : Event()
         object OnAddCity : Event()
         object OnLocation : Event()

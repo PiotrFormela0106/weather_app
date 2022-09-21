@@ -45,7 +45,7 @@ class WeatherRepositoryImpl @Inject constructor(
                     units = getUnitsParam()
                 ).compose(mapCurrentWeatherResponse(cacheKey))
             }
-            LocationMethod.Location -> {
+            LocationMethod.Location, LocationMethod.Map -> {
                 val cacheKey = getLocationCacheKey(
                     getCoordinatesParam().first,
                     getCoordinatesParam().second,
@@ -82,7 +82,7 @@ class WeatherRepositoryImpl @Inject constructor(
                     units = getUnitsParam()
                 ).compose(mapForecastWeatherResponse(cacheKey))
             }
-            LocationMethod.Location -> {
+            LocationMethod.Location, LocationMethod.Map -> {
                 val cacheKey = getLocationCacheKey(
                     getCoordinatesParam().first,
                     getCoordinatesParam().second,
