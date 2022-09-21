@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.data.mappers.toSymbol
 import com.example.weatherapp.domain.Error
 import com.example.weatherapp.domain.Result
@@ -60,7 +61,7 @@ class MainScreenViewModel @Inject constructor(
 
     init {
         setLang(Locale.getDefault().country)
-        if (storageRepository.getLocationMethod() == LocationMethod.City)
+        if (storageRepository.getLocationMethod() == LocationMethod.City || storageRepository.getLocationMethod() == LocationMethod.Map)
             fetchData()
     }
 
@@ -91,7 +92,7 @@ class MainScreenViewModel @Inject constructor(
     }
 
     fun fetchData() {
-        val sdf = SimpleDateFormat("EEEE, d MMMM HH:mm", Locale.getDefault())
+        val sdf = SimpleDateFormat("EEEE, d MMMM HH:mm", Locale(storageRepository.getLanguage().toData()))
         val currentDate = sdf.format(Date())
         date.postValue(currentDate.toString())
         status.postValue(Status.Loading)

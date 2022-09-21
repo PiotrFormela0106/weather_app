@@ -17,6 +17,8 @@ import com.example.weatherapp.data.room.City
 import com.example.weatherapp.databinding.FragmentCityScreenBinding
 import com.example.weatherapp.domain.models.LocationMethod
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
@@ -26,7 +28,7 @@ import dagger.android.support.DaggerFragment
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
-class CityScreenFragment : DaggerFragment() {
+class CityScreenFragment : DaggerFragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentCityScreenBinding
     private lateinit var adapter: GridAdapter
 
@@ -53,6 +55,9 @@ class CityScreenFragment : DaggerFragment() {
         setHasOptionsMenu(true)
         setupAutocompleteSearchFragment()
 
+        // val mapFragment = childFragmentManager.findFragmentById(R.id.maps) as SupportMapFragment
+        // mapFragment.getMapAsync(this)
+
         return binding.root
     }
 
@@ -78,6 +83,9 @@ class CityScreenFragment : DaggerFragment() {
                         findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
                     }
                 }
+        }
+
+        binding.pickPlace.setOnClickListener {
         }
     }
 
@@ -126,7 +134,7 @@ class CityScreenFragment : DaggerFragment() {
     private fun handleEvent(event: CityScreenViewModel.Event) {
         when (event) {
             is CityScreenViewModel.Event.OnAddCity -> {
-                findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
+                goToMainScreen()
             }
             is CityScreenViewModel.Event.OnBack -> {
                 findNavController().popBackStack()
@@ -135,8 +143,28 @@ class CityScreenFragment : DaggerFragment() {
                 Snackbar.make(binding.root, event.message, Snackbar.LENGTH_SHORT).show()
             }
             is CityScreenViewModel.Event.OnLocation -> {
-                findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
+                goToMainScreen()
+            }
+            is CityScreenViewModel.Event.OnMaps -> {
+                openMap()
             }
         }
+    }
+
+    private fun openMap() {
+        if (findNavController().currentDestination?.id == R.id.cityScreenFragment)
+            findNavController().navigate(CityScreenFragmentDirections.navigateToMapsScreen())
+    }
+
+    private fun goToMainScreen() {
+        if (findNavController().currentDestination?.id == R.id.cityScreenFragment)
+            findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
+    }
+
+    companion object {
+        private const val PLACE_PICKER_REQUEST = 1
+    }
+
+    override fun onMapReady(p0: GoogleMap) {
     }
 }

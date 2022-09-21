@@ -26,4 +26,5 @@
     <string name="confirm">Änderungen bestätigen</string>
     <string name="celsius">°C</string>
     <string name="kelvin">K</string>
+    <string name="map">Karte verwenden</string>
 </resources>

@@ -34,8 +34,7 @@ class ForecastDetailsFragment : Fragment() {
                 AdditionalInfoScreenFragment(days[1]),
                 AdditionalInfoScreenFragment(days[2]),
                 AdditionalInfoScreenFragment(days[3]),
-                AdditionalInfoScreenFragment(days[4]),
-                AdditionalInfoScreenFragment(days[5])
+                AdditionalInfoScreenFragment(days[4])
             )
             val adapter =
                 ViewPagerAdapter(fragmentList, requireActivity().supportFragmentManager, lifecycle)

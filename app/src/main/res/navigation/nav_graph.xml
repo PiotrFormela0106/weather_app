@@ -9,11 +9,11 @@
         android:id="@+id/mainScreenFragment"
         android:name="com.example.weatherapp.ui.main.MainScreenFragment"
         android:label="Main screen"
-        tools:layout="@layout/fragment_main_screen" >
+        tools:layout="@layout/fragment_main_screen">
         <action
             android:id="@+id/navigateToCities"
             app:destination="@id/cityScreenFragment"
-            app:popUpTo="@id/mainScreenFragment"/>
+            app:popUpTo="@id/mainScreenFragment" />
         <action
             android:id="@+id/navigateToSettings"
             app:destination="@id/settingsFragment" />
@@ -28,7 +28,7 @@
         android:id="@+id/additionalInfoScreenFragment"
         android:name="com.example.weatherapp.ui.additionalinfo.AdditionalInfoScreenFragment"
         android:label="Additional info"
-        tools:layout="@layout/fragment_additional_info_screen" >
+        tools:layout="@layout/fragment_additional_info_screen">
         <action
             android:id="@+id/navigateToMainScreen"
             app:destination="@id/mainScreenFragment" />
@@ -40,16 +40,19 @@
         android:id="@+id/cityScreenFragment"
         android:name="com.example.weatherapp.ui.city.CityScreenFragment"
         android:label="Cities screen"
-        tools:layout="@layout/fragment_city_screen" >
+        tools:layout="@layout/fragment_city_screen">
         <action
             android:id="@+id/navigateToMainScreen"
             app:destination="@id/mainScreenFragment" />
+        <action
+            android:id="@+id/navigateToMapsScreen"
+            app:destination="@id/mapsFragment" />
     </fragment>
     <dialog
         android:id="@+id/settingsFragment"
         android:name="com.example.weatherapp.ui.settings.SettingsFragment"
         android:label="Settings"
-        tools:layout="@layout/fragment_settings" >
+        tools:layout="@layout/fragment_settings">
         <action
             android:id="@+id/navigateToMainScreen"
             app:destination="@id/mainScreenFragment" />
@@ -57,12 +60,21 @@
     <fragment
         android:id="@+id/forecastDetailsFragment"
         android:name="com.example.weatherapp.ui.additionalinfo.ForecastDetailsFragment"
-        android:label="ForecastDetailsFragment" >
+        android:label="ForecastDetailsFragment">
         <argument
             android:name="day"
             app:argType="string" />
         <argument
             android:name="days"
             app:argType="string[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.weatherapp.ui.city.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps">
+        <action
+            android:id="@+id/navigateToMainScreen"
+            app:destination="@id/mainScreenFragment" />
     </fragment>
 </navigation>

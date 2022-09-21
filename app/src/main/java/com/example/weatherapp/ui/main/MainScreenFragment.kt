@@ -76,7 +76,7 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
             LocationServices.getFusedLocationProviderClient(requireActivity())
         if (viewModel.storageRepository.getLocationMethod() == LocationMethod.Location) {
             checkPermission()
-        } else {
+        } else if (viewModel.storageRepository.getLocationMethod() == LocationMethod.City) {
             if (viewModel.storageRepository.getPhotoId().isNotEmpty()) {
                 Picasso.get()
                     .load(viewModel.storageRepository.getPhotoId())
