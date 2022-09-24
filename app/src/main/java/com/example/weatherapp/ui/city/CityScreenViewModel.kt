@@ -75,7 +75,8 @@ class CityScreenViewModel @Inject constructor(
                 onComplete = {
                     Log.i("inserted", "$city inserted!")
                     fetchCitiesList()
-                }
+                },
+                onError = {Log.e("inserted", it.message.orEmpty())}
             )
     }
     private fun deleteCity(city: City) {

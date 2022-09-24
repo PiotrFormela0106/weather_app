@@ -80,7 +80,7 @@ class CityScreenFragment : DaggerFragment(), OnMapReadyCallback {
                     viewModel.getPhotoId(textView?.text.toString())
                     viewModel.photoId.observe(viewLifecycleOwner) { id ->
                         viewModel.storageRepository.savePhotoId(id)
-                        findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
+                        findNavController().popBackStack()
                     }
                 }
         }
@@ -157,8 +157,9 @@ class CityScreenFragment : DaggerFragment(), OnMapReadyCallback {
     }
 
     private fun goToMainScreen() {
-        if (findNavController().currentDestination?.id == R.id.cityScreenFragment)
-            findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
+//        if (findNavController().currentDestination?.id == R.id.cityScreenFragment)
+//            findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
+        findNavController().popBackStack()
     }
 
     companion object {

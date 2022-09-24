@@ -16,4 +16,5 @@
     <color name="yellow">#FFC107</color>
     <color name="primary">#64B5F6</color>
     <color name="light_black">#383434</color>
+    <color name="opacity_card">#ddffffff</color>
 </resources>

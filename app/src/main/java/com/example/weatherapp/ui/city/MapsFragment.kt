@@ -133,8 +133,9 @@ class MapsFragment : DaggerFragment() {
     private fun handleEvent(event: MapsViewModel.Event) {
         when (event) {
             is MapsViewModel.Event.OnPickPlace -> {
-                if (findNavController().currentDestination?.id == R.id.mapsFragment)
-                    findNavController().navigate(MapsFragmentDirections.navigateToMainScreen())
+                findNavController().popBackStack(R.id.mainScreenFragment, false)
+//                if (findNavController().currentDestination?.id == R.id.mapsFragment)
+//                    findNavController().navigate(MapsFragmentDirections.navigateToMainScreen())
             }
             is MapsViewModel.Event.OnBack -> {
                 findNavController().popBackStack()
