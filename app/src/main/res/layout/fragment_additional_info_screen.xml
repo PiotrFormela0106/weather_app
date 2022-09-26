@@ -2,9 +2,10 @@
 <layout>
 
     <data>
+
         <variable
             name="viewModel"
-            type="com.example.weatherapp.ui.additionalinfo.AdditionalInfoScreenViewModel"/>
+            type="com.example.weatherapp.ui.additionalinfo.AdditionalInfoScreenViewModel" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,25 +14,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <ImageButton
-            android:id="@+id/cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:srcCompat="@drawable/ic_cancel"
-            android:layout_gravity="start"
-            style="@style/icon"
-            android:onClick="@{()->viewModel.onBack()}"/>
+
         <TextView
             android:id="@+id/date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="24sp"
-            android:text="@{viewModel.dayValue}"/>
+            android:text="@{viewModel.dayValue}"
+            android:textSize="24sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerForecastDetailed"

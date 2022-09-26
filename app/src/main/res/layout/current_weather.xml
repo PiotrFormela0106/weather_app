@@ -8,67 +8,84 @@
         <variable
             name="viewModel"
             type="com.example.weatherapp.ui.main.MainScreenViewModel" />
-
-        <variable
-            name="viewState"
-            type="com.example.weatherapp.ui.main.MainScreenViewModel.ViewState" />
     </data>
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:layout_margin="8dp"
-        app:cardElevation="8dp"
-        app:cardCornerRadius="8dp"
-        android:visibility="@{viewModel.status}"
-        style="@style/Theme.WeatherApp">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            tools:showIn="@layout/fragment_main_screen">
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:imageDefault="@{@drawable/ic_cloud}"
+            android:imageUrl="@{viewModel.weatherImageUrl}"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="@{viewModel.status}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/card"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
 
-            <TextView
-                android:id="@+id/temperature"
-                style="@style/Theme.WeatherApp"
-                android:layout_width="wrap_content"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card"
+            style="@style/Theme.WeatherApp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:visibility="@{viewModel.status}"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/imageView"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="36dp"
-                android:text='@{viewModel.roundedTemperature}'
-                android:textSize="34sp"
-                android:visibility="@{viewModel.status}"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                tools:showIn="@layout/fragment_main_screen">
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
-                android:imageDefault="@{@drawable/ic_cloud}"
-                android:imageUrl="@{viewModel.imageUrl}"
-                android:visibility="@{viewModel.status}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@tools:sample/avatars" />
+                <TextView
+                    android:id="@+id/temperature"
+                    style="@style/Theme.WeatherApp"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:text='@{viewModel.roundedTemperature}'
+                    android:textSize="34sp"
+                    android:visibility="@{viewModel.status}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                style="@style/Theme.WeatherApp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="50dp"
-                android:gravity="center"
-                android:text="@{viewModel.weatherData.weather.get(0).description}"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.501"
-                app:layout_constraintStart_toStartOf="parent" />
+                <TextView
+                    android:id="@+id/weather_conditions"
+                    style="@style/Theme.WeatherApp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="none"
+                    android:gravity="center"
+                    android:maxLines="3"
+                    android:paddingBottom="16dp"
+                    android:scrollHorizontally="false"
+                    android:singleLine="false"
+                    android:text="@{viewModel.weatherData.weather.get(0).description}"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/temperature" />
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
-
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

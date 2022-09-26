@@ -46,6 +46,7 @@ class MainScreenViewModel @Inject constructor(
     val events: Observable<Event> = uiEvents.stream()
 
     val status = MutableLiveData(Status.Loading)
+    val photoVisibility = MutableLiveData(false)
     val weatherData = MutableLiveData<CurrentWeather>()
     val forecastData = MutableLiveData<ForecastWeather>()
     val airPollutionData = MutableLiveData<AirPollution>()
@@ -53,7 +54,7 @@ class MainScreenViewModel @Inject constructor(
     private val sunriseFormat = MutableLiveData<String>()
     private val sunsetFormat = MutableLiveData<String>()
     private val iconId = MutableLiveData<String>()
-    val imageUrl = MutableLiveData("https://openweathermap.org/img/wn/03d@2x.png")
+    val weatherImageUrl = MutableLiveData("https://openweathermap.org/img/wn/03d@2x.png")
     val roundedTemperature = MutableLiveData<String>()
     val cityName = MutableLiveData<String>()
     val locationMethod = MutableLiveData(storageRepository.getLocationMethod())
@@ -61,8 +62,6 @@ class MainScreenViewModel @Inject constructor(
 
     init {
         setLang(Locale.getDefault().country)
-        if (storageRepository.getLocationMethod() == LocationMethod.City || storageRepository.getLocationMethod() == LocationMethod.Map)
-            fetchData()
     }
 
     enum class Status { Loading, Success, Error }
@@ -92,7 +91,9 @@ class MainScreenViewModel @Inject constructor(
     }
 
     fun fetchData() {
-        val sdf = SimpleDateFormat("EEEE, d MMMM HH:mm", Locale(storageRepository.getLanguage().toData()))
+        photoVisibility.value = false
+        val sdf =
+            SimpleDateFormat("EEEE, d MMMM HH:mm", Locale(storageRepository.getLanguage().toData()))
         val currentDate = sdf.format(Date())
         date.postValue(currentDate.toString())
         status.postValue(Status.Loading)
@@ -141,12 +142,15 @@ class MainScreenViewModel @Inject constructor(
         status.postValue(Status.Success)
         weatherData.value = data
         cityName.postValue(data.cityName)
-        iconId.value = data.weather[0].icon
-        imageUrl.value = "https://openweathermap.org/img/wn/${iconId.value}@2x.png"
+        if (data.weather.isNotEmpty()) {
+            iconId.value = data.weather[0].icon
+            weatherImageUrl.value = "https://openweathermap.org/img/wn/${iconId.value}@2x.png"
+        }
         storageRepository.saveCity(data.cityName)
         storageRepository.saveCoordinates(data.coordinates.lat, data.coordinates.lon)
         roundedTemperature.postValue(
-            data.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt().toString() + storageRepository.getUnits().toSymbol()
+            data.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt()
+                .toString() + storageRepository.getUnits().toSymbol()
         )
 
         @SuppressLint("SimpleDateFormat")
@@ -158,6 +162,12 @@ class MainScreenViewModel @Inject constructor(
         val sunset = Date(data.sys.sunset * 1000)
         val sunsetTime = sdf.format(sunset)
         sunsetFormat.postValue(sunsetTime)
+
+        if (storageRepository.getLocationMethod() == LocationMethod.City
+            && storageRepository.getPhotoId().isNotEmpty()
+        ) {
+            photoVisibility.value = true
+        }
     }
 
     private fun handleError(error: Error) {
@@ -180,6 +190,12 @@ class MainScreenViewModel @Inject constructor(
         val configuration = resources.configuration
         configuration.locale = Locale(lang)
         resources.updateConfiguration(configuration, metrics)
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onResume() {
+        if (storageRepository.getLocationMethod() == LocationMethod.City || storageRepository.getLocationMethod() == LocationMethod.Map)
+            fetchData()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)

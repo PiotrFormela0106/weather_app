@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginEnd="8dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.example.weatherapp.ui.settings.SettingsViewModel" />
     </data>
 
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="-16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp">
         <LinearLayout
             android:id="@+id/sheet"
             android:layout_width="match_parent"
@@ -22,19 +26,16 @@
                 android:id="@+id/cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@drawable/ic_cancel"
                 android:layout_gravity="end"
-                style="@style/icon"
-                android:onClick="@{()->viewModel.onCancelClick()}"/>
+                android:padding="16dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{()->viewModel.onCancelClick()}"
+                app:srcCompat="@drawable/ic_cancel" />
 
             <RadioGroup
                 android:id="@+id/radio_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -103,4 +104,5 @@
                     android:textSize="20sp" />
             </RadioGroup>
         </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

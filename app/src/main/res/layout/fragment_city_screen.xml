@@ -31,7 +31,7 @@
                 android:onClick="@{()->viewModel.onBack()}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_cancel" />
+                app:srcCompat="@drawable/round_back_button" />
 
             <ImageButton
                 android:id="@+id/bin"
@@ -43,14 +43,28 @@
                 android:onClick="@{()->viewModel.deleteAllCities()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_bin" />
+                app:srcCompat="@drawable/round_bin_button" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <fragment
-            android:id="@+id/autocomplete_fragment"
-            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card"
+            style="@style/Theme.WeatherApp"
             android:layout_width="match_parent"
-            android:layout_height="80dp" />
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/imageView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <fragment
+                android:id="@+id/autocomplete_fragment"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                android:layout_width="match_parent"
+                android:layout_height="80dp" />
+        </com.google.android.material.card.MaterialCardView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -90,9 +104,9 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:horizontalSpacing="6dp"
+            android:horizontalSpacing="8dp"
             android:numColumns="2"
-            android:verticalSpacing="6dp"
+            android:verticalSpacing="8dp"
             tools:listitem="@layout/city" />
 
     </LinearLayout>

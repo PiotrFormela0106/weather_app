@@ -22,12 +22,12 @@
         android:visibility="@{viewModel.status}"
         style="@style/Theme.WeatherApp">
 
-        <com.robertlevonyan.views.expandable.Expandable
+        <LinearLayout
+            android:orientation="vertical"
             android:id="@+id/expandable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            app:exp_animateExpand="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="8dp">
+                android:layout_marginBottom="24dp">
 
                 <TextView
                     android:id="@+id/aqi"
@@ -239,7 +239,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView7" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </com.robertlevonyan.views.expandable.Expandable>
+        </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 </layout>

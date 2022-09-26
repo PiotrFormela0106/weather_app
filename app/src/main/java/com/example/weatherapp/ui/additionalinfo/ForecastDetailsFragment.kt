@@ -40,6 +40,8 @@ class ForecastDetailsFragment : Fragment() {
                 ViewPagerAdapter(fragmentList, requireActivity().supportFragmentManager, lifecycle)
             binding.viewPager.adapter = adapter
             binding.viewPager.currentItem = index
+
+            binding.backButton.setOnClickListener { this.activity?.onBackPressed() }
         } catch (e: IndexOutOfBoundsException) {
             Log.e("error", e.toString())
         }

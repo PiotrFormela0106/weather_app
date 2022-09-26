@@ -81,6 +81,9 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
                 Picasso.get()
                     .load(viewModel.storageRepository.getPhotoId())
                     .into(binding.cityImage)
+                viewModel.photoVisibility.value = true
+            } else {
+                viewModel.photoVisibility.value = false
             }
         }
         setupForecastRecyclerViewOnClick()
@@ -130,8 +133,8 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
     @SuppressLint("MissingPermission")
     private fun getLocation() { // move all that you can from this method to viewmodel
         fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
-            val location: Location = task.result
             try {
+                val location: Location = task.result
                 val geocoder = Geocoder(requireActivity(), Locale.getDefault())
                 val addresses: List<Address> = geocoder.getFromLocation(
                     location.latitude, location.longitude, 1
