@@ -7,9 +7,7 @@ import com.example.weatherapp.data.room.CityDatabase
 import com.example.weatherapp.domain.Result
 import com.example.weatherapp.domain.repo.CityRepository
 import com.example.weatherapp.domain.toError
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.core.SingleTransformer
+import java.lang.Exception
 import javax.inject.Inject
 
 class CityRepositoryImpl @Inject constructor(context: Context) : CityRepository {
@@ -21,48 +19,38 @@ class CityRepositoryImpl @Inject constructor(context: Context) : CityRepository 
         cityDao = database.cityDao()
     }
 
-    override fun insertCity(cityName: String, photoId: String): Completable {
+    override suspend fun insertCity(cityName: String, photoId: String) {
         return cityDao.insert(City(city = cityName, photoId = photoId))
     }
 
-    override fun deleteCity(city: City): Completable {
+    override suspend fun deleteCity(city: City) {
         return cityDao.delete(city)
     }
 
-    override fun fetchCities(): Single<Result<List<City>>> {
-        return cityDao.getAllCities()
-            .compose(mapCities())
-    }
-
-    override fun deleteAllCities(): Completable {
-        return cityDao.deleteAllCities()
-    }
-
-    override fun getPhotoId(city: String): Single<Result<String>> {
-        return cityDao.getPhotoId(city)
-            .compose(mapPhotoId())
-    }
-
-    private fun mapCities():
-        SingleTransformer<List<City>, Result<List<City>>> {
-        return SingleTransformer { upstream ->
-            upstream
-                .map { Result.withValue(it) }
-                .onErrorReturn { it.toResultError() }
+    override suspend fun fetchCities(): Result<List<City>> {
+        return try {
+            val result = cityDao.getAllCities()
+            Result.withValue(result)
+        } catch (ex: Exception) {
+            ex.toResultError()
         }
     }
 
-    private fun mapPhotoId():
-        SingleTransformer<String, Result<String>> {
-        return SingleTransformer { upstream ->
-            upstream
-                .map { Result.withValue(it) }
-                .onErrorReturn { it.toResultError() }
+    override suspend fun deleteAllCities() {
+        return cityDao.deleteAllCities()
+    }
+
+    override suspend fun getPhotoId(city: String): Result<String> {
+        return try {
+            val result = cityDao.getPhotoId(city)
+            Result.withValue(result)
+        } catch (ex: Exception) {
+            ex.toResultError()
         }
     }
 
     private fun <T> Throwable.toResultError(): Result<T> {
         val error = this.toError()
-        return Result.withError<T>(error)
+        return Result.withError(error)
     }
 }

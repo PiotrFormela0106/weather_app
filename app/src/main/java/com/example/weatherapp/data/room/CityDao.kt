@@ -4,19 +4,17 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Single
 
 @Dao
 interface CityDao {
     @Insert
-    fun insert(city: City): Completable
+    suspend fun insert(city: City)
     @Delete
-    fun delete(city: City): Completable
+    suspend fun delete(city: City)
     @Query("SELECT * FROM city_table")
-    fun getAllCities(): Single<List<City>>
+    suspend fun getAllCities(): List<City>
     @Query("DELETE FROM city_table")
-    fun deleteAllCities(): Completable
+    suspend fun deleteAllCities()
     @Query("SELECT photoId FROM city_table WHERE city = :cityName")
-    fun getPhotoId(cityName: String): Single<String>
+    suspend fun getPhotoId(cityName: String): String
 }

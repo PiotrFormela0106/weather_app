@@ -4,11 +4,10 @@ import com.example.weatherapp.domain.Result
 import com.example.weatherapp.domain.models.AirPollution
 import com.example.weatherapp.domain.models.CurrentWeather
 import com.example.weatherapp.domain.models.ForecastWeather
-import io.reactivex.rxjava3.core.Single
 
 interface WeatherRepository {
 
-    fun getCurrentWeather(): Single<Result<CurrentWeather>>
-    fun getForecastWeather(): Single<Result<ForecastWeather>>
-    fun getAirPollution(): Single<Result<AirPollution>>
+    suspend fun getCurrentWeather(): Result<CurrentWeather>
+    suspend fun getForecastWeather(): Result<ForecastWeather>
+    suspend fun getAirPollution(): Result<AirPollution>
 }

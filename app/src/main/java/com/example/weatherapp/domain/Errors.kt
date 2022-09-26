@@ -3,7 +3,6 @@ package com.example.weatherapp.domain
 import android.util.Log
 import retrofit2.HttpException
 
-// private const val CITY_ERROR = "HTTP 404 Not Found"
 private const val CITY_ERROR = "city not found"
 private const val CITY_ERROR2 = "Nothing to geocode"
 
@@ -22,7 +21,7 @@ open class NetworkError(
     throwable: Throwable? = null
 ) : Error(message, throwable)
 
-fun Throwable.toError(): com.example.weatherapp.domain.Error {
+fun Throwable.toError(): Error {
     return when (this) {
         is HttpException -> {
             val throwable = this

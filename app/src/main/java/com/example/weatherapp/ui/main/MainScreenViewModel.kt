@@ -3,13 +3,12 @@ package com.example.weatherapp.ui.main
 import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.util.Log
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.data.mappers.toSymbol
 import com.example.weatherapp.domain.Error
@@ -22,13 +21,12 @@ import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.domain.repo.StorageRepository
 import com.example.weatherapp.domain.repo.WeatherRepository
 import com.example.weatherapp.ui.core.UiEvents
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.kotlin.plusAssign
-import io.reactivex.rxjava3.kotlin.subscribeBy
-import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.zip
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -41,9 +39,8 @@ class MainScreenViewModel @Inject constructor(
     val resources: Resources
 ) : ViewModel(), LifecycleObserver {
 
-    private val disposable = CompositeDisposable()
     private val uiEvents = UiEvents<Event>()
-    val events: Observable<Event> = uiEvents.stream()
+    val events: Flow<Event> = uiEvents.events()
 
     val status = MutableLiveData(Status.Loading)
     val weatherData = MutableLiveData<CurrentWeather>()
@@ -61,8 +58,9 @@ class MainScreenViewModel @Inject constructor(
 
     init {
         setLang(Locale.getDefault().country)
-        if (storageRepository.getLocationMethod() == LocationMethod.City || storageRepository.getLocationMethod() == LocationMethod.Map)
+        if (storageRepository.getLocationMethod() == LocationMethod.City || storageRepository.getLocationMethod() == LocationMethod.Map) {
             fetchData()
+        }
     }
 
     enum class Status { Loading, Success, Error }
@@ -96,45 +94,48 @@ class MainScreenViewModel @Inject constructor(
         val currentDate = sdf.format(Date())
         date.postValue(currentDate.toString())
         status.postValue(Status.Loading)
-        disposable += Single.zip(
-            weatherRepository.getCurrentWeather(),
-            weatherRepository.getForecastWeather(),
-            weatherRepository.getAirPollution()
-        ) { currentWeatherResult, getForecastWeatherResult, airPollutionResult ->
-            Triple(
-                first = currentWeatherResult,
-                second = getForecastWeatherResult,
-                third = airPollutionResult
-            )
-        }.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy { result ->
-                status.postValue(Status.Success)
-                when (val weather = result.first) {
-                    is Result.OnSuccess -> {
-                        handleSuccess(weather.data)
-                    }
-                    is Result.OnError -> {
-                        handleError(weather.error)
-                    }
+
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val currentWeatherResult = flowOf(weatherRepository.getCurrentWeather())
+                val forecastWeatherResult = flowOf(weatherRepository.getForecastWeather())
+                val airPollutionResult = flowOf(weatherRepository.getAirPollution())
+                val combinedFlow = currentWeatherResult.zip(forecastWeatherResult) { c, f ->
+                    Pair(c, f)
+                }.zip(airPollutionResult) { pair, air ->
+                    Triple(pair.first, pair.second, air)
                 }
-                when (val forecast = result.second) {
-                    is Result.OnSuccess -> {
-                        forecast.data.let { forecastData.value = it }
-                    }
-                    is Result.OnError -> {
-                        handleError(forecast.error)
-                    }
-                }
-                when (val pollution = result.third) {
-                    is Result.OnSuccess -> {
-                        pollution.data.let { airPollutionData.value = it }
-                    }
-                    is Result.OnError -> {
-                        handleError(pollution.error)
+                withContext(Dispatchers.Main) {
+                    combinedFlow.collect { result ->
+                        status.postValue(Status.Success)
+                        when (val weather = result.first) {
+                            is Result.OnSuccess -> {
+                                handleSuccess(weather.data)
+                            }
+                            is Result.OnError -> {
+                                handleError(weather.error)
+                            }
+                        }
+                        when (val forecast = result.second) {
+                            is Result.OnSuccess -> {
+                                forecast.data.let { forecastData.value = it }
+                            }
+                            is Result.OnError -> {
+                                handleError(forecast.error)
+                            }
+                        }
+                        when (val pollution = result.third) {
+                            is Result.OnSuccess -> {
+                                pollution.data.let { airPollutionData.value = it }
+                            }
+                            is Result.OnError -> {
+                                handleError(pollution.error)
+                            }
+                        }
                     }
                 }
             }
+        }
     }
 
     private fun handleSuccess(data: CurrentWeather) {
@@ -146,7 +147,8 @@ class MainScreenViewModel @Inject constructor(
         storageRepository.saveCity(data.cityName)
         storageRepository.saveCoordinates(data.coordinates.lat, data.coordinates.lon)
         roundedTemperature.postValue(
-            data.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt().toString() + storageRepository.getUnits().toSymbol()
+            data.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt()
+                .toString() + storageRepository.getUnits().toSymbol()
         )
 
         @SuppressLint("SimpleDateFormat")
@@ -180,11 +182,6 @@ class MainScreenViewModel @Inject constructor(
         val configuration = resources.configuration
         configuration.locale = Locale(lang)
         resources.updateConfiguration(configuration, metrics)
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy() {
-        disposable.clear()
     }
 
     sealed class Event {

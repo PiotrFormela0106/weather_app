@@ -28,12 +28,13 @@ import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentMainScreenBinding
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.models.LocationMethod
+import com.example.weatherapp.ui.core.BaseFragment
 import com.example.weatherapp.ui.core.RecyclerItemClickListener
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerFragment
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
@@ -60,10 +61,11 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         lifecycle.addObserver(viewModel)
-
-        viewModel.events
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { handleEvent(it) }
+        val baseFragment = BaseFragment()
+        baseFragment.initScope()
+        baseFragment.scope?.launch {
+            viewModel.events.collect { handleEvent(it) }
+        }
 
         setHasOptionsMenu(true)
 

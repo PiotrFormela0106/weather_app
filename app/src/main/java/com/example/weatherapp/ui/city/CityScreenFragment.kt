@@ -16,19 +16,18 @@ import com.example.weatherapp.R
 import com.example.weatherapp.data.room.City
 import com.example.weatherapp.databinding.FragmentCityScreenBinding
 import com.example.weatherapp.domain.models.LocationMethod
+import com.example.weatherapp.ui.core.BaseFragment
 import com.google.android.gms.common.api.Status
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class CityScreenFragment : DaggerFragment(), OnMapReadyCallback {
+class CityScreenFragment : DaggerFragment() {
     private lateinit var binding: FragmentCityScreenBinding
     private lateinit var adapter: GridAdapter
 
@@ -47,16 +46,14 @@ class CityScreenFragment : DaggerFragment(), OnMapReadyCallback {
         )
 
         binding.viewModel = viewModel
-
-        viewModel.events
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { handleEvent(it) }
+        val base = BaseFragment()
+        base.initScope()
+        base.scope?.launch {
+            viewModel.events.collect { handleEvent(it) }
+        }
 
         setHasOptionsMenu(true)
         setupAutocompleteSearchFragment()
-
-        // val mapFragment = childFragmentManager.findFragmentById(R.id.maps) as SupportMapFragment
-        // mapFragment.getMapAsync(this)
 
         return binding.root
     }
@@ -159,12 +156,5 @@ class CityScreenFragment : DaggerFragment(), OnMapReadyCallback {
     private fun goToMainScreen() {
         if (findNavController().currentDestination?.id == R.id.cityScreenFragment)
             findNavController().navigate(CityScreenFragmentDirections.navigateToMainScreen())
-    }
-
-    companion object {
-        private const val PLACE_PICKER_REQUEST = 1
-    }
-
-    override fun onMapReady(p0: GoogleMap) {
     }
 }

@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.weatherapp.BuildConfig.PLACES_API_KEY
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentMapsBinding
+import com.example.weatherapp.ui.core.BaseFragment
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -25,7 +26,7 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import dagger.android.support.DaggerFragment
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.launch
 import java.util.Locale
 import javax.inject.Inject
 
@@ -47,9 +48,11 @@ class MapsFragment : DaggerFragment() {
 
         binding.viewModel = viewModel
 
-        viewModel.events
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { handleEvent(it) }
+        val base = BaseFragment()
+        base.initScope()
+        base.scope?.launch {
+            viewModel.events.collect { handleEvent(it) }
+        }
 
         setupAutocompleteSearchFragment()
 

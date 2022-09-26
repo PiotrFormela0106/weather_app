@@ -13,8 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentAdditionalInfoScreenBinding
 import com.example.weatherapp.domain.models.ForecastItem
+import com.example.weatherapp.ui.core.BaseFragment
 import dagger.android.support.DaggerFragment
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import javax.inject.Inject
@@ -36,10 +37,11 @@ class AdditionalInfoScreenFragment(val day: String) : DaggerFragment() {
         )
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-
-        viewModel.events
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { handleEvent(it) }
+        val base = BaseFragment()
+        base.initScope()
+        base.scope?.launch {
+            viewModel.events.collect { handleEvent(it) }
+        }
 
         val day = day
 

@@ -92,12 +92,8 @@ dependencies {
     //Room
     def room_version = "2.4.3"
     implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-    implementation ("androidx.room:room-rxjava3:2.4.3")
-    // To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:$room_version")
-    // To use Kotlin Symbol Processing (KSP)
-    //ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
 
     //Location
     implementation 'com.google.android.gms:play-services-location:20.0.0'
@@ -114,4 +110,7 @@ dependencies {
     //Expandable Panel
     implementation 'com.robertlevonyan.view:MaterialExpansionPanel:2.1.1'
 
+    //Coroutines
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
 }

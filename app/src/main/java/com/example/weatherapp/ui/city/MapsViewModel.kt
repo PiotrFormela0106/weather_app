@@ -4,11 +4,12 @@ import androidx.lifecycle.ViewModel
 import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.domain.repo.StorageRepository
 import com.example.weatherapp.ui.core.UiEvents
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class MapsViewModel @Inject constructor(val storageRepository: StorageRepository) : ViewModel() {
     private val uiEvents = UiEvents<Event>()
-    val events = uiEvents.stream()
+    val events: Flow<Event> = uiEvents.events()
 
     fun setLangLong(lang: Double, long: Double) {
         storageRepository.saveLocationMethod(LocationMethod.Map)

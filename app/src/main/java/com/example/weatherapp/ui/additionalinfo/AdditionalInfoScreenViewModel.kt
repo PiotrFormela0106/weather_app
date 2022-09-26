@@ -4,13 +4,15 @@ import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.domain.Result
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.repo.WeatherRepository
 import com.example.weatherapp.ui.core.UiEvents
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.kotlin.subscribeBy
-import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class AdditionalInfoScreenViewModel @Inject constructor(
@@ -19,28 +21,24 @@ class AdditionalInfoScreenViewModel @Inject constructor(
     val forecast = MutableLiveData<ForecastWeather?>()
     var dayValue = MutableLiveData<String>()
     private val uiEvents = UiEvents<Event>()
-    val events = uiEvents.stream()
+    val events: Flow<Event> = uiEvents.events()
 
     init {
         fetchData()
     }
 
     private fun fetchData() {
-        weatherRepository.getForecastWeather()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(
-                onSuccess = {
-                    when (it) {
-                        is Result.OnSuccess -> {
-                            forecast.value = it.data
-                        }
-                        is Result.OnError -> {
-                            Log.i("result", "error")
-                        }
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val result = weatherRepository.getForecastWeather()
+                withContext(Dispatchers.Main) {
+                    when (result) {
+                        is Result.OnSuccess -> result.data.let { forecast.value = it }
+                        is Result.OnError -> Log.i("result", "error")
                     }
                 }
-            )
+            }
+        }
     }
 
     fun onBack() {
