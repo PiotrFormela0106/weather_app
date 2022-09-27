@@ -9,11 +9,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.weatherapp.R
 import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.databinding.FragmentSettingsBinding
-import com.example.weatherapp.ui.core.BaseFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.coroutines.launch
@@ -45,9 +45,7 @@ class SettingsFragment : BottomSheetDialogFragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
-        val base = BaseFragment()
-        base.initScope()
-        base.scope?.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.events.collect { handleEvent(it) }
         }
 

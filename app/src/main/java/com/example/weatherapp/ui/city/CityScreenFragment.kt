@@ -10,13 +10,13 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.weatherapp.BuildConfig.PLACES_API_KEY
 import com.example.weatherapp.R
 import com.example.weatherapp.data.room.City
 import com.example.weatherapp.databinding.FragmentCityScreenBinding
 import com.example.weatherapp.domain.models.LocationMethod
-import com.example.weatherapp.ui.core.BaseFragment
 import com.google.android.gms.common.api.Status
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
@@ -46,9 +46,7 @@ class CityScreenFragment : DaggerFragment() {
         )
 
         binding.viewModel = viewModel
-        val base = BaseFragment()
-        base.initScope()
-        base.scope?.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.events.collect { handleEvent(it) }
         }
 

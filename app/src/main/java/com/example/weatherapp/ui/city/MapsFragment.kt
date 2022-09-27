@@ -9,11 +9,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.weatherapp.BuildConfig.PLACES_API_KEY
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentMapsBinding
-import com.example.weatherapp.ui.core.BaseFragment
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -48,9 +48,7 @@ class MapsFragment : DaggerFragment() {
 
         binding.viewModel = viewModel
 
-        val base = BaseFragment()
-        base.initScope()
-        base.scope?.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.events.collect { handleEvent(it) }
         }
 

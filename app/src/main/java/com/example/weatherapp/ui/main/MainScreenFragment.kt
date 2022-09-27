@@ -22,13 +22,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentMainScreenBinding
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.models.LocationMethod
-import com.example.weatherapp.ui.core.BaseFragment
 import com.example.weatherapp.ui.core.RecyclerItemClickListener
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -61,9 +61,7 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         lifecycle.addObserver(viewModel)
-        val baseFragment = BaseFragment()
-        baseFragment.initScope()
-        baseFragment.scope?.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.events.collect { handleEvent(it) }
         }
 
