@@ -68,12 +68,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
     //Gson
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
-    //RxJava
-    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
-    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
-    implementation "io.reactivex.rxjava3:rxkotlin:3.0.0"
-    //RxAdapter
-    implementation "com.squareup.retrofit2:adapter-rxjava3:2.9.0"
     //Lifecycle
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:2.6.0-alpha01"
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
@@ -92,26 +86,20 @@ dependencies {
     //Room
     def room_version = "2.4.3"
     implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-    implementation ("androidx.room:room-rxjava3:2.4.3")
-    // To use Kotlin annotation processing tool (kapt)
+    implementation("androidx.room:room-ktx:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
-    // To use Kotlin Symbol Processing (KSP)
-    //ksp("androidx.room:room-compiler:$room_version")
-
     //Location
     implementation 'com.google.android.gms:play-services-location:20.0.0'
-
     // For developers using AndroidX in their applications
     implementation 'pub.devrel:easypermissions:3.0.0'
-
     //Places Autocomplete
     implementation 'com.google.android.libraries.places:places:2.6.0'
     //Places Picker
     implementation 'com.google.android.gms:play-services-places:17.0.0'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
-
     //Expandable Panel
     implementation 'com.robertlevonyan.view:MaterialExpansionPanel:2.1.1'
-
+    //Coroutines
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
 }

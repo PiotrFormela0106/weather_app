@@ -9,7 +9,7 @@ import com.example.weatherapp.domain.models.Language
 import com.example.weatherapp.domain.models.Units
 import com.example.weatherapp.domain.repo.StorageRepository
 import com.example.weatherapp.ui.core.UiEvents
-import io.reactivex.rxjava3.core.Observable
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
@@ -22,7 +22,7 @@ class SettingsViewModel @Inject constructor(
     val metric = Transformations.map(selectionUnits) { it == Units.Metric }
     val notMetric = Transformations.map(selectionUnits) { it == Units.NotMetric }
     private val uiEvents = UiEvents<Event>()
-    val events: Observable<Event> = uiEvents.stream()
+    val events: Flow<Event> = uiEvents.events()
 
     fun switchUnitsClick() {
         val initialValue = selectionUnits.value ?: Units.Metric
