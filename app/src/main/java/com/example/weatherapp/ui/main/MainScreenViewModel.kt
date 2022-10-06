@@ -90,7 +90,7 @@ class MainScreenViewModel @Inject constructor(
     }
 
     fun fetchData() {
-        photoVisibility.value = false
+        photoVisibility.postValue(false)
         val sdf =
             SimpleDateFormat("EEEE, d MMMM HH:mm", Locale(storageRepository.getLanguage().toData()))
         val currentDate = sdf.format(Date())
@@ -141,7 +141,7 @@ class MainScreenViewModel @Inject constructor(
 
     private fun handleSuccess(data: CurrentWeather) {
         status.postValue(Status.Success)
-        weatherData.value = data
+        weatherData.postValue(data)
         cityName.postValue(data.cityName)
         if (data.weather.isNotEmpty()) {
             iconId.value = data.weather[0].icon

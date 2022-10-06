@@ -27,7 +27,7 @@ class AdditionalInfoScreenViewModel @Inject constructor(
         fetchData()
     }
 
-    private fun fetchData() {
+    fun fetchData() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val result = weatherRepository.getForecastWeather()

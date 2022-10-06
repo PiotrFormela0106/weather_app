@@ -17,7 +17,7 @@ class SettingsViewModel @Inject constructor(
     val resources: Resources
 ) : ViewModel() {
     private val selectionLanguage = MutableLiveData(storageRepository.getLanguage())
-    private val selectionUnits = MutableLiveData(storageRepository.getUnits())
+    val selectionUnits = MutableLiveData(storageRepository.getUnits())
     val language = MutableLiveData(storageRepository.getLanguage().toId())
     val metric = Transformations.map(selectionUnits) { it == Units.Metric }
     val notMetric = Transformations.map(selectionUnits) { it == Units.NotMetric }
