@@ -2,21 +2,11 @@ package com.example.weatherapp.data.repo
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.weatherapp.data.api.RetrofitClient
-import com.example.weatherapp.domain.models.LocationMethod
-import io.mockk.MockKAnnotations
-import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.runner.RunWith
 import org.junit.Before
 import org.junit.Test
 import kotlinx.coroutines.test.runTest
-import com.example.weatherapp.domain.Result
-import com.example.weatherapp.domain.models.AirPollution
-import com.example.weatherapp.domain.models.CurrentWeather
-import com.example.weatherapp.domain.models.ForecastWeather
-import com.example.weatherapp.domain.models.Language
 import com.google.common.truth.Truth.assertThat
 
 @ExperimentalCoroutinesApi
@@ -29,7 +19,7 @@ class WeatherRepositoryImplTest {
 
     @Before
     fun setup() {
-        val retrofitClient = RetrofitClient()
+        val retrofitClient = com.example.weather_data.api.RetrofitClient()
         storageRepository = StorageRepositoryImpl(ApplicationProvider.getApplicationContext())
         weatherRepository = WeatherRepositoryImpl(retrofitClient, storageRepository)
     }
@@ -37,10 +27,10 @@ class WeatherRepositoryImplTest {
     @Test
     fun getCurrentWeather() = runTest {
         when (val result = weatherRepository.getCurrentWeather()) {
-            is Result.OnSuccess -> {
+            is com.example.weather_domain.Result.OnSuccess -> {
                 assertThat(result.data).isNotNull()
             }
-            is Result.OnError -> {}
+            is com.example.weather_domain.Result.OnError -> {}
         }
 
 
@@ -48,15 +38,15 @@ class WeatherRepositoryImplTest {
 
     @Test
     fun checkResponse() = runTest {
-        lateinit var data: CurrentWeather
-        storageRepository.saveLanguage(Language.ENG)
-        storageRepository.saveLocationMethod(LocationMethod.City)
+        lateinit var data: com.example.weather_domain.models.CurrentWeather
+        storageRepository.saveLanguage(com.example.weather_domain.models.Language.ENG)
+        storageRepository.saveLocationMethod(com.example.weather_domain.models.LocationMethod.City)
         storageRepository.saveCity("Warsaw")
         when (val result = weatherRepository.getCurrentWeather()) {
-            is Result.OnSuccess -> {
+            is com.example.weather_domain.Result.OnSuccess -> {
                 data = result.data
             }
-            is Result.OnError -> {}
+            is com.example.weather_domain.Result.OnError -> {}
         }
         assertThat(data.cityName).isEqualTo("Warsaw")
 
@@ -64,12 +54,12 @@ class WeatherRepositoryImplTest {
 
     @Test
     fun getForecastWeather() = runTest {
-        lateinit var data: ForecastWeather
+        lateinit var data: com.example.weather_domain.models.ForecastWeather
         when (val result = weatherRepository.getForecastWeather()) {
-            is Result.OnSuccess -> {
+            is com.example.weather_domain.Result.OnSuccess -> {
                 data = result.data
             }
-            is Result.OnError -> {}
+            is com.example.weather_domain.Result.OnError -> {}
         }
         assertThat(data).isNotNull()
 
@@ -77,13 +67,13 @@ class WeatherRepositoryImplTest {
 
     @Test
     fun getAirPollution() = runTest {
-        lateinit var data: AirPollution
+        lateinit var data: com.example.weather_domain.models.AirPollution
         storageRepository.saveCoordinates(54.27,18.19)
         when (val result = weatherRepository.getAirPollution()) {
-            is Result.OnSuccess -> {
+            is com.example.weather_domain.Result.OnSuccess -> {
                 data = result.data
             }
-            is Result.OnError -> {}
+            is com.example.weather_domain.Result.OnError -> {}
         }
         assertThat(data.coordinates.lat).isEqualTo(54.27)
 

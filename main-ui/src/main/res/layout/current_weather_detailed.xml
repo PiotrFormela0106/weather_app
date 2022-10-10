@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewState"
+            type="com.example.main_ui.MainScreenViewModel.ViewState" />
+
+        <variable
+            name="viewModel"
+            type="com.example.main_ui.MainScreenViewModel" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Theme.WeatherApp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:visibility="@{viewModel.status}"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="4dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="4dp"
+            android:paddingBottom="16dp"
+            tools:showIn="@layout/fragment_main_screen">
+
+            <TextView
+                android:id="@+id/sunrise"
+                style="@style/weather_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:text="@{viewState.sunrise}"
+                app:drawableLeftCompat="@drawable/ic_sunrise"
+                app:layout_constraintEnd_toStartOf="@id/sunset"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="06:30" />
+
+            <TextView
+                android:id="@+id/sunset"
+                style="@style/weather_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:text="@{viewState.sunset}"
+                app:drawableLeftCompat="@drawable/ic_sunset"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/sunrise"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="21:30" />
+
+            <TextView
+                android:id="@+id/wind"
+                style="@style/weather_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewState.wind}"
+                app:drawableLeftCompat="@drawable/ic_wind"
+                app:layout_constraintEnd_toStartOf="@id/humidity"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sunrise" />
+
+            <TextView
+                android:id="@+id/humidity"
+                style="@style/weather_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewState.humidity}"
+                app:drawableLeftCompat="@drawable/ic_humidity"
+                app:layout_constraintEnd_toStartOf="@id/pressure"
+                app:layout_constraintStart_toEndOf="@id/wind"
+                app:layout_constraintTop_toBottomOf="@id/sunrise" />
+
+            <TextView
+                android:id="@+id/pressure"
+                style="@style/weather_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewState.pressure}"
+                app:drawableLeftCompat="@drawable/ic_pressure"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/humidity"
+                app:layout_constraintTop_toBottomOf="@id/sunrise" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

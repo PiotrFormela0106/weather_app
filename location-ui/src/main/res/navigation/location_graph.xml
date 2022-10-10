@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/location_graph"
+    app:startDestination="@id/cityScreenFragment">
+    <fragment
+        android:id="@+id/cityScreenFragment"
+        android:name="com.example.location_ui.CityScreenFragment"
+        android:label="Cities screen"
+        tools:layout="@layout/fragment_city_screen">
+        <action
+            android:id="@+id/navigateToMapsScreen"
+            app:destination="@id/mapsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.location_ui.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps">
+    </fragment>
+</navigation>

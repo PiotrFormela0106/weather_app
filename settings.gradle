@@ -14,3 +14,14 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Weather App"
 include ':app'
+include ':weather-data'
+include ':weather-domain'
+include ':main-ui'
+include ':storage-data'
+include ':storage-domain'
+include ':city-data'
+include ':city-domain'
+include ':location-ui'
+include ':info-ui'
+include ':settings-ui'
+include ':base'

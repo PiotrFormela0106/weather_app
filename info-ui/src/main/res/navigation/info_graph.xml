@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/info_graph"
+    app:startDestination="@id/forecastDetailsFragment">
+    <fragment
+        android:id="@+id/forecastDetailsFragment"
+        android:name="com.example.info_ui.ForecastDetailsFragment"
+        android:label="ForecastDetailsFragment">
+        <argument
+            android:name="day"
+            app:argType="string" />
+        <argument
+            android:name="days"
+            app:argType="string[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/additionalInfoScreenFragment"
+        android:name="com.example.info_ui.AdditionalInfoScreenFragment"
+        android:label="Additional info"
+        tools:layout="@layout/fragment_additional_info_screen">
+        <argument
+            android:name="day"
+            app:argType="string" />
+    </fragment>
+
+</navigation>

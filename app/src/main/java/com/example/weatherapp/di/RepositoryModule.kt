@@ -1,13 +1,13 @@
 package com.example.weatherapp.di
 
 import android.content.Context
-import com.example.weatherapp.data.api.RetrofitClient
-import com.example.weatherapp.data.repo.CityRepositoryImpl
-import com.example.weatherapp.data.repo.StorageRepositoryImpl
-import com.example.weatherapp.data.repo.WeatherRepositoryImpl
-import com.example.weatherapp.domain.repo.CityRepository
-import com.example.weatherapp.domain.repo.StorageRepository
-import com.example.weatherapp.domain.repo.WeatherRepository
+import com.example.weather_data.api.RetrofitClient
+import com.example.city_data.repo.CityRepositoryImpl
+import com.example.city_domain.repo.CityRepository
+import com.example.storage_data.repo.StorageRepositoryImpl
+import com.example.storage_domain.repo.StorageRepository
+import com.example.weather_data.repo.WeatherRepositoryImpl
+import com.example.weather_domain.repo.WeatherRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

@@ -11,6 +11,17 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/base" />
+            <option value="$PROJECT_DIR$/city-data" />
+            <option value="$PROJECT_DIR$/city-domain" />
+            <option value="$PROJECT_DIR$/info-ui" />
+            <option value="$PROJECT_DIR$/location-ui" />
+            <option value="$PROJECT_DIR$/main-ui" />
+            <option value="$PROJECT_DIR$/settings-ui" />
+            <option value="$PROJECT_DIR$/storage-data" />
+            <option value="$PROJECT_DIR$/storage-domain" />
+            <option value="$PROJECT_DIR$/weather-data" />
+            <option value="$PROJECT_DIR$/weather-domain" />
           </set>
         </option>
       </GradleProjectSettings>

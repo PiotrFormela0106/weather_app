@@ -15,6 +15,7 @@
         <entry key="app/src/main/res/drawable/ic_location.xml" value="0.2005" />
         <entry key="app/src/main/res/drawable/ic_weather.xml" value="0.1605" />
         <entry key="app/src/main/res/drawable/image_view_border.xml" value="0.1895" />
+        <entry key="app/src/main/res/drawable/round_back_button.xml" value="0.129" />
         <entry key="app/src/main/res/drawable/splash_image.xml" value="0.1605" />
         <entry key="app/src/main/res/drawable/toolbar_bg.xml" value="0.1795" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
@@ -31,6 +32,7 @@
         <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.3453125" />
         <entry key="app/src/main/res/layout/fragment_city_screen.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_dialog.xml" value="0.3453125" />
+        <entry key="app/src/main/res/layout/fragment_forecast_details.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_main_screen.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_places.xml" value="0.34322916666666664" />
@@ -39,6 +41,42 @@
         <entry key="app/src/main/res/layout/gridview_city.xml" value="0.21197916666666666" />
         <entry key="app/src/main/res/menu/nav_bin.xml" value="0.375" />
         <entry key="app/src/main/res/menu/nav_menu.xml" value="0.2490740740740741" />
+        <entry key="info-ui/src/main/res/drawable/ic_back_button.xml" value="0.2225" />
+        <entry key="info-ui/src/main/res/drawable/ic_humidity.xml" value="0.2225" />
+        <entry key="info-ui/src/main/res/drawable/ic_pressure.xml" value="0.2225" />
+        <entry key="info-ui/src/main/res/drawable/ic_round.xml" value="0.2225" />
+        <entry key="info-ui/src/main/res/drawable/ic_weather.xml" value="0.2225" />
+        <entry key="info-ui/src/main/res/drawable/ic_wind.xml" value="0.2225" />
+        <entry key="info-ui/src/main/res/drawable/round_back_button.xml" value="0.2225" />
+        <entry key="info-ui/src/main/res/drawable/splash_image.xml" value="0.2225" />
+        <entry key="info-ui/src/main/res/layout/forecast_day_detailed.xml" value="0.22395833333333334" />
+        <entry key="info-ui/src/main/res/layout/fragment_additional_info_screen.xml" value="0.22395833333333334" />
+        <entry key="info-ui/src/main/res/layout/fragment_forecast_details.xml" value="0.22395833333333334" />
+        <entry key="location-ui/src/main/res/drawable/ic_weather.xml" value="0.2225" />
+        <entry key="location-ui/src/main/res/drawable/round_bin_button.xml" value="0.2225" />
+        <entry key="location-ui/src/main/res/drawable/splash_image.xml" value="0.2225" />
+        <entry key="location-ui/src/main/res/layout/city.xml" value="0.37604166666666666" />
+        <entry key="location-ui/src/main/res/layout/fragment_city_screen.xml" value="0.37604166666666666" />
+        <entry key="location-ui/src/main/res/layout/fragment_maps.xml" value="0.37604166666666666" />
+        <entry key="main-ui/src/main/res/drawable/ic_humidity.xml" value="0.2225" />
+        <entry key="main-ui/src/main/res/drawable/ic_location.xml" value="0.2225" />
+        <entry key="main-ui/src/main/res/drawable/ic_pressure.xml" value="0.2225" />
+        <entry key="main-ui/src/main/res/drawable/ic_round.xml" value="0.2225" />
+        <entry key="main-ui/src/main/res/drawable/ic_settings.xml" value="0.2225" />
+        <entry key="main-ui/src/main/res/drawable/ic_sunrise.xml" value="0.2225" />
+        <entry key="main-ui/src/main/res/drawable/ic_sunset.xml" value="0.2225" />
+        <entry key="main-ui/src/main/res/drawable/ic_weather.xml" value="0.2225" />
+        <entry key="main-ui/src/main/res/drawable/ic_wind.xml" value="0.2225" />
+        <entry key="main-ui/src/main/res/drawable/round_location_button.xml" value="0.2225" />
+        <entry key="main-ui/src/main/res/drawable/round_settings_button.xml" value="0.2225" />
+        <entry key="main-ui/src/main/res/drawable/splash_image.xml" value="0.2225" />
+        <entry key="main-ui/src/main/res/layout/air_pollution.xml" value="0.22395833333333334" />
+        <entry key="main-ui/src/main/res/layout/current_weather.xml" value="0.22395833333333334" />
+        <entry key="main-ui/src/main/res/layout/current_weather_detailed.xml" value="0.33" />
+        <entry key="main-ui/src/main/res/layout/forecast_day.xml" value="0.22395833333333334" />
+        <entry key="main-ui/src/main/res/layout/fragment_main_screen.xml" value="0.22" />
+        <entry key="main-ui/src/main/res/layout/fragment_settings.xml" value="0.22395833333333334" />
+        <entry key="settings-ui/src/main/res/layout/fragment_settings.xml" value="0.37025641025641026" />
       </map>
     </option>
   </component>
