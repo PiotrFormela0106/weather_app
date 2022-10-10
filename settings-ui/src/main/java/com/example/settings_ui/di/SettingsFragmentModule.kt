@@ -1,9 +1,9 @@
 package com.example.settings_ui.di
 
 import androidx.lifecycle.ViewModel
+import com.example.di.ViewModelKey
 import com.example.settings_ui.SettingsFragment
 import com.example.settings_ui.SettingsViewModel
-import com.example.weatherapp.di.ViewModelKey
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

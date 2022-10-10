@@ -3,7 +3,7 @@ package com.example.location_ui.di
 import androidx.lifecycle.ViewModel
 import com.example.location_ui.CityScreenFragment
 import com.example.location_ui.CityScreenViewModel
-import com.example.weatherapp.di.ViewModelKey
+import com.example.di.ViewModelKey
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

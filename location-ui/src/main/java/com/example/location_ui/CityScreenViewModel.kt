@@ -5,20 +5,20 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.city_data.room.City
+import com.example.city_domain.models.City
 import com.example.weather_domain.models.LocationMethod
 import com.example.city_domain.repo.CityRepository
 import com.example.storage_domain.repo.StorageRepository
 import com.example.weather_domain.CityError
 import com.example.weather_domain.repo.WeatherRepository
-import com.example.base.ui.core.UiEvents
+import com.example.base.UiEvents
+import com.example.base.Result
+import com.example.base.Error
 import com.google.android.libraries.places.api.model.Place
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.example.weather_domain.Result
-import com.example.weather_domain.Error
 import javax.inject.Inject
 
 class CityScreenViewModel @Inject constructor(
@@ -26,7 +26,7 @@ class CityScreenViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository,
     val storageRepository: StorageRepository
 ) : ViewModel(), LifecycleObserver {
-    private val uiEvents = com.example.base.ui.core.UiEvents<Event>()
+    private val uiEvents = UiEvents<Event>()
     val events: Flow<Event> = uiEvents.events()
     val allCities = MutableLiveData<List<City>>()
     val cityName = MutableLiveData<String>()
@@ -82,7 +82,7 @@ class CityScreenViewModel @Inject constructor(
         }
     }
 
-    private fun deleteCity(city: com.example.city_data.room.City) {
+    private fun deleteCity(city: City) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 cityRepository.deleteCity(city)

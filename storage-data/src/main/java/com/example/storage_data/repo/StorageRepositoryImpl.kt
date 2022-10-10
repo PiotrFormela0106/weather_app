@@ -3,9 +3,6 @@ package com.example.storage_data.repo
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.storage_domain.repo.StorageRepository
-import com.example.weather_data.mappers.toData
-import com.example.weather_data.mappers.toLanguage
-import com.example.weather_data.mappers.toUnits
 import com.example.weather_domain.models.Language
 import com.example.weather_domain.models.LocationMethod
 import com.example.weather_domain.models.Units
@@ -81,3 +78,36 @@ class StorageRepositoryImpl @Inject constructor(context: Context) :
         return prefs.getString(EXTRA_PHOTO_ID, "").orEmpty()
     }
 }
+
+private fun String.toUnits(): Units {
+    return if (NOT_METRIC.equals(this, true)) Units.NotMetric
+    else Units.Metric
+}
+
+private fun Units.toData(): String {
+    return when (this) {
+        Units.Metric -> METRIC
+        Units.NotMetric -> NOT_METRIC
+    }
+}
+
+private fun String.toLanguage(): Language {
+    if (PL.equals(this, true)) return Language.PL
+    return if (DE.equals(this, true)) Language.DE
+    else
+        Language.ENG
+}
+
+private fun Language.toData(): String {
+    return when (this) {
+        Language.ENG -> ENG
+        Language.PL -> PL
+        Language.DE -> DE
+    }
+}
+
+private const val METRIC = "Metric"
+private const val NOT_METRIC = "Not metric"
+private const val PL = "pl"
+private const val ENG = "eng"
+private const val DE = "de"

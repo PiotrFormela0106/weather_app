@@ -4,7 +4,6 @@ import com.example.weather_data.Cache
 import com.example.weather_data.getCityCacheKey
 import com.example.weather_data.getLocationCacheKey
 import com.example.weather_data.mappers.toDomain
-import com.example.weather_domain.Result
 import com.example.weather_domain.models.AirPollution
 import com.example.weather_domain.models.CurrentWeather
 import com.example.weather_domain.models.ForecastWeather
@@ -18,6 +17,7 @@ import com.example.weather_domain.repo.WeatherRepository
 import com.example.weather_domain.toError
 import java.lang.Exception
 import javax.inject.Inject
+import com.example.base.Result
 
 class WeatherRepositoryImpl @Inject constructor(
     retrofitClient: RetrofitClient,

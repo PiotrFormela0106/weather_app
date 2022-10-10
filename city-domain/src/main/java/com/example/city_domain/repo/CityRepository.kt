@@ -1,7 +1,7 @@
 package com.example.city_domain.repo
 
 import com.example.city_domain.models.City
-import com.example.weather_domain.Result
+import com.example.base.Result
 
 interface CityRepository {
     suspend fun insertCity(cityName: String, photoId: String)

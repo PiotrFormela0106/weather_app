@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.location_ui.databinding.FragmentMapsBinding
-import com.example.weatherapp.BuildConfig.PLACES_API_KEY
+import com.example.base.BuildConfig.PLACES_API_KEY
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -133,7 +133,8 @@ class MapsFragment : DaggerFragment() {
     private fun handleEvent(event: MapsViewModel.Event) {
         when (event) {
             is MapsViewModel.Event.OnPickPlace -> {
-                findNavController().popBackStack(R.id.mainScreenFragment, false)
+                //todo fix later
+//                findNavController().popBackStack(com.example.weatherapp.R.id.main_screen_id, false)
             }
             is MapsViewModel.Event.OnBack -> {
                 findNavController().popBackStack()

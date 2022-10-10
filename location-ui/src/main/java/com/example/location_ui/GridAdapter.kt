@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import com.example.city_data.room.City
+import com.example.city_domain.models.City
 import com.squareup.picasso.Picasso
 
 class GridAdapter(private val listOfCities: List<City>, private val context: Context) : BaseAdapter() {

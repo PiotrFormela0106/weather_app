@@ -1,9 +1,9 @@
 package com.example.location_ui.di
 
 import androidx.lifecycle.ViewModel
-import com.example.base.di.ViewModelKey
-import com.example.weatherapp.ui.city.MapsFragment
-import com.example.weatherapp.ui.city.MapsViewModel
+import com.example.di.ViewModelKey
+import com.example.location_ui.MapsFragment
+import com.example.location_ui.MapsViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -20,6 +20,6 @@ abstract class MapsFragmentModule {
 abstract class MapsViewModelModule {
     @Binds
     @IntoMap
-    @com.example.base.di.ViewModelKey(MapsViewModel::class)
+    @ViewModelKey(MapsViewModel::class)
     abstract fun bindMapsViewModel(fragmentViewModel: MapsViewModel): ViewModel
 }

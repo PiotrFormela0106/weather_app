@@ -11,6 +11,9 @@ import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.base.UiEvents
+import com.example.base.Result
+import com.example.base.Error
 import com.example.weather_data.mappers.toData
 import com.example.weather_data.mappers.toSymbol
 import com.example.weather_domain.models.AirPollution
@@ -20,7 +23,6 @@ import com.example.weather_domain.models.ForecastWeather
 import com.example.weather_domain.models.LocationMethod
 import com.example.storage_domain.repo.StorageRepository
 import com.example.weather_domain.repo.WeatherRepository
-import com.example.base.ui.core.UiEvents
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -32,8 +34,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
-import com.example.weather_domain.Result
-import com.example.weather_domain.Error
 
 class MainScreenViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository,
@@ -41,7 +41,7 @@ class MainScreenViewModel @Inject constructor(
     val resources: Resources
 ) : ViewModel(), LifecycleObserver {
 
-    private val uiEvents = com.example.base.ui.core.UiEvents<Event>()
+    private val uiEvents = UiEvents<Event>()
     val events: Flow<Event> = uiEvents.events()
 
     val status = MutableLiveData(Status.Loading)

@@ -12,8 +12,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.weatherapp.BuildConfig.PLACES_API_KEY
-import com.example.city_data.room.City
+import com.example.city_domain.models.City
+import com.example.base.BuildConfig.PLACES_API_KEY
 import com.example.location_ui.databinding.FragmentCityScreenBinding
 import com.example.weather_domain.models.LocationMethod
 import com.google.android.gms.common.api.Status

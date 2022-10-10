@@ -44,8 +44,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation project(path: ':storage-domain')
     implementation project(path: ':weather-domain')
-    implementation project(path: ':weather-data')
-    implementation project(path: ':app')
+    implementation project(path: ':base')
 
     //Dagger
     implementation "com.google.dagger:dagger-android-support:2.41"

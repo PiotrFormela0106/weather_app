@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.weather_domain.models.Language
 import com.example.weather_domain.models.Units
 import com.example.storage_domain.repo.StorageRepository
-import com.example.base.ui.core.UiEvents
+import com.example.base.UiEvents
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -20,7 +20,7 @@ class SettingsViewModel @Inject constructor(
     val language = MutableLiveData(storageRepository.getLanguage().toId())
     val metric = Transformations.map(selectionUnits) { it == Units.Metric }
     val notMetric = Transformations.map(selectionUnits) { it == Units.NotMetric }
-    private val uiEvents = com.example.base.ui.core.UiEvents<Event>()
+    private val uiEvents = UiEvents<Event>()
     val events: Flow<Event> = uiEvents.events()
 
     fun switchUnitsClick() {

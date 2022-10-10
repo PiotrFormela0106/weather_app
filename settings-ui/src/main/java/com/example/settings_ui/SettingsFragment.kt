@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.settings_ui.databinding.FragmentSettingsBinding
-import com.example.weather_data.mappers.toData
+import com.example.weather_domain.models.Language
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.coroutines.launch
@@ -74,3 +74,14 @@ class SettingsFragment : BottomSheetDialogFragment() {
         }
     }
 }
+
+private fun Language.toData(): String {
+    return when (this) {
+        Language.ENG -> ENG
+        Language.PL -> PL
+        Language.DE -> DE
+    }
+}
+private const val PL = "pl"
+private const val ENG = "eng"
+private const val DE = "de"

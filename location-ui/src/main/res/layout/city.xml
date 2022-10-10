@@ -4,7 +4,7 @@
     <data>
         <variable
             name="city"
-            type="com.example.city_data.room.City" />
+            type="com.example.city_domain.models.City" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

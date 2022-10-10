@@ -2,18 +2,11 @@ package com.example.weatherapp.data.repo
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.weather_data.api.RetrofitClient
-import com.example.weather_domain.models.LocationMethod
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.runner.RunWith
 import org.junit.Before
 import org.junit.Test
 import kotlinx.coroutines.test.runTest
-import com.example.weather_domain.Result
-import com.example.weather_domain.models.AirPollution
-import com.example.weather_domain.models.CurrentWeather
-import com.example.weather_domain.models.ForecastWeather
-import com.example.weather_domain.models.Language
 import com.google.common.truth.Truth.assertThat
 
 @ExperimentalCoroutinesApi

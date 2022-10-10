@@ -1,7 +1,7 @@
 package com.example.info_ui.di
 
 import androidx.lifecycle.ViewModel
-import com.example.weatherapp.di.ViewModelKey
+import com.example.di.ViewModelKey
 import com.example.info_ui.AdditionalInfoScreenFragment
 import com.example.info_ui.AdditionalInfoScreenViewModel
 import dagger.Binds

@@ -152,17 +152,6 @@ fun ForecastWeatherData.toDomain(): ForecastWeatherDomain =
         list = list.map { it.toDomain() }
     )
 
-fun String.toUnits(): Units {
-    return if (NOT_METRIC.equals(this, true)) Units.NotMetric
-    else Units.Metric
-}
-
-fun Units.toData(): String {
-    return when (this) {
-        Units.Metric -> METRIC
-        Units.NotMetric -> NOT_METRIC
-    }
-}
 fun Units.toSymbol(): String {
     return when (this) {
         Units.Metric -> CELSIUS
@@ -176,12 +165,6 @@ fun Language.toData(): String {
         Language.PL -> PL
         Language.DE -> DE
     }
-}
-fun String.toLanguage(): Language {
-    if (PL.equals(this, true)) return Language.PL
-    return if (DE.equals(this, true)) Language.DE
-    else
-        Language.ENG
 }
 
 private const val METRIC = "Metric"

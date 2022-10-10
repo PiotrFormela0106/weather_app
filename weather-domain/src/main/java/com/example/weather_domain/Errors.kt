@@ -2,15 +2,11 @@ package com.example.weather_domain
 
 import android.util.Log
 import retrofit2.HttpException
+import com.example.base.Error
 
 // private const val CITY_ERROR = "HTTP 404 Not Found"
 private const val CITY_ERROR = "city not found"
 private const val CITY_ERROR2 = "Nothing to geocode"
-
-sealed class Error(
-    val message: String,
-    val throwable: Throwable? = null
-)
 
 open class CityError(
     message: String = "There is no such city!",

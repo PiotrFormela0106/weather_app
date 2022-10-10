@@ -34,19 +34,12 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            buildConfigField "String", "API_URL", '"https://api.openweathermap.org/data/2.5/"'
-            buildConfigField "String", "API_KEY", '"7a6886b06890c79387cbdf1ebc857ef2"'
-            buildConfigField "String", "PLACES_API_KEY", '"AIzaSyC21G1hQSHrdlo7hQV7Ln70IIRZNWclaXQ"'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug{
             minifyEnabled false
-            buildConfigField "String", "API_URL", '"https://api.openweathermap.org/data/2.5/"'
-            buildConfigField "String", "API_KEY", '"7a6886b06890c79387cbdf1ebc857ef2"'
-            buildConfigField "String", "PLACES_API_KEY", '"AIzaSyC21G1hQSHrdlo7hQV7Ln70IIRZNWclaXQ"'
             debuggable true
         }
-
     }
     ext{
         daggerVersion = "2.41"
@@ -79,6 +72,7 @@ dependencies {
     implementation project(path: ':settings-ui')
     implementation project(path: ':main-ui')
     implementation project(path: ':location-ui')
+    implementation project(path: ':base')
 
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

@@ -3,17 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainScreenFragment">
+    app:startDestination="@id/main_screen_id">
 
     <fragment
-        android:id="@+id/mainScreenFragment"
+        android:id="@id/main_screen_id"
         android:name="com.example.main_ui.MainScreenFragment"
         android:label="Main screen"
         tools:layout="@layout/fragment_main_screen">
         <action
             android:id="@+id/navigateToCities"
             app:destination="@id/location_graph"
-            app:popUpTo="@id/mainScreenFragment" />
+            app:popUpTo="@id/main_screen_id" />
         <action
             android:id="@+id/navigateToSettings"
             app:destination="@id/settings_graph" />
