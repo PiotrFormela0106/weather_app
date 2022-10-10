@@ -1,24 +1,17 @@
 package com.example.weatherapp.ui.main
 
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.weatherapp.data.api.RetrofitClient
 import com.example.weatherapp.data.repo.StorageRepositoryImpl
-import com.example.weatherapp.data.repo.WeatherRepositoryImpl
-import com.example.weatherapp.domain.models.LocationMethod
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.runner.RunWith
 import org.junit.Before
 import org.junit.Test
-import kotlinx.coroutines.test.runTest
 import com.google.common.truth.Truth.assertThat
 import android.content.res.Resources
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.weatherapp.data.mappers.toData
-import com.example.weatherapp.domain.models.Units
-import com.example.weatherapp.ui.settings.SettingsViewModel
+import com.example.weather_domain.models.Units
+import com.example.settings_ui.SettingsViewModel
 import org.junit.Rule
 
 class SettingsViewModelTest {
@@ -27,7 +20,7 @@ class SettingsViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var viewModel: SettingsViewModel
+    private lateinit var viewModel: com.example.settings_ui.SettingsViewModel
     lateinit var storageRepository: StorageRepositoryImpl
     @RelaxedMockK
     lateinit var resources: Resources
@@ -36,12 +29,12 @@ class SettingsViewModelTest {
     fun setup() {
         MockKAnnotations.init(this)
         storageRepository = StorageRepositoryImpl(ApplicationProvider.getApplicationContext())
-        viewModel = SettingsViewModel(storageRepository, resources)
+        viewModel = com.example.settings_ui.SettingsViewModel(storageRepository, resources)
     }
 
     @Test
     fun switchUnitsToNotMetric(){
-        val units = storageRepository.saveUnits(Units.Metric)
+        val units = storageRepository.saveUnits(com.example.weather_domain.models.Units.Metric)
         viewModel.switchUnitsClick()
         viewModel.selectionUnits.observeForever { currentUnits ->
             assertThat(currentUnits).isNotEqualTo(units)
@@ -50,7 +43,7 @@ class SettingsViewModelTest {
 
     @Test
     fun switchUnitsToMetric(){
-        val units = storageRepository.saveUnits(Units.NotMetric)
+        val units = storageRepository.saveUnits(com.example.weather_domain.models.Units.NotMetric)
         viewModel.switchUnitsClick()
         viewModel.selectionUnits.observeForever { currentUnits ->
             assertThat(currentUnits).isNotEqualTo(units)

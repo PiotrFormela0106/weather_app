@@ -2,10 +2,10 @@ package com.example.weatherapp.ui.main
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.weatherapp.data.api.RetrofitClient
+import com.example.weather_data.api.RetrofitClient
 import com.example.weatherapp.data.repo.StorageRepositoryImpl
 import com.example.weatherapp.data.repo.WeatherRepositoryImpl
-import com.example.weatherapp.domain.models.LocationMethod
+import com.example.weather_domain.models.LocationMethod
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,7 +26,7 @@ class MainScreenViewModelTest{
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var viewModel: MainScreenViewModel
+    private lateinit var viewModel: com.example.main_ui.MainScreenViewModel
     lateinit var storageRepository: StorageRepositoryImpl
     @RelaxedMockK
     lateinit var resources: Resources
@@ -35,14 +35,15 @@ class MainScreenViewModelTest{
     fun setup() {
         MockKAnnotations.init(this)
         storageRepository = StorageRepositoryImpl(ApplicationProvider.getApplicationContext())
-        val retrofitClient = RetrofitClient()
+        val retrofitClient = com.example.weather_data.api.RetrofitClient()
         val weatherRepository = WeatherRepositoryImpl(retrofitClient, storageRepository)
-        viewModel = MainScreenViewModel(weatherRepository, storageRepository, resources)
+        viewModel =
+            com.example.main_ui.MainScreenViewModel(weatherRepository, storageRepository, resources)
     }
 
     @Test
     fun checkWeatherDataResponseForCity() = runTest{
-        storageRepository.saveLocationMethod(LocationMethod.City)
+        storageRepository.saveLocationMethod(com.example.weather_domain.models.LocationMethod.City)
         storageRepository.saveCity("Warsaw")
         viewModel.fetchData()
         viewModel.weatherData.observeForever { data ->
@@ -51,7 +52,7 @@ class MainScreenViewModelTest{
     }
     @Test
     fun checkWeatherDataResponseForLocation() = runTest{
-        storageRepository.saveLocationMethod(LocationMethod.Location)
+        storageRepository.saveLocationMethod(com.example.weather_domain.models.LocationMethod.Location)
         storageRepository.saveCoordinates(54.27,18.19)
         viewModel.fetchData()
         viewModel.weatherData.observeForever { data ->
@@ -60,7 +61,7 @@ class MainScreenViewModelTest{
     }
     @Test
     fun checkForecastDataResponseForCity() = runTest{
-        storageRepository.saveLocationMethod(LocationMethod.City)
+        storageRepository.saveLocationMethod(com.example.weather_domain.models.LocationMethod.City)
         storageRepository.saveCity("Warsaw")
         viewModel.fetchData()
         viewModel.forecastData.observeForever { data ->
@@ -69,7 +70,7 @@ class MainScreenViewModelTest{
     }
     @Test
     fun checkForecastDataResponseForLocation() = runTest{
-        storageRepository.saveLocationMethod(LocationMethod.Location)
+        storageRepository.saveLocationMethod(com.example.weather_domain.models.LocationMethod.Location)
         storageRepository.saveCoordinates(54.27,18.19)
         viewModel.fetchData()
         viewModel.forecastData.observeForever { data ->
@@ -78,7 +79,7 @@ class MainScreenViewModelTest{
     }
     @Test
     fun checkAirPollutionDataResponse() = runTest{
-        storageRepository.saveLocationMethod(LocationMethod.City)
+        storageRepository.saveLocationMethod(com.example.weather_domain.models.LocationMethod.City)
         storageRepository.saveCoordinates(54.27,18.19)
         viewModel.fetchData()
         viewModel.airPollutionData.observeForever { data ->

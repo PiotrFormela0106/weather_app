@@ -2,14 +2,14 @@ package com.example.weatherapp.data.repo
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.weatherapp.domain.models.LocationMethod
+import com.example.weather_domain.models.LocationMethod
 import org.junit.runner.RunWith
 import org.junit.Before
 import org.junit.Test
 import com.google.common.truth.Truth.assertThat
-import com.example.weatherapp.data.mappers.toData
-import com.example.weatherapp.domain.models.Language
-import com.example.weatherapp.domain.models.Units
+import com.example.weather_data.mappers.toData
+import com.example.weather_domain.models.Language
+import com.example.weather_domain.models.Units
 
 @RunWith(AndroidJUnit4::class)
 class StorageRepositoryImplTest {
@@ -30,21 +30,21 @@ class StorageRepositoryImplTest {
 
     @Test
     fun savingLocationMethod(){
-        storageRepository.saveLocationMethod(LocationMethod.City)
+        storageRepository.saveLocationMethod(com.example.weather_domain.models.LocationMethod.City)
         val locationMethod = storageRepository.getLocationMethod().toString()
         assertThat(locationMethod).isEqualTo("City")
     }
 
     @Test
     fun savingUnits(){
-        storageRepository.saveUnits(Units.Metric)
+        storageRepository.saveUnits(com.example.weather_domain.models.Units.Metric)
         val units = storageRepository.getUnits().toData()
         assertThat(units).isEqualTo("Metric")
     }
 
     @Test
     fun savingLanguage(){
-        storageRepository.saveLanguage(Language.PL)
+        storageRepository.saveLanguage(com.example.weather_domain.models.Language.PL)
         val lang = storageRepository.getLanguage().toData().uppercase()
         assertThat(lang).isEqualTo("PL")
     }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="metric">Celsius (°C)</string>
+    <string name="pl">Polish</string>
+    <string name="eng">English</string>
+    <string name="settings">Settings</string>
+    <string name="not_metric">Kelvin (K)</string>
+    <string name="de">German</string>
+    <string name="celsius">°C</string>
+    <string name="kelvin">K</string>
+</resources>

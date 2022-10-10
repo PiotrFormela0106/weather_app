@@ -16,14 +16,14 @@ import kotlinx.coroutines.test.runTest
 @RunWith(AndroidJUnit4::class)
 @SmallTest
 class CityDaoTest {
-    private lateinit var database: CityDatabase
-    private lateinit var dao: CityDao
+    private lateinit var database: com.example.city_data.room.CityDatabase
+    private lateinit var dao: com.example.city_data.room.CityDao
 
     @Before
     fun setup() {
         database = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
-            CityDatabase::class.java
+            com.example.city_data.room.CityDatabase::class.java
         ).allowMainThreadQueries().build()
         dao = database.cityDao()
     }
@@ -36,7 +36,8 @@ class CityDaoTest {
     @Test
     fun insertCityItem() = runTest {
         //adding one element to db
-        val cityItem1 = City(cityId = 1, city = "Gdansk", photoId = "http://....")
+        val cityItem1 =
+            com.example.city_data.room.City(cityId = 1, city = "Gdansk", photoId = "http://....")
         dao.insert(cityItem1)
         val allCities = dao.getAllCities()
         assertThat(allCities).contains(cityItem1)
@@ -45,7 +46,8 @@ class CityDaoTest {
     @Test
     fun removeCityItem() = runTest {
         //removing one element from db
-        val cityItem1 = City(cityId = 1, city = "Gdansk", photoId = "http://....")
+        val cityItem1 =
+            com.example.city_data.room.City(cityId = 1, city = "Gdansk", photoId = "http://....")
         dao.insert(cityItem1)
         dao.delete(cityItem1)
         val allCities = dao.getAllCities()
@@ -55,9 +57,9 @@ class CityDaoTest {
     @Test
     fun deleteCities() = runTest {
         //Removing all elements from db
-        val cityItem1 = City(city = "Gdansk", photoId = "http://....")
-        val cityItem2 = City(city = "Gdynia", photoId = "http://....")
-        val cityItem3 = City(city = "Sopot", photoId = "http://....")
+        val cityItem1 = com.example.city_data.room.City(city = "Gdansk", photoId = "http://....")
+        val cityItem2 = com.example.city_data.room.City(city = "Gdynia", photoId = "http://....")
+        val cityItem3 = com.example.city_data.room.City(city = "Sopot", photoId = "http://....")
         dao.insert(cityItem1)
         dao.insert(cityItem2)
         dao.insert(cityItem3)
@@ -69,7 +71,8 @@ class CityDaoTest {
     @Test
     fun getPhotoId() = runTest {
         //getting photo id
-        val cityItem1 = City(cityId = 1, city = "Gdansk", photoId = "http://...")
+        val cityItem1 =
+            com.example.city_data.room.City(cityId = 1, city = "Gdansk", photoId = "http://...")
         dao.insert(cityItem1)
         val photo = dao.getPhotoId(cityItem1.city)
         assertThat(photo).isEqualTo("http://...")

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.location_ui.MapsViewModel" />
+    </data>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <fragment
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.example.location_ui.MapsFragment" />
+
+    <ImageButton
+        android:id="@+id/back_to_city_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/round_back_button"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        style="@style/icon"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:onClick="@{()->viewModel.onBack()}"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="64dp"
+        android:background="@color/white">
+
+        <fragment
+            android:id="@+id/autocomplete_fragment_map"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/check_weather"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginStart="200dp"
+        android:layout_toEndOf="@+id/back_to_city_screen"
+        android:onClick="@{()->viewModel.onPickPlace()}"
+        android:text="CHECK WEATHER" />
+
+
+</RelativeLayout>
+</layout>

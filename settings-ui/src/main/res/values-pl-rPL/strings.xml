@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings">Ustawienia</string>
+    <string name="metric">Stopnie Celsjusza (°C)</string>
+    <string name="not_metric">Kelvin (K)</string>
+    <string name="pl">Polski</string>
+    <string name="eng">Angielski</string>
+    <string name="de">Niemiecki</string>
+    <string name="celsius">°C</string>
+    <string name="kelvin">K</string>
+</resources>
