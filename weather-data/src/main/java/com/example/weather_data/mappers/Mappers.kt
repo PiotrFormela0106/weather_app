@@ -151,26 +151,3 @@ fun ForecastWeatherData.toDomain(): ForecastWeatherDomain =
         city = city.toDomain(),
         list = list.map { it.toDomain() }
     )
-
-fun Units.toSymbol(): String {
-    return when (this) {
-        Units.Metric -> CELSIUS
-        Units.NotMetric -> KELVIN
-    }
-}
-
-fun Language.toData(): String {
-    return when (this) {
-        Language.ENG -> ENG
-        Language.PL -> PL
-        Language.DE -> DE
-    }
-}
-
-private const val METRIC = "Metric"
-private const val NOT_METRIC = "Not metric"
-private const val PL = "pl"
-private const val ENG = "eng"
-private const val DE = "de"
-private const val CELSIUS = " \u2103"
-private const val KELVIN = " K"

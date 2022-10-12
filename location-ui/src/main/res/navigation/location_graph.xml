@@ -18,5 +18,8 @@
         android:name="com.example.location_ui.MapsFragment"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps">
+        <action
+            android:id="@+id/navigateToMainScreen"
+            app:destination="@id/main_screen_id" />
     </fragment>
 </navigation>

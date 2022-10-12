@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.city_domain.models.City
-import com.example.base.BuildConfig.PLACES_API_KEY
+import com.example.location_ui.BuildConfig.PLACES_API_KEY
 import com.example.location_ui.databinding.FragmentCityScreenBinding
 import com.example.weather_domain.models.LocationMethod
 import com.google.android.gms.common.api.Status
@@ -80,8 +80,6 @@ class CityScreenFragment : DaggerFragment() {
                 }
         }
 
-        binding.pickPlace.setOnClickListener {
-        }
     }
 
     private fun setupAutocompleteSearchFragment() {
@@ -147,8 +145,8 @@ class CityScreenFragment : DaggerFragment() {
     }
 
     private fun openMap() {
-        //if (findNavController().currentDestination?.id == R.id.cityScreenFragment)
-        //    findNavController().navigate(CityScreenFragmentDirections.navigateToMapsScreen())
+        if (findNavController().currentDestination?.id == R.id.cityScreenFragment)
+            findNavController().navigate(CityScreenFragmentDirections.navigateToMapsScreen())
     }
 
     private fun goToMainScreen() {
