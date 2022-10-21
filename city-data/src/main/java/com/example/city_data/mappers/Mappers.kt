@@ -13,6 +13,3 @@ fun CityRoomData.toDomain(): CityRoomDomain = CityRoomDomain(
     city = city,
     photoId = photoId
 )
-
-
-

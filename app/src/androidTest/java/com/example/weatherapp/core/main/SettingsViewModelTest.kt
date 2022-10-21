@@ -1,18 +1,18 @@
-//package com.example.weatherapp.core.main
+// package com.example.weatherapp.core.main
 //
-//import androidx.test.core.app.ApplicationProvider
-//import com.example.weatherapp.data.repo.StorageRepositoryImpl
-//import io.mockk.MockKAnnotations
-//import io.mockk.impl.annotations.RelaxedMockK
-//import kotlinx.coroutines.ExperimentalCoroutinesApi
-//import org.junit.Before
-//import org.junit.Test
-//import com.google.common.truth.Truth.assertThat
-//import android.content.res.Resources
-//import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-//import org.junit.Rule
+// import androidx.test.core.app.ApplicationProvider
+// import com.example.weatherapp.data.repo.StorageRepositoryImpl
+// import io.mockk.MockKAnnotations
+// import io.mockk.impl.annotations.RelaxedMockK
+// import kotlinx.coroutines.ExperimentalCoroutinesApi
+// import org.junit.Before
+// import org.junit.Test
+// import com.google.common.truth.Truth.assertThat
+// import android.content.res.Resources
+// import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+// import org.junit.Rule
 //
-//class SettingsViewModelTest {
+// class SettingsViewModelTest {
 //
 //    @ExperimentalCoroutinesApi
 //    @get:Rule
@@ -47,4 +47,4 @@
 //            assertThat(currentUnits).isNotEqualTo(units)
 //        }
 //    }
-//}
+// }

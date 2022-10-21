@@ -1,8 +1,8 @@
 package com.example.weather_domain
 
 import android.util.Log
-import retrofit2.HttpException
 import com.example.base.Error
+import retrofit2.HttpException
 
 // private const val CITY_ERROR = "HTTP 404 Not Found"
 private const val CITY_ERROR = "city not found"

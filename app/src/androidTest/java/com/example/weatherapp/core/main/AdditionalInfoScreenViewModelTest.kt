@@ -1,18 +1,18 @@
-//package com.example.weatherapp.core.main
+// package com.example.weatherapp.core.main
 //
-//import androidx.test.core.app.ApplicationProvider
-//import com.example.weatherapp.data.repo.StorageRepositoryImpl
-//import com.example.weatherapp.data.repo.WeatherRepositoryImpl
-//import kotlinx.coroutines.ExperimentalCoroutinesApi
-//import org.junit.Before
-//import org.junit.Test
-//import kotlinx.coroutines.test.runTest
-//import com.google.common.truth.Truth.assertThat
-//import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-//import org.junit.Rule
+// import androidx.test.core.app.ApplicationProvider
+// import com.example.weatherapp.data.repo.StorageRepositoryImpl
+// import com.example.weatherapp.data.repo.WeatherRepositoryImpl
+// import kotlinx.coroutines.ExperimentalCoroutinesApi
+// import org.junit.Before
+// import org.junit.Test
+// import kotlinx.coroutines.test.runTest
+// import com.google.common.truth.Truth.assertThat
+// import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+// import org.junit.Rule
 //
-//@ExperimentalCoroutinesApi
-//class AdditionalInfoScreenViewModelTest {
+// @ExperimentalCoroutinesApi
+// class AdditionalInfoScreenViewModelTest {
 //
 //    @ExperimentalCoroutinesApi
 //    @get:Rule
@@ -38,4 +38,4 @@
 //            assertThat(data?.city).isEqualTo("Warsaw")
 //        }
 //    }
-//}
+// }

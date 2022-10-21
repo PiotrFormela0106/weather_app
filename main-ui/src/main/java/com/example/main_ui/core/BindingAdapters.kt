@@ -4,8 +4,8 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import com.example.weather_domain.models.LocationMethod
 import com.example.main_ui.MainScreenViewModel.Status
+import com.example.weather_domain.models.LocationMethod
 import com.squareup.picasso.Picasso
 
 @BindingAdapter("android:progress")
