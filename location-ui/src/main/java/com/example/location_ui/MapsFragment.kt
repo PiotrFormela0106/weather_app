@@ -133,8 +133,7 @@ class MapsFragment : DaggerFragment() {
     private fun handleEvent(event: MapsViewModel.Event) {
         when (event) {
             is MapsViewModel.Event.OnPickPlace -> {
-                //todo fix later
-//                findNavController().popBackStack(com.example.weatherapp.R.id.main_screen_id, false)
+                findNavController().popBackStack(com.example.base.R.id.main_screen_id, false)
             }
             is MapsViewModel.Event.OnBack -> {
                 findNavController().popBackStack()

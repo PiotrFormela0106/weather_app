@@ -123,8 +123,7 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
             setPositiveButton(
                 "ok"
             ) { _, _ ->
-                //todo fix back
-//                findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
+                findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
             }
         }
             .create()
@@ -204,9 +203,12 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
                             val arrayList: Array<String> = listOfDays.toTypedArray()
                             val textView = view?.findViewById<TextView>(R.id.day)
                             //todo fix back
-//                            findNavController().navigate(
-//                                MainScreenFragmentDirections.navigateToViewPager()
-//                            )
+                            findNavController().navigate(
+                                MainScreenFragmentDirections.navigateToViewPager(
+                                    textView?.text.toString(),
+                                    arrayList
+                                )
+                            )
                         }
                     }
                 }
@@ -232,15 +234,13 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
     }
 
     private fun openSettingsSheet() {
-        //todo fix back
-//        if (findNavController().currentDestination?.id == com.example.base.R.id.main_screen_id)
-//            findNavController().navigate(MainScreenFragmentDirections.navigateToSettings())
+        if (findNavController().currentDestination?.id == com.example.base.R.id.main_screen_id)
+            findNavController().navigate(MainScreenFragmentDirections.navigateToSettings())
     }
 
     private fun goToLocationScreen() {
-        //todo fix back
-//        if (findNavController().currentDestination?.id == com.example.base.R.id.main_screen_id)
-//            findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
+        if (findNavController().currentDestination?.id == com.example.base.R.id.main_screen_id)
+            findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
     }
 
     companion object {

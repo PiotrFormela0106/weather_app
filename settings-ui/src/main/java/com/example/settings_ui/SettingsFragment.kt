@@ -54,7 +54,7 @@ class SettingsFragment : BottomSheetDialogFragment() {
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
         setLang(viewModel.storageRepository.getLanguage().toData())
-        //findNavController().navigate(SettingsFragmentDirections.navigateToMainScreen())
+        findNavController().navigate(SettingsFragmentDirections.navigateToMainScreen())
     }
 
     private fun setLang(lang: String) {
@@ -69,7 +69,7 @@ class SettingsFragment : BottomSheetDialogFragment() {
     private fun handleEvent(event: SettingsViewModel.Event) {
         when (event) {
             is SettingsViewModel.Event.OnCancelClick -> {
-            //    findNavController().navigate(SettingsFragmentDirections.navigateToMainScreen())
+                findNavController().navigate(SettingsFragmentDirections.navigateToMainScreen())
             }
         }
     }

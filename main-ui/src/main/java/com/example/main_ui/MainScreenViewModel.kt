@@ -14,8 +14,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.base.UiEvents
 import com.example.base.Result
 import com.example.base.Error
-import com.example.weather_data.mappers.toData
-import com.example.weather_data.mappers.toSymbol
+import com.example.main_ui.mappers.toStringFormat
+import com.example.main_ui.mappers.toSymbol
 import com.example.weather_domain.models.AirPollution
 import com.example.weather_domain.models.AirPollutionItem
 import com.example.weather_domain.models.CurrentWeather
@@ -92,7 +92,7 @@ class MainScreenViewModel @Inject constructor(
     fun fetchData() {
         photoVisibility.postValue(false)
         val sdf =
-            SimpleDateFormat("EEEE, d MMMM HH:mm", Locale(storageRepository.getLanguage().toData()))
+            SimpleDateFormat("EEEE, d MMMM HH:mm", Locale(storageRepository.getLanguage().toStringFormat()))
         val currentDate = sdf.format(Date())
         date.postValue(currentDate.toString())
         status.postValue(Status.Loading)

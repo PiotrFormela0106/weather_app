@@ -18,15 +18,19 @@
             android:id="@+id/navigateToSettings"
             app:destination="@id/settings_graph" />
         <action
-            android:id="@+id/navigateToAddInfo"
-            app:destination="@id/info_graph" />
-        <action
             android:id="@+id/navigateToViewPager"
-            app:destination="@id/info_graph" />
+            app:destination="@id/info_graph">
+            <argument
+                android:name="day"
+                app:argType="string" />
+            <argument
+                android:name="days"
+                app:argType="string[]" />
+        </action>
     </fragment>
 
-    <include app:graph="@navigation/info_graph"/>
-    <include app:graph="@navigation/location_graph"/>
-    <include app:graph="@navigation/settings_graph"/>
+    <include app:graph="@navigation/info_graph" />
+    <include app:graph="@navigation/location_graph" />
+    <include app:graph="@navigation/settings_graph" />
 
 </navigation>
