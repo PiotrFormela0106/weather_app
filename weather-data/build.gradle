@@ -47,15 +47,11 @@ dependencies {
     implementation project(path: ':weather-domain')
     implementation project(path: ':storage-domain')
     implementation project(path: ':base')
-
+    implementation 'javax.inject:javax.inject:1'
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$gson"
     //Gson
     implementation "com.squareup.retrofit2:converter-gson:$gson"
-    //Dagger
-    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
-    implementation "com.google.dagger:dagger:$daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+
 }
