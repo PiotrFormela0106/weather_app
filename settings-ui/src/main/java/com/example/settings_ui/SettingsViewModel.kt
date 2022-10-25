@@ -4,13 +4,15 @@ import android.content.res.Resources
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.example.base.UiEvents
+import com.example.storage_domain.repo.StorageRepository
 import com.example.weather_domain.models.Language
 import com.example.weather_domain.models.Units
-import com.example.storage_domain.repo.StorageRepository
-import com.example.base.UiEvents
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
+@HiltViewModel
 class SettingsViewModel @Inject constructor(
     val storageRepository: StorageRepository,
     val resources: Resources

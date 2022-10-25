@@ -5,22 +5,24 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.base.Error
+import com.example.base.Result
+import com.example.base.UiEvents
 import com.example.city_domain.models.City
-import com.example.weather_domain.models.LocationMethod
 import com.example.city_domain.repo.CityRepository
 import com.example.storage_domain.repo.StorageRepository
 import com.example.weather_domain.CityError
+import com.example.weather_domain.models.LocationMethod
 import com.example.weather_domain.repo.WeatherRepository
-import com.example.base.UiEvents
-import com.example.base.Result
-import com.example.base.Error
 import com.google.android.libraries.places.api.model.Place
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+@HiltViewModel
 class CityScreenViewModel @Inject constructor(
     private val cityRepository: CityRepository,
     private val weatherRepository: WeatherRepository,

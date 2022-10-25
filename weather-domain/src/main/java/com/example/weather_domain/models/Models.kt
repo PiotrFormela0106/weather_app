@@ -95,6 +95,3 @@ enum class Language { PL, ENG, DE }
 enum class LocationMethod {
     City, Location, Map
 }
-
-
-

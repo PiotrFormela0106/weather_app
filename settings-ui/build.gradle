@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'androidx.navigation.safeargs.kotlin'
     id 'kotlin-kapt'
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -51,12 +52,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_reactive"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle"
-    //Dagger
-    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
-    implementation "com.google.dagger:dagger:$daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
     //Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation"
+    //Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 }

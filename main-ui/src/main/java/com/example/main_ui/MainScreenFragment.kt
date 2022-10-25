@@ -18,33 +18,30 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.main_ui.core.RecyclerItemClickListener
 import com.example.main_ui.databinding.FragmentMainScreenBinding
 import com.example.weather_domain.models.ForecastWeather
 import com.example.weather_domain.models.LocationMethod
-import com.example.main_ui.core.RecyclerItemClickListener
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.squareup.picasso.Picasso
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.Locale
-import javax.inject.Inject
 
-class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycleObserver {
+@AndroidEntryPoint
+class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserver {
     private lateinit var binding: FragmentMainScreenBinding
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private val viewModel: MainScreenViewModel by viewModels { viewModelFactory }
+    private val viewModel by viewModels<MainScreenViewModel>()
     lateinit var forecast: ForecastWeather
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
@@ -202,7 +199,7 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
                             }
                             val arrayList: Array<String> = listOfDays.toTypedArray()
                             val textView = view?.findViewById<TextView>(R.id.day)
-                            //todo fix back
+                            // todo fix back
                             findNavController().navigate(
                                 MainScreenFragmentDirections.navigateToViewPager(
                                     textView?.text.toString(),

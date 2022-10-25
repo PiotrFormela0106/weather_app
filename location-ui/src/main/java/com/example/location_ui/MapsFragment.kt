@@ -7,12 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.location_ui.databinding.FragmentMapsBinding
 import com.example.base.BuildConfig.PLACES_API_KEY
+import com.example.location_ui.databinding.FragmentMapsBinding
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -24,17 +24,15 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Locale
-import javax.inject.Inject
 
-class MapsFragment : DaggerFragment() {
+@AndroidEntryPoint
+class MapsFragment : Fragment() {
     private lateinit var binding: FragmentMapsBinding
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    private val viewModel: MapsViewModel by viewModels { viewModelFactory }
+    private val viewModel by viewModels<MapsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -6,26 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.info_ui.databinding.FragmentAdditionalInfoScreenBinding
 import com.example.weather_domain.models.ForecastItem
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
-import javax.inject.Inject
 
-class AdditionalInfoScreenFragment(val day: String) : DaggerFragment() {
+@AndroidEntryPoint
+class AdditionalInfoScreenFragment(val day: String) : Fragment() {
     private lateinit var binding: FragmentAdditionalInfoScreenBinding
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private val viewModel: AdditionalInfoScreenViewModel by viewModels { viewModelFactory }
+    private val viewModel by viewModels<AdditionalInfoScreenViewModel>()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

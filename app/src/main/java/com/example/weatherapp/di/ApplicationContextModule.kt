@@ -5,9 +5,11 @@ import android.content.Context
 import android.content.res.Resources
 import dagger.Module
 import dagger.Provides
-import dagger.android.support.AndroidSupportInjectionModule
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
-@Module(includes = [AndroidSupportInjectionModule::class])
+@Module
+@InstallIn(SingletonComponent::class)
 class ApplicationContextModule {
 
     @Provides

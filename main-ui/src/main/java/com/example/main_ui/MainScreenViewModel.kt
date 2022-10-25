@@ -11,18 +11,19 @@ import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.base.UiEvents
-import com.example.base.Result
 import com.example.base.Error
+import com.example.base.Result
+import com.example.base.UiEvents
 import com.example.main_ui.mappers.toStringFormat
 import com.example.main_ui.mappers.toSymbol
+import com.example.storage_domain.repo.StorageRepository
 import com.example.weather_domain.models.AirPollution
 import com.example.weather_domain.models.AirPollutionItem
 import com.example.weather_domain.models.CurrentWeather
 import com.example.weather_domain.models.ForecastWeather
 import com.example.weather_domain.models.LocationMethod
-import com.example.storage_domain.repo.StorageRepository
 import com.example.weather_domain.repo.WeatherRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -35,6 +36,7 @@ import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
+@HiltViewModel
 class MainScreenViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository,
     val storageRepository: StorageRepository,

@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.city_domain.models.City
@@ -22,18 +22,15 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.material.snackbar.Snackbar
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class CityScreenFragment : DaggerFragment() {
+@AndroidEntryPoint
+class CityScreenFragment : Fragment() {
     private lateinit var binding: FragmentCityScreenBinding
     private lateinit var adapter: GridAdapter
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private val viewModel: CityScreenViewModel by viewModels { viewModelFactory }
+    private val viewModel by viewModels<CityScreenViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,7 +76,6 @@ class CityScreenFragment : DaggerFragment() {
                     }
                 }
         }
-
     }
 
     private fun setupAutocompleteSearchFragment() {

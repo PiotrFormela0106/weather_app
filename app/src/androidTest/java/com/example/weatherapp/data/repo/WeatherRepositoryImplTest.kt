@@ -2,12 +2,12 @@ package com.example.weatherapp.data.repo
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.runner.RunWith
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import kotlinx.coroutines.test.runTest
-import com.google.common.truth.Truth.assertThat
+import org.junit.runner.RunWith
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -32,8 +32,6 @@ class WeatherRepositoryImplTest {
             }
             is com.example.weather_domain.Result.OnError -> {}
         }
-
-
     }
 
     @Test
@@ -49,7 +47,6 @@ class WeatherRepositoryImplTest {
             is com.example.weather_domain.Result.OnError -> {}
         }
         assertThat(data.cityName).isEqualTo("Warsaw")
-
     }
 
     @Test
@@ -62,13 +59,12 @@ class WeatherRepositoryImplTest {
             is com.example.weather_domain.Result.OnError -> {}
         }
         assertThat(data).isNotNull()
-
     }
 
     @Test
     fun getAirPollution() = runTest {
         lateinit var data: com.example.weather_domain.models.AirPollution
-        storageRepository.saveCoordinates(54.27,18.19)
+        storageRepository.saveCoordinates(54.27, 18.19)
         when (val result = weatherRepository.getAirPollution()) {
             is com.example.weather_domain.Result.OnSuccess -> {
                 data = result.data
@@ -76,8 +72,5 @@ class WeatherRepositoryImplTest {
             is com.example.weather_domain.Result.OnError -> {}
         }
         assertThat(data.coordinates.lat).isEqualTo(54.27)
-
     }
-
-
 }

@@ -30,6 +30,12 @@ android {
 }
 
 dependencies {
+    implementation "androidx.core:core-ktx:$androidx_core"
+    implementation "androidx.appcompat:appcompat:$androidx_appcompat"
+    implementation "com.google.android.material:material:$material"
+    testImplementation "junit:junit:$junit"
+    androidTestImplementation "androidx.test.ext:junit:$junit_test"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso"
 
     implementation project(path: ':base')
     implementation project(path: ':weather-domain')

@@ -1,14 +1,14 @@
 package com.example.city_data.repo
 
 import android.content.Context
+import com.example.base.Result
+import com.example.city_data.mappers.toData
+import com.example.city_data.mappers.toDomain
+import com.example.city_domain.models.City
 import com.example.city_domain.repo.CityRepository
 import com.example.weather_domain.toError
 import java.lang.Exception
 import javax.inject.Inject
-import com.example.city_data.mappers.toData
-import com.example.city_data.mappers.toDomain
-import com.example.city_domain.models.City
-import com.example.base.Result
 
 class CityRepositoryImpl @Inject constructor(context: Context) : CityRepository {
     private var cityDao: com.example.city_data.room.CityDao

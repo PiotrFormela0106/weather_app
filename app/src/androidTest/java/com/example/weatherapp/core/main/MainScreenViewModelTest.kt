@@ -1,24 +1,24 @@
-//package com.example.weatherapp.core.main
+// package com.example.weatherapp.core.main
 //
-//import androidx.test.core.app.ApplicationProvider
-//import androidx.test.ext.junit.runners.AndroidJUnit4
-//import com.example.weatherapp.data.repo.StorageRepositoryImpl
-//import com.example.weatherapp.data.repo.WeatherRepositoryImpl
-//import io.mockk.MockKAnnotations
-//import io.mockk.impl.annotations.RelaxedMockK
-//import kotlinx.coroutines.ExperimentalCoroutinesApi
-//import org.junit.runner.RunWith
-//import org.junit.Before
-//import org.junit.Test
-//import kotlinx.coroutines.test.runTest
-//import com.google.common.truth.Truth.assertThat
-//import android.content.res.Resources
-//import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-//import org.junit.Rule
+// import androidx.test.core.app.ApplicationProvider
+// import androidx.test.ext.junit.runners.AndroidJUnit4
+// import com.example.weatherapp.data.repo.StorageRepositoryImpl
+// import com.example.weatherapp.data.repo.WeatherRepositoryImpl
+// import io.mockk.MockKAnnotations
+// import io.mockk.impl.annotations.RelaxedMockK
+// import kotlinx.coroutines.ExperimentalCoroutinesApi
+// import org.junit.runner.RunWith
+// import org.junit.Before
+// import org.junit.Test
+// import kotlinx.coroutines.test.runTest
+// import com.google.common.truth.Truth.assertThat
+// import android.content.res.Resources
+// import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+// import org.junit.Rule
 //
-//@ExperimentalCoroutinesApi
-//@RunWith(AndroidJUnit4::class)
-//class MainScreenViewModelTest{
+// @ExperimentalCoroutinesApi
+// @RunWith(AndroidJUnit4::class)
+// class MainScreenViewModelTest{
 //
 //    @ExperimentalCoroutinesApi
 //    @get:Rule
@@ -85,4 +85,4 @@
 //        }
 //    }
 //
-//}
+// }

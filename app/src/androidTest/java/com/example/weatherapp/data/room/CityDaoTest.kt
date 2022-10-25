@@ -1,9 +1,5 @@
 package com.example.weatherapp.data.room
 
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -11,6 +7,10 @@ import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -35,7 +35,7 @@ class CityDaoTest {
 
     @Test
     fun insertCityItem() = runTest {
-        //adding one element to db
+        // adding one element to db
         val cityItem1 =
             com.example.city_data.room.City(cityId = 1, city = "Gdansk", photoId = "http://....")
         dao.insert(cityItem1)
@@ -45,7 +45,7 @@ class CityDaoTest {
 
     @Test
     fun removeCityItem() = runTest {
-        //removing one element from db
+        // removing one element from db
         val cityItem1 =
             com.example.city_data.room.City(cityId = 1, city = "Gdansk", photoId = "http://....")
         dao.insert(cityItem1)
@@ -56,7 +56,7 @@ class CityDaoTest {
 
     @Test
     fun deleteCities() = runTest {
-        //Removing all elements from db
+        // Removing all elements from db
         val cityItem1 = com.example.city_data.room.City(city = "Gdansk", photoId = "http://....")
         val cityItem2 = com.example.city_data.room.City(city = "Gdynia", photoId = "http://....")
         val cityItem3 = com.example.city_data.room.City(city = "Sopot", photoId = "http://....")
@@ -70,13 +70,11 @@ class CityDaoTest {
 
     @Test
     fun getPhotoId() = runTest {
-        //getting photo id
+        // getting photo id
         val cityItem1 =
             com.example.city_data.room.City(cityId = 1, city = "Gdansk", photoId = "http://...")
         dao.insert(cityItem1)
         val photo = dao.getPhotoId(cityItem1.city)
         assertThat(photo).isEqualTo("http://...")
     }
-
-
 }

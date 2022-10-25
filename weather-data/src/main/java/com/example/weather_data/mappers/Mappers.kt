@@ -15,8 +15,6 @@ import com.example.weather_data.models.Rain
 import com.example.weather_data.models.Sun
 import com.example.weather_data.models.Weather
 import com.example.weather_data.models.Wind
-import com.example.weather_domain.models.Language
-import com.example.weather_domain.models.Units
 
 typealias CurrentWeatherDomain = com.example.weather_domain.models.CurrentWeather
 typealias ForecastWeatherDomain = com.example.weather_domain.models.ForecastWeather
