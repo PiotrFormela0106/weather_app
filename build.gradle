@@ -5,7 +5,6 @@ buildscript{
         mavenCentral()
     }
     project.ext{
-        daggerVersion="2.41"
         navigation="2.5.1"
         picasso="2.8"
         lifecycle_reactive="2.6.0-alpha01"
