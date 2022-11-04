@@ -133,6 +133,7 @@ class WeatherRepositoryImpl @Inject constructor(
     private fun getCityParam(): String = storageRepository.getCity()
     private fun getCoordinatesParam(): Pair<Double, Double> = storageRepository.getCoordinates()
     private fun getLanguageParam(): String = storageRepository.getLanguage().toQueryParam()
+    val city = "Somonino"
 }
 
 private fun Units.toQueryParam(): String {

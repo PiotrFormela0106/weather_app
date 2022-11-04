@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/info_graph"
-    app:startDestination="@id/forecastDetailsFragment">
+    app:startDestination="@id/additionalInfoScreenFragment">
     <fragment
         android:id="@+id/forecastDetailsFragment"
         android:name="com.example.info_ui.ForecastDetailsFragment"
@@ -23,6 +23,9 @@
         <argument
             android:name="day"
             app:argType="string" />
+        <argument
+            android:name="days"
+            app:argType="string[]" />
     </fragment>
 
 </navigation>
