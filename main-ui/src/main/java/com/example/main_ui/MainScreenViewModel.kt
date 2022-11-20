@@ -23,7 +23,6 @@ import com.example.weather_domain.models.CurrentWeather
 import com.example.weather_domain.models.ForecastWeather
 import com.example.weather_domain.models.LocationMethod
 import com.example.weather_domain.repo.WeatherRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -34,10 +33,8 @@ import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import javax.inject.Inject
 
-@HiltViewModel
-class MainScreenViewModel @Inject constructor(
+class MainScreenViewModel(
     private val weatherRepository: WeatherRepository,
     val storageRepository: StorageRepository,
     val resources: Resources

@@ -28,13 +28,12 @@ import com.example.weather_domain.models.ForecastWeather
 import com.example.weather_domain.models.LocationMethod
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 import java.util.Locale
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@AndroidEntryPoint
 class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserver {
-    private val viewModel by viewModels<MainScreenViewModel>()
+    private val viewModel: MainScreenViewModel by viewModel()
     lateinit var forecast: ForecastWeather
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 

@@ -22,8 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-@HiltViewModel
-class CityScreenViewModel @Inject constructor(
+class CityScreenViewModel (
     private val cityRepository: CityRepository,
     private val weatherRepository: WeatherRepository,
     val storageRepository: StorageRepository

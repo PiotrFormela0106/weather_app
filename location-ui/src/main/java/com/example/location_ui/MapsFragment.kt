@@ -24,15 +24,14 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Locale
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@AndroidEntryPoint
 class MapsFragment : Fragment() {
     private lateinit var binding: FragmentMapsBinding
 
-    private val viewModel by viewModels<MapsViewModel>()
+    private val viewModel by viewModel<MapsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

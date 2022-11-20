@@ -75,4 +75,9 @@ dependencies {
     //Pager
     implementation "com.google.accompanist:accompanist-pager:0.22.0-rc"
     implementation "com.google.accompanist:accompanist-pager-indicators:0.22.0-rc"
+    //Koin
+    implementation("io.insert-koin:koin-core:$koin")
+    implementation "io.insert-koin:koin-android:$koin"
+    implementation "io.insert-koin:koin-android-compat:$koin"
+
 }
