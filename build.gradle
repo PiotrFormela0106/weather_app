@@ -21,6 +21,7 @@ buildscript{
         espresso="3.4.0"
         hilt_version='2.44'
         compose='1.2.0'
+        koin='3.2.0'
     }
     dependencies {
         def nav_version = "2.5.1"

@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
-class RetrofitClient @Inject constructor() {
+class RetrofitClient {
     val api: WeatherApi = Retrofit.Builder()
         .baseUrl(API_URL)
         .addConverterFactory(
@@ -16,4 +16,5 @@ class RetrofitClient @Inject constructor() {
         )
         .build()
         .create(WeatherApi::class.java)
+
 }

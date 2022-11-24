@@ -22,15 +22,14 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.material.snackbar.Snackbar
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@AndroidEntryPoint
 class CityScreenFragment : Fragment() {
     private lateinit var binding: FragmentCityScreenBinding
     private lateinit var adapter: GridAdapter
 
-    private val viewModel by viewModels<CityScreenViewModel>()
+    private val viewModel by viewModel<CityScreenViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

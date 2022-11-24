@@ -12,12 +12,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.base.ui.theme.AppTheme
 import com.example.info_ui.ui.ContentView
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@AndroidEntryPoint
 class AdditionalInfoScreenFragment : Fragment() {
 
-    private val viewModel by viewModels<AdditionalInfoScreenViewModel>()
+    private val viewModel by viewModel<AdditionalInfoScreenViewModel>()
     private val args: AdditionalInfoScreenFragmentArgs by navArgs()
     override fun onCreateView(
         inflater: LayoutInflater,
