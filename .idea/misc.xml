@@ -51,7 +51,7 @@
         <entry key="info-ui/src/main/res/drawable/splash_image.xml" value="0.2225" />
         <entry key="info-ui/src/main/res/layout/forecast_day_detailed.xml" value="0.22395833333333334" />
         <entry key="info-ui/src/main/res/layout/fragment_additional_info_screen.xml" value="0.22395833333333334" />
-        <entry key="info-ui/src/main/res/layout/fragment_forecast_details.xml" value="0.22395833333333334" />
+        <entry key="info-ui/src/main/res/layout/fragment_forecast_details.xml" value="0.1" />
         <entry key="location-ui/src/main/res/drawable/ic_weather.xml" value="0.2225" />
         <entry key="location-ui/src/main/res/drawable/round_bin_button.xml" value="0.2225" />
         <entry key="location-ui/src/main/res/drawable/splash_image.xml" value="0.2225" />

@@ -33,6 +33,12 @@ android {
             debuggable true
         }
     }
+    buildFeatures{
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion compose
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -50,4 +56,16 @@ dependencies {
     testImplementation "junit:junit:$junit"
     androidTestImplementation "androidx.test.ext:junit:$junit_test"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso"
+
+    //Compose
+    implementation "androidx.compose.ui:ui:$compose"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose"
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose"
+    implementation "androidx.compose.material:material-icons-extended:$compose"
+    implementation("io.coil-kt:coil-compose:2.0.0-rc01")
+    implementation 'androidx.compose.material3:material3:1.0.0-alpha13'
+    implementation "androidx.compose.runtime:runtime-livedata:$compose"
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 }

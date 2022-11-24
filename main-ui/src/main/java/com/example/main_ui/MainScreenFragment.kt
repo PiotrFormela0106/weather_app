@@ -3,7 +3,6 @@ package com.example.main_ui
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Context.LOCATION_SERVICE
 import android.content.pm.PackageManager
 import android.location.Address
@@ -11,36 +10,30 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.app.ActivityCompat
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.main_ui.core.RecyclerItemClickListener
-import com.example.main_ui.databinding.FragmentMainScreenBinding
+import com.example.base.ui.theme.AppTheme
+import com.example.main_ui.ui.MainScreen
 import com.example.weather_domain.models.ForecastWeather
 import com.example.weather_domain.models.LocationMethod
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.Locale
 
 @AndroidEntryPoint
 class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserver {
-    private lateinit var binding: FragmentMainScreenBinding
-
     private val viewModel by viewModels<MainScreenViewModel>()
     lateinit var forecast: ForecastWeather
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -50,42 +43,25 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_main_screen, container, false
-        )
-        binding.viewState = viewModel.ViewState()
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
         lifecycle.addObserver(viewModel)
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.events.collect { handleEvent(it) }
-        }
-
-        setHasOptionsMenu(true)
-
-        viewModel.forecastData.observe(viewLifecycleOwner) { data ->
-            forecast = data
-            setupRecyclerView(requireContext(), forecast)
-        }
 
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireActivity())
         if (viewModel.storageRepository.getLocationMethod() == LocationMethod.Location) {
             checkPermission()
         } else if (viewModel.storageRepository.getLocationMethod() == LocationMethod.City) {
-            if (viewModel.storageRepository.getPhotoId().isNotEmpty()) {
-                Picasso.get()
-                    .load(viewModel.storageRepository.getPhotoId())
-                    .into(binding.cityImage)
-                viewModel.photoVisibility.value = true
-            } else {
-                viewModel.photoVisibility.value = false
+            viewModel.photoVisibility.value = viewModel.storageRepository.getPhotoId().isNotEmpty()
+        }
+
+        return ComposeView(requireContext()).apply {
+            setContent {
+                AppTheme {
+                    Surface(color = MaterialTheme.colorScheme.background) {
+                        MainScreen(viewModel, navController = findNavController())
+                    }
+                }
             }
         }
-        setupForecastRecyclerViewOnClick()
-
-        return binding.root
     }
 
     override fun onRequestPermissionsResult(
@@ -128,7 +104,7 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
     }
 
     @SuppressLint("MissingPermission")
-    private fun getLocation() { // move all that you can from this method to viewmodel
+    private fun getLocation() {
         fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
             try {
                 val location: Location = task.result
@@ -171,73 +147,6 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
         } else {
             checkGPS()
         }
-    }
-
-    private fun setupForecastRecyclerViewOnClick() {
-        val recyclerView = binding.recyclerForecast
-        binding.recyclerForecast.addOnItemTouchListener(
-            RecyclerItemClickListener(
-                context,
-                recyclerView,
-                object : RecyclerItemClickListener.OnItemClickListener {
-                    override fun onItemClick(view: View?, position: Int) {
-                        viewModel.forecastData.observe(viewLifecycleOwner) { data ->
-                            val forecastWithUniqueDays = data.list.distinctBy {
-                                try {
-                                    it.date.removeRange(10, 19).removeRange(0, 5)
-                                } catch (e: IndexOutOfBoundsException) {
-                                    Log.e("error", e.toString())
-                                }
-                            }
-                            val listOfDays: MutableList<String> = mutableListOf()
-                            for (day in forecastWithUniqueDays) {
-                                try {
-                                    listOfDays.add(day.date.removeRange(10, 19).removeRange(0, 5))
-                                } catch (e: IndexOutOfBoundsException) {
-                                    Log.e("error", e.toString())
-                                }
-                            }
-                            val arrayList: Array<String> = listOfDays.toTypedArray()
-                            val textView = view?.findViewById<TextView>(R.id.day)
-                            // todo fix back
-                            findNavController().navigate(
-                                MainScreenFragmentDirections.navigateToViewPager(
-                                    textView?.text.toString(),
-                                    arrayList
-                                )
-                            )
-                        }
-                    }
-                }
-            )
-        )
-    }
-
-    private fun setupRecyclerView(context: Context, forecast: ForecastWeather) {
-        binding.recyclerForecast.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerForecast.adapter = ForecastAdapter(forecast)
-    }
-
-    private fun handleEvent(event: MainScreenViewModel.Event) {
-        when (event) {
-            is MainScreenViewModel.Event.OnCitiesClick -> {
-                goToLocationScreen()
-            }
-            is MainScreenViewModel.Event.OnSettingsClick -> {
-                openSettingsSheet()
-            }
-        }
-    }
-
-    private fun openSettingsSheet() {
-        if (findNavController().currentDestination?.id == com.example.base.R.id.main_screen_id)
-            findNavController().navigate(MainScreenFragmentDirections.navigateToSettings())
-    }
-
-    private fun goToLocationScreen() {
-        if (findNavController().currentDestination?.id == com.example.base.R.id.main_screen_id)
-            findNavController().navigate(MainScreenFragmentDirections.navigateToCities())
     }
 
     companion object {
