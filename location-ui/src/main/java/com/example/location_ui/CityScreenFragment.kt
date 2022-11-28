@@ -22,6 +22,9 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -29,7 +32,7 @@ import kotlinx.coroutines.launch
 class CityScreenFragment : Fragment() {
     private lateinit var binding: FragmentCityScreenBinding
     private lateinit var adapter: GridAdapter
-
+    private lateinit var analytics: FirebaseAnalytics
     private val viewModel by viewModels<CityScreenViewModel>()
 
     override fun onCreateView(
@@ -99,6 +102,7 @@ class CityScreenFragment : Fragment() {
             }
 
             override fun onPlaceSelected(place: Place) {
+                analytics = Firebase.analytics
                 if (place.photoMetadatas != null) {
                     val photoId = place.photoMetadatas?.first()?.zza()
                     val url = "https://maps.googleapis.com/maps/api/place/photo?" +
@@ -106,6 +110,9 @@ class CityScreenFragment : Fragment() {
                         "photo_reference=$photoId" +
                         "&" + "key=$PLACES_API_KEY"
                     viewModel.addCity(place, photoId = url)
+                    val bundle = Bundle()
+                    bundle.putString("city_name", place.name)
+                    analytics.logEvent("select_city", bundle)
                 } else {
                     val url =
                         "https://previews.123rf.com/images/dvarg/dvarg1402/dvarg140200058/25942935-city-map-booklet-with-question-mark-on-white-background.jpg"
@@ -141,11 +148,20 @@ class CityScreenFragment : Fragment() {
     }
 
     private fun openMap() {
-        if (findNavController().currentDestination?.id == R.id.cityScreenFragment)
+        if (findNavController().currentDestination?.id == R.id.cityScreenFragment) {
+            analytics = Firebase.analytics
+            val bundle = Bundle()
+            bundle.putString("go_to_map_screen", "map_screen")
+            analytics.logEvent("go_to_map_screen", bundle)
             findNavController().navigate(CityScreenFragmentDirections.navigateToMapsScreen())
+        }
     }
 
     private fun goToMainScreen() {
+        analytics = Firebase.analytics
+        val bundle = Bundle()
+        bundle.putString("get_weather_by_location", "location")
+        analytics.logEvent("getWeather", bundle)
         findNavController().popBackStack()
     }
 }

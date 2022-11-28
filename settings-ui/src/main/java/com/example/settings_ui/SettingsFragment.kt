@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.settings_ui.databinding.FragmentSettingsBinding
 import com.example.weather_domain.models.Language
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -19,7 +20,6 @@ import java.util.Locale
 @AndroidEntryPoint
 class SettingsFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentSettingsBinding
-
     private val viewModel by viewModels<SettingsViewModel>()
 
     override fun onCreateView(

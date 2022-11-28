@@ -1,5 +1,6 @@
 package com.example.main_ui.ui
 
+import android.os.Bundle
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -30,23 +31,30 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.main_ui.MainScreenFragmentDirections
 import com.example.main_ui.MainScreenViewModel
 import com.example.main_ui.R
 import com.example.weather_domain.models.ForecastItem
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
 
+private lateinit var analytics: FirebaseAnalytics
 @Composable
 fun MainScreen(
     viewModel: MainScreenViewModel,
@@ -226,13 +234,18 @@ fun ForecastList(
     days: List<ForecastItem>,
     navController: NavController
 ) {
+    analytics = Firebase.analytics
     val forecast by viewModel.forecastData.observeAsState()
     LazyRow() {
         items(items = days) { day ->
             SingleForecastDay(
                 day = day,
                 onClick = {
+
                     val date = day.date.removeRange(10, 19).removeRange(0, 5) // 11-06
+                    val bundle = Bundle()
+                    bundle.putString("day", date)
+                    analytics.logEvent("get_forecast_click", bundle)
                     val forecastWithUniqueDays = forecast?.list?.distinctBy {
                         try {
                             it.date.removeRange(10, 19).removeRange(0, 5)
@@ -411,11 +424,21 @@ fun AirPollutionItem(
 }
 
 private fun openSettingsSheet(navController: NavController) {
-    if (navController.currentDestination?.id == com.example.base.R.id.main_screen_id)
+    if (navController.currentDestination?.id == com.example.base.R.id.main_screen_id) {
+        analytics = Firebase.analytics
+        val bundle = Bundle()
+        bundle.putString("go_to_settings_screen", "settings_screen")
+        analytics.logEvent("go_to_settings_screen", bundle)
         navController.navigate(MainScreenFragmentDirections.navigateToSettings())
+    }
 }
 
 private fun goToLocationScreen(navController: NavController) {
-    if (navController.currentDestination?.id == com.example.base.R.id.main_screen_id)
+    if (navController.currentDestination?.id == com.example.base.R.id.main_screen_id) {
+        analytics = Firebase.analytics
+        val bundle = Bundle()
+        bundle.putString("go_to_location_screen", "location_screen")
+        analytics.logEvent("go_to_location_screen", bundle)
         navController.navigate(MainScreenFragmentDirections.navigateToCities())
+    }
 }

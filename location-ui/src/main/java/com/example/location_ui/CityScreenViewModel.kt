@@ -1,5 +1,6 @@
 package com.example.location_ui
 
+import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
@@ -15,8 +16,12 @@ import com.example.weather_domain.CityError
 import com.example.weather_domain.models.LocationMethod
 import com.example.weather_domain.repo.WeatherRepository
 import com.google.android.libraries.places.api.model.Place
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -144,6 +149,7 @@ class CityScreenViewModel @Inject constructor(
         allCities.postValue(data)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun handleError(error: Error?) {
         if (error is CityError) {
             uiEvents.post(Event.OnCityError(error.message))

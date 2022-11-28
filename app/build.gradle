@@ -6,6 +6,8 @@ plugins {
     id 'kotlin-kapt'
     id("com.google.dagger.hilt.android")
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -57,6 +59,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidx_appcompat"
     implementation "com.google.android.material:material:$material"
     implementation "androidx.constraintlayout:constraintlayout:$androidx_constraint"
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.2'
     testImplementation "junit:junit:$junit"
     androidTestImplementation "androidx.test.ext:junit:$junit_test"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso"
@@ -82,4 +85,9 @@ dependencies {
     //Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    //Firebase
+    implementation 'com.google.firebase:firebase-core:21.1.1'
+    //Firebase Analytics
+    implementation "com.google.firebase:firebase-analytics-ktx:21.2.0"
+
 }
