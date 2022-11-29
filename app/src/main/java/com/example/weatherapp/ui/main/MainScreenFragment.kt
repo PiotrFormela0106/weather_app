@@ -131,7 +131,7 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
     }
 
     @SuppressLint("MissingPermission")
-    private fun getLocation() { // move all that you can from this method to viewmodel
+    private fun getLocation() {
         fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
             try {
                 val location: Location = task.result
@@ -184,6 +184,7 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
                 recyclerView,
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(view: View?, position: Int) {
+
                         viewModel.forecastData.observe(viewLifecycleOwner) { data ->
                             val forecastWithUniqueDays = data.list.distinctBy {
                                 try {
@@ -202,6 +203,7 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
                             }
                             val arrayList: Array<String> = listOfDays.toTypedArray()
                             val textView = view?.findViewById<TextView>(R.id.day)
+
                             findNavController().navigate(
                                 MainScreenFragmentDirections.navigateToViewPager(
                                     textView?.text.toString(),

@@ -61,7 +61,8 @@ class MainScreenViewModel @Inject constructor(
     val date = MutableLiveData<String>()
 
     init {
-        setLang(Locale.getDefault().country)
+        //setLang(Locale.getDefault().country)
+        setLang(storageRepository.getLanguage().toData())
     }
 
     enum class Status { Loading, Success, Error }
@@ -196,11 +197,6 @@ class MainScreenViewModel @Inject constructor(
     fun onResume() {
         if (storageRepository.getLocationMethod() == LocationMethod.City || storageRepository.getLocationMethod() == LocationMethod.Map)
             fetchData()
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy() {
-        disposable.clear()
     }
 
     sealed class Event {

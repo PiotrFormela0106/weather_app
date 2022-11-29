@@ -11,12 +11,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.R
+import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.databinding.FragmentAdditionalInfoScreenBinding
 import com.example.weatherapp.domain.models.ForecastItem
 import dagger.android.support.DaggerFragment
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.text.SimpleDateFormat
-import java.util.Date
+import java.util.*
 import javax.inject.Inject
 
 class AdditionalInfoScreenFragment(val day: String) : DaggerFragment() {
@@ -44,10 +45,10 @@ class AdditionalInfoScreenFragment(val day: String) : DaggerFragment() {
         val day = day
 
         viewModel.forecast.observe(viewLifecycleOwner) { data ->
-
+            val lang = viewModel.storageRepository.getLanguage().toData()
             val forecastList = data?.list?.filter { it -> it.date.contains(day) }.orEmpty()
             val item = forecastList.first().dateLong * 1000
-            val sdf = SimpleDateFormat("EEEE, d MMMM")
+            val sdf = SimpleDateFormat("EEEE, d MMMM", Locale(lang))
             val dateAndTime = Date(item)
             val dateAndTimeFormat = sdf.format(dateAndTime)
             viewModel.dayValue.value = dateAndTimeFormat

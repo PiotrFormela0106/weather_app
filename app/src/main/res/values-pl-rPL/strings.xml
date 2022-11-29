@@ -27,5 +27,6 @@
     <string name="celsius">°C</string>
     <string name="kelvin">K</string>
     <string name="map">Skorzystaj z mapy</string>
+    <string name="check_weather">SPRAWDŹ POGODĘ</string>
 
 </resources>

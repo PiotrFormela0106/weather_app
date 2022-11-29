@@ -13,12 +13,14 @@
         <entry key="app/src/main/res/drawable/ic_cancel.xml" value="0.1355" />
         <entry key="app/src/main/res/drawable/ic_city.xml" value="0.1575" />
         <entry key="app/src/main/res/drawable/ic_location.xml" value="0.2005" />
+        <entry key="app/src/main/res/drawable/ic_round.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_weather.xml" value="0.1605" />
         <entry key="app/src/main/res/drawable/image_view_border.xml" value="0.1895" />
+        <entry key="app/src/main/res/drawable/round_back_button.xml" value="0.1435" />
         <entry key="app/src/main/res/drawable/splash_image.xml" value="0.1605" />
         <entry key="app/src/main/res/drawable/toolbar_bg.xml" value="0.1795" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/air_pollution.xml" value="0.40326340326340326" />
+        <entry key="app/src/main/res/layout/air_pollution.xml" value="0.20813397129186603" />
         <entry key="app/src/main/res/layout/air_pollution_details.xml" value="0.33" />
         <entry key="app/src/main/res/layout/air_pollution_header.xml" value="0.23125" />
         <entry key="app/src/main/res/layout/air_pollution_layout.xml" value="0.375" />

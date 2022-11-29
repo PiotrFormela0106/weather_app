@@ -9,8 +9,7 @@ import com.example.weatherapp.domain.models.ForecastWeather
 import com.squareup.picasso.Picasso
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.TimeZone
+import java.util.*
 import javax.inject.Inject
 
 class ForecastAdapter @Inject constructor(private val forecast: ForecastWeather) :
@@ -38,7 +37,7 @@ class ForecastAdapter @Inject constructor(private val forecast: ForecastWeather)
 class MyViewHolder(private val binding: ForecastDayBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(day: ForecastItem) {
-        val sdf = SimpleDateFormat("dd MMM HH:mm")
+        val sdf = SimpleDateFormat("dd MMM HH:mm", Locale(Locale.getDefault().country))
         sdf.timeZone = TimeZone.getTimeZone("GMT")
         val dateAndTimeFormat2 = sdf.format(Date(day.dateLong * 1000))
         binding.day.text = dateAndTimeFormat2

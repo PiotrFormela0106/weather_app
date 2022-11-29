@@ -79,7 +79,7 @@ class CityScreenViewModel @Inject constructor(
                 onError = {Log.e("inserted", it.message.orEmpty())}
             )
     }
-    private fun deleteCity(city: City) {
+    fun deleteCity(city: City) {
         cityRepository.deleteCity(city)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
