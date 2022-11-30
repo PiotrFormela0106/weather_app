@@ -42,6 +42,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun switchLanguageClick() {
+        analytics = Firebase.analytics
         var value = selectionLanguage.value ?: Language.ENG
         when (language.value) {
             R.id.eng -> value = Language.ENG
