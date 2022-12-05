@@ -141,6 +141,7 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
+
     private fun handleSuccess(data: CurrentWeather) {
         status.postValue(Status.Success)
         weatherData.postValue(data)

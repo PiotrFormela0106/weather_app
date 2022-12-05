@@ -8,6 +8,7 @@ plugins {
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'com.google.firebase.firebase-perf'
 }
 
 android {
@@ -89,5 +90,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:21.1.1'
     //Firebase Analytics
     implementation "com.google.firebase:firebase-analytics-ktx:21.2.0"
+    //Firebase Performance
+    implementation 'com.google.firebase:firebase-perf-ktx:20.3.0'
 
 }

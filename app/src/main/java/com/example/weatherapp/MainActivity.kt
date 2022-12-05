@@ -10,6 +10,7 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.initialize
+import com.google.firebase.perf.FirebasePerformance
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,6 +23,8 @@ class MainActivity : AppCompatActivity() {
         setTheme(R.style.Theme_WeatherApp)
         setContentView(binding.root)
 
+        val trace = FirebasePerformance.getInstance().newTrace("OnCreateMainActivity")
+        trace.start()
         val options = FirebaseOptions.Builder()
             .setProjectId("weatherapp-56c1f")
             .setApplicationId("1:329381951953:android:2f88bcea078d01483548f0")
@@ -33,6 +36,8 @@ class MainActivity : AppCompatActivity() {
         val bundle = Bundle()
         bundle.putString("startApp", "onCreate")
         analytics.logEvent("startApp", bundle)
+
+        trace.stop()
 
     }
 }
