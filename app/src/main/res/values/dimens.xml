@@ -4,4 +4,10 @@
     <dimen name="air_pollution_components_hints_text_size">12sp</dimen>
     <dimen name="air_pollution_aqi">20sp</dimen>
     <dimen name="air_pollution_comp_width">56dp</dimen>
+
+    <!--
+Refer to App Widget Documentation for margin information
+http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <dimen name="widget_margin">0dp</dimen>
 </resources>

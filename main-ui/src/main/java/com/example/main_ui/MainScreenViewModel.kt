@@ -141,6 +141,26 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
+    fun airPollution(){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val airPollutionResult = flowOf(weatherRepository.getAirPollution())
+                withContext(Dispatchers.Main){
+                    airPollutionResult.collect{ result ->
+                        when(result){
+                            is Result.OnSuccess -> {
+                                result.data.let { airPollutionData.value = it }
+                            }
+                            is Result.OnError -> {
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     private fun handleSuccess(data: CurrentWeather) {
         status.postValue(Status.Success)
@@ -152,6 +172,7 @@ class MainScreenViewModel @Inject constructor(
         }
         storageRepository.saveCity(data.cityName)
         storageRepository.saveCoordinates(data.coordinates.lat, data.coordinates.lon)
+        airPollution()
         roundedTemperature.postValue(
             data.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt()
                 .toString() + storageRepository.getUnits().toSymbol()
@@ -198,8 +219,9 @@ class MainScreenViewModel @Inject constructor(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
-        if (storageRepository.getLocationMethod() == LocationMethod.City || storageRepository.getLocationMethod() == LocationMethod.Map)
+        if (storageRepository.getLocationMethod() == LocationMethod.City || storageRepository.getLocationMethod() == LocationMethod.Map) {
             fetchData()
+        }
     }
 
     sealed class Event {

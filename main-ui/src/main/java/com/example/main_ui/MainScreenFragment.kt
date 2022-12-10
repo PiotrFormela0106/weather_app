@@ -51,7 +51,6 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         val analytics = Firebase.analytics
         val bundle = Bundle()
         bundle.putString("main_ui", "my_item_id")
@@ -65,7 +64,6 @@ class MainScreenFragment : Fragment(), LifecycleObserver, DefaultLifecycleObserv
         } else if (viewModel.storageRepository.getLocationMethod() == LocationMethod.City) {
             viewModel.photoVisibility.value = viewModel.storageRepository.getPhotoId().isNotEmpty()
         }
-
         return ComposeView(requireContext()).apply {
             setContent {
                 AppTheme {
