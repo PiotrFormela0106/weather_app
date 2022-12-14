@@ -1,11 +1,7 @@
 package com.example.weatherapp.data.repo
 
 import com.example.weatherapp.BuildConfig.API_KEY
-import com.example.weatherapp.data.Cache
-import com.example.weatherapp.data.CacheKey
 import com.example.weatherapp.data.api.RetrofitClient
-import com.example.weatherapp.data.getCityCacheKey
-import com.example.weatherapp.data.getLocationCacheKey
 import com.example.weatherapp.data.mappers.AirPollutionData
 import com.example.weatherapp.data.mappers.CurrentWeatherData
 import com.example.weatherapp.data.mappers.ForecastWeatherData
@@ -29,40 +25,24 @@ class WeatherRepositoryImpl @Inject constructor(
     val storageRepository: StorageRepository
 ) : WeatherRepository {
     private val api = retrofitClient.api
-    private val cache = Cache()
     override fun getCurrentWeather(): Single<Result<CurrentWeather>> {
         return when (storageRepository.getLocationMethod()) {
             LocationMethod.City -> {
-                val cacheKey = getCityCacheKey(getCityParam(), getUnitsParam(), getLanguageParam())
-                val cachedValue = cache.getCurrentWeather(cacheKey)
-                if (cachedValue != null) {
-                    return Single.just(Result.withValue(cachedValue))
-                }
                 api.getCurrentWeatherForCity(
                     cityName = getCityParam(),
                     apikey = API_KEY,
                     lang = getLanguageParam(),
                     units = getUnitsParam()
-                ).compose(mapCurrentWeatherResponse(cacheKey))
+                ).compose(mapCurrentWeatherResponse())
             }
             LocationMethod.Location, LocationMethod.Map -> {
-                val cacheKey = getLocationCacheKey(
-                    getCoordinatesParam().first,
-                    getCoordinatesParam().second,
-                    getUnitsParam(),
-                    getLanguageParam()
-                )
-                val cachedValue = cache.getCurrentWeather(cacheKey)
-                if (cachedValue != null) {
-                    return Single.just(Result.withValue(cachedValue))
-                }
                 api.getCurrentWeatherForLocation(
                     lat = getCoordinatesParam().first,
                     lon = getCoordinatesParam().second,
                     apikey = API_KEY,
                     lang = getLanguageParam(),
                     units = getUnitsParam()
-                ).compose(mapCurrentWeatherResponse(cacheKey))
+                ).compose(mapCurrentWeatherResponse())
             }
         }
     }
@@ -70,36 +50,21 @@ class WeatherRepositoryImpl @Inject constructor(
     override fun getForecastWeather(): Single<Result<ForecastWeather>> {
         return when (storageRepository.getLocationMethod()) {
             LocationMethod.City -> {
-                val cacheKey = getCityCacheKey(getCityParam(), getUnitsParam(), getLanguageParam())
-                val cachedValue = cache.getForecast(cacheKey)
-                if (cachedValue != null) {
-                    return Single.just(Result.withValue(cachedValue))
-                }
                 api.getForecastForCity(
                     cityName = getCityParam(),
                     apikey = API_KEY,
                     lang = getLanguageParam(),
                     units = getUnitsParam()
-                ).compose(mapForecastWeatherResponse(cacheKey))
+                ).compose(mapForecastWeatherResponse())
             }
             LocationMethod.Location, LocationMethod.Map -> {
-                val cacheKey = getLocationCacheKey(
-                    getCoordinatesParam().first,
-                    getCoordinatesParam().second,
-                    getUnitsParam(),
-                    getLanguageParam()
-                )
-                val cachedValue = cache.getForecast(cacheKey)
-                if (cachedValue != null) {
-                    return Single.just(Result.withValue(cachedValue))
-                }
                 api.getForecastForLocation(
                     lat = getCoordinatesParam().first,
                     lon = getCoordinatesParam().second,
                     apikey = API_KEY,
                     units = getUnitsParam(),
                     lang = getLanguageParam()
-                ).compose(mapForecastWeatherResponse(cacheKey))
+                ).compose(mapForecastWeatherResponse())
             }
         }
     }
@@ -113,24 +78,20 @@ class WeatherRepositoryImpl @Inject constructor(
             .compose(mapAirPollutionResponse())
     }
 
-    private fun mapCurrentWeatherResponse(cacheKey: CacheKey):
-        SingleTransformer<CurrentWeatherData, Result<CurrentWeather>> {
+    private fun mapCurrentWeatherResponse():
+            SingleTransformer<CurrentWeatherData, Result<CurrentWeather>> {
         return SingleTransformer { upstream ->
             upstream
-                .map { it.toDomain() }
-                .doOnSuccess { cache.cache(cacheKey, it) }
-                .map { Result.withValue(it) }
+                .map { Result.withValue(it.toDomain()) }
                 .onErrorReturn { it.toResultError() }
         }
     }
 
-    private fun mapForecastWeatherResponse(cacheKey: CacheKey):
-        SingleTransformer<ForecastWeatherData, Result<ForecastWeather>> {
+    private fun mapForecastWeatherResponse():
+            SingleTransformer<ForecastWeatherData, Result<ForecastWeather>> {
         return SingleTransformer { upstream ->
             upstream
-                .map { it.toDomain() }
-                .doOnSuccess { cache.cache(cacheKey, it) }
-                .map { Result.withValue(it) }
+                .map { Result.withValue(it.toDomain()) }
                 .onErrorReturn { it.toResultError() }
         }
     }

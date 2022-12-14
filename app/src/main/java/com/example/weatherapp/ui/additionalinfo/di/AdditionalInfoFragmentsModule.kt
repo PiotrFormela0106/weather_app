@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.example.weatherapp.di.ViewModelKey
 import com.example.weatherapp.ui.additionalinfo.AdditionalInfoScreenFragment
 import com.example.weatherapp.ui.additionalinfo.AdditionalInfoScreenViewModel
+import com.example.weatherapp.ui.additionalinfo.ForecastDetailsFragment
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -14,6 +15,9 @@ abstract class AdditionalInfoFragmentsModule {
 
     @ContributesAndroidInjector
     abstract fun contributeAdditionalInfoScreenFragment(): AdditionalInfoScreenFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeForecastDetailsFragment(): ForecastDetailsFragment
 }
 
 @Module

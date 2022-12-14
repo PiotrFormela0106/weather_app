@@ -9,6 +9,7 @@ import com.example.weatherapp.domain.models.Language
 import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.domain.models.Units
 import com.example.weatherapp.domain.repo.StorageRepository
+import java.util.*
 import javax.inject.Inject
 
 private const val EXTRA_CITY = "extra_city"
@@ -70,7 +71,7 @@ class StorageRepositoryImpl @Inject constructor(context: Context) :
     }
 
     override fun getLanguage(): Language {
-        return prefs.getString(EXTRA_LANGUAGE, "").orEmpty().toLanguage()
+        return prefs.getString(EXTRA_LANGUAGE, Locale.getDefault().language).orEmpty().toLanguage()
     }
 
     override fun savePhotoId(photoId: String) {

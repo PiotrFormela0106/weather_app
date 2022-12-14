@@ -25,6 +25,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.R
+import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.databinding.FragmentMainScreenBinding
 import com.example.weatherapp.domain.models.ForecastWeather
 import com.example.weatherapp.domain.models.LocationMethod
@@ -35,6 +36,7 @@ import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerFragment
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.Locale
 import javax.inject.Inject
 
@@ -202,11 +204,14 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
                                 }
                             }
                             val arrayList: Array<String> = listOfDays.toTypedArray()
-                            val textView = view?.findViewById<TextView>(R.id.day)
-
+                            val day = view?.findViewById<TextView>(R.id.day)?.text.toString()
+                            var spf = SimpleDateFormat("dd MMM HH:mm", Locale(viewModel.storageRepository.getLanguage().toData()))
+                            val newDate = spf.parse(day)
+                            spf = SimpleDateFormat("MM-dd")
+                            val formattedDay = spf.format(newDate)
                             findNavController().navigate(
                                 MainScreenFragmentDirections.navigateToViewPager(
-                                    textView?.text.toString(),
+                                    day,
                                     arrayList
                                 )
                             )
@@ -220,7 +225,7 @@ class MainScreenFragment : DaggerFragment(), LifecycleObserver, DefaultLifecycle
     private fun setupRecyclerView(context: Context, forecast: ForecastWeather) {
         binding.recyclerForecast.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerForecast.adapter = ForecastAdapter(forecast)
+        binding.recyclerForecast.adapter = ForecastAdapter(forecast, viewModel.storageRepository, resources)
     }
 
     private fun handleEvent(event: MainScreenViewModel.Event) {

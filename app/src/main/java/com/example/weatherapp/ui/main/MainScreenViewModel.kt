@@ -61,7 +61,6 @@ class MainScreenViewModel @Inject constructor(
     val date = MutableLiveData<String>()
 
     init {
-        //setLang(Locale.getDefault().country)
         setLang(storageRepository.getLanguage().toData())
     }
 
@@ -115,6 +114,7 @@ class MainScreenViewModel @Inject constructor(
                 when (val weather = result.first) {
                     is Result.OnSuccess -> {
                         handleSuccess(weather.data)
+                        weatherRepository.getAirPollution()
                     }
                     is Result.OnError -> {
                         handleError(weather.error)
@@ -139,6 +139,22 @@ class MainScreenViewModel @Inject constructor(
             }
     }
 
+    private fun getAirPollution(){
+        weatherRepository.getAirPollution()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy { data ->
+                when(data){
+                    is Result.OnSuccess -> {
+                        data.data.let { airPollutionData.value = it }
+                    }
+                    is Result.OnError -> {
+
+                    }
+                }
+            }
+    }
+
     private fun handleSuccess(data: CurrentWeather) {
         status.postValue(Status.Success)
         weatherData.value = data
@@ -149,6 +165,7 @@ class MainScreenViewModel @Inject constructor(
         }
         storageRepository.saveCity(data.cityName)
         storageRepository.saveCoordinates(data.coordinates.lat, data.coordinates.lon)
+        getAirPollution()
         roundedTemperature.postValue(
             data.main.temp.toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt()
                 .toString() + storageRepository.getUnits().toSymbol()

@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentForecastDetailsBinding
+import dagger.android.support.DaggerFragment
 
-class ForecastDetailsFragment : Fragment() {
+class ForecastDetailsFragment : DaggerFragment() {
     private lateinit var binding: FragmentForecastDetailsBinding
     private val args: ForecastDetailsFragmentArgs by navArgs()
 
@@ -25,10 +25,9 @@ class ForecastDetailsFragment : Fragment() {
         )
         try {
             val days = args.days
-            val day = args.day.removeRange(2, 12)
+            val day = args.day
             val item = days.find { it.contains(day) }
             val index = days.indexOf(item)
-
             val fragmentList = arrayListOf(
                 AdditionalInfoScreenFragment(days[0]),
                 AdditionalInfoScreenFragment(days[1]),
