@@ -11,8 +11,12 @@ import com.example.weatherapp.domain.repo.WeatherRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 
 @Module
+@InstallIn(SingletonComponent::class)
 class RepositoryModule {
 
     @Singleton
@@ -30,14 +34,14 @@ class RepositoryModule {
     @Singleton
     @Provides
     fun provideStorageRepository(
-        context: Context
+        @ApplicationContext context: Context
     ): StorageRepository {
         return StorageRepositoryImpl(context = context)
     }
 
     @Singleton
     @Provides
-    fun provideCityRepository(context: Context): CityRepository {
+    fun provideCityRepository(@ApplicationContext context: Context): CityRepository {
         return CityRepositoryImpl(context = context)
     }
 }

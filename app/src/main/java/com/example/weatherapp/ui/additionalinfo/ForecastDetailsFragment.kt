@@ -6,12 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentForecastDetailsBinding
 import dagger.android.support.DaggerFragment
 
-class ForecastDetailsFragment : DaggerFragment() {
+class ForecastDetailsFragment : Fragment() {
     private lateinit var binding: FragmentForecastDetailsBinding
     private val args: ForecastDetailsFragmentArgs by navArgs()
 

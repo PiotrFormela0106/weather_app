@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -25,16 +26,16 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.util.Locale
 import javax.inject.Inject
 
-class MapsFragment : DaggerFragment() {
+@AndroidEntryPoint
+class MapsFragment : Fragment() {
     private lateinit var binding: FragmentMapsBinding
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    private val viewModel: MapsViewModel by viewModels { viewModelFactory }
+    private val viewModel by viewModels<MapsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

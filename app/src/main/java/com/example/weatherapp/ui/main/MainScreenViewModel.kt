@@ -22,6 +22,7 @@ import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.domain.repo.StorageRepository
 import com.example.weatherapp.domain.repo.WeatherRepository
 import com.example.weatherapp.ui.core.UiEvents
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
@@ -35,6 +36,7 @@ import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
+@HiltViewModel
 class MainScreenViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository,
     val storageRepository: StorageRepository,

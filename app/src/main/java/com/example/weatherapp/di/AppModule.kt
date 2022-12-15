@@ -1,6 +1,10 @@
 package com.example.weatherapp.di
 
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
-@Module(includes = [ViewModelModule::class, RepositoryModule::class])
+@InstallIn(SingletonComponent::class)
+@Module(includes = [RepositoryModule::class])
 class AppModule()
+

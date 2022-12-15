@@ -15,17 +15,16 @@ import com.example.weatherapp.data.mappers.toData
 import com.example.weatherapp.databinding.FragmentSettingsBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.android.support.AndroidSupportInjection
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.util.Locale
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class SettingsFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentSettingsBinding
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private val viewModel: SettingsViewModel by viewModels { viewModelFactory }
+    private val viewModel by viewModels<SettingsViewModel>()
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)

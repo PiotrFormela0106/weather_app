@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import com.example.weatherapp.domain.models.LocationMethod
 import com.example.weatherapp.domain.repo.StorageRepository
 import com.example.weatherapp.ui.core.UiEvents
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+@HiltViewModel
 class MapsViewModel @Inject constructor(val storageRepository: StorageRepository) : ViewModel() {
     private val uiEvents = UiEvents<Event>()
     val events = uiEvents.stream()
